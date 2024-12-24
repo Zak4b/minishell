@@ -1,6 +1,6 @@
 # Minishell
 
-Minishell est un projet de l'École 42 qui consiste à recréer un shell minimaliste inspiré de bash. Ce projet a été réalisé par [rsebasti](mailto:rsebasti@42.fr) et [asene](mailto:asene@42.fr).
+Minishell est un projet de l'École 42 qui consiste à recréer un shell minimaliste inspiré de bash. Ce projet a été réalisé par <a href="www.github.com/Dak-Ore">rsebasti</a> et <a href="www.github.com/Zak4b">asene</a>.
 
 ---
 
