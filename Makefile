@@ -6,13 +6,15 @@ YELLOW = \033[0;33m
 RESET = \033[0m
 
 LIBFT = libft/libft.a
-INC = -I/opt/homebrew/opt/readline/include
+INC = -I/opt/homebrew/opt/readline/include -I.
 LIB = -L/opt/homebrew/opt/readline/lib -lreadline -L./libft/ -lft
 
 FLAGS = -Wall -Wextra -Werror -g
 
 SOURCES = \
-        main.c
+        main.c \
+		token.c \
+		utils.c
 
 OBJDIR = obj
 OBJS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
@@ -31,7 +33,7 @@ all: $(NAME)
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
 
-$(OBJDIR)/%.o: %.c | $(OBJDIR)
+$(OBJDIR)/%.o: srcs/%.c | $(OBJDIR)
 	@cc $(FLAGS) $(INC) -c $< -o $@
 
 clean:
