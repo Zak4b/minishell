@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2024/12/24 17:09:03 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/24 18:47:48 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,23 @@ void	add_token(t_token_list *list, t_token_type type, char *value)
 
 char	*get_word_token(char **ptr)
 {
-	char	buffer[MAX_CMD_LEN];
-	int		buf_index;
+	int		i;
+	char	quote;
+	char	*res;
 
-	buf_index = 0;
-	while (**ptr && !is_space(**ptr) && ft_strchr("|<>", **ptr) == NULL)
+	i = 0;
+	quote = 0;
+	if (ft_strchr("'\"", **ptr))
+		quote = **ptr + i++;
+	while ((*ptr)[i])
 	{
-		buffer[buf_index++] = **ptr;
-		*ptr = *ptr + 1;
+		if (quote && (*ptr)[i] == quote && ++i)
+			break;
+		if (!quote && (is_space((*ptr)[i]) || ft_strchr("|<>", (*ptr)[i])))
+			break;
+		i++;
 	}
-	buffer[buf_index] = '\0';
-	return (ft_strdup(buffer));
+	return (res = ft_substr(*ptr, 0, i), *ptr += i, res);
 }
 
 t_token_list	tokenize(const char *input)
