@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 22:48:55 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/25 23:26:46 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	analyze_token(t_token *token, char **env)
 		printf("'%s' est un fichier existant.\n", token->value);
 	else if (cmd_or_file(token->value, env) == 1)
 		printf("'%s' est un fichier executable.\n", token->value);
+	else if (cmd_or_file(token->value, env) == 4)
+		printf("'%s' est une commande builtin.\n", token->value);
 	else
 		printf("'%s' est une commande invalide.\n", token->value);
 }
