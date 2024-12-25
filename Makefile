@@ -37,7 +37,7 @@ $(OBJDIR):
 $(OBJDIR)/%.o: srcs/%.c | $(OBJDIR)
 	@cc $(FLAGS) $(INC) -c $< -o $@
 
-check_norm:
+norm:
 	@echo "Lancement de la norminette..."
 	@norminette | grep -i "error" > norm_errors.log || true
 	@if [ -s norm_errors.log ]; then \
@@ -45,7 +45,7 @@ check_norm:
 		echo "$(RED)$$err_count erreur(s) détectée(s) :$(RESET)"; \
 		cat norm_errors.log; \
 	else \
-		echo "$(GREEN)OK - Aucun problème détecté par la norminette."$(RESET); \
+		echo "$(GREEN)OK - Aucun problème détecté par la norminette.$(RESET)"; \
 	fi
 	@rm norm_errors.log
 

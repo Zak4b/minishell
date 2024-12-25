@@ -55,7 +55,7 @@ SOURCES = ft_isalpha.c \
 OBJS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
 
 $(NAME): $(OBJS)
-	ar -rcs $(NAME) $(OBJS)
+	@ar -rcs $(NAME) $(OBJS)
 
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
@@ -66,9 +66,9 @@ $(OBJDIR)/%.o: %.c | $(OBJDIR)
 all: $(NAME)
 
 clean:
-	rm -rf $(OBJDIR)
+	@rm -rf $(OBJDIR)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
