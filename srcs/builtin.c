@@ -6,25 +6,27 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/25 23:46:49 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/25 23:51:17 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	select_builtin(char *token)
+#include "minishell.h"
+
+void	select_builtin(char *builtin, t_list *tokens)
 {
-	if (ft_strncmp(token, "cd", 3) == 0)
+	if (ft_strncmp(builtin, "cd", 3) == 0)
 		ft_cd();
-	if (ft_strncmp(token, "export", 7) == 0)
+	if (ft_strncmp(builtin, "export", 7) == 0)
 		ft_export();
-	if (ft_strncmp(token, "pwd", 4) == 0)
+	if (ft_strncmp(builtin, "pwd", 4) == 0)
 		ft_pwd();
-	if (ft_strncmp(token, "echo", 5) == 0)
+	if (ft_strncmp(builtin, "echo", 5) == 0)
 		ft_echo();
-	if (ft_strncmp(token, "exit", 5) == 0)
+	if (ft_strncmp(builtin, "exit", 5) == 0)
 		ft_exit();
-	if (ft_strncmp(token, "env", 4) == 0)
+	if (ft_strncmp(builtin, "env", 4) == 0)
 		ft_env();
-	if (ft_strncmp(token, "unset", 6) == 0)
+	if (ft_strncmp(builtin, "unset", 6) == 0)
 		ft_unset();
 }
 
