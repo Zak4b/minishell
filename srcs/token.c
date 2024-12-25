@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 20:15:46 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/25 21:40:06 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_list	*tokenize(const char *input)
 		}
 		else if (*ptr == '<' && ++ptr)
 			lst_add(&list, new_token(TOKEN_REDIRECT_IN, ft_strdup("<")));
-		else
+		else if (*ptr)
 			lst_add(&list, new_token(TOKEN_WORD, get_token((char **)&ptr)));
 	}
 	return (lst_add(&list, new_token(TOKEN_END, NULL)), list);
