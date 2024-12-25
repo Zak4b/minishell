@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/24 17:07:26 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/25 01:28:38 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
-# define MAX_TOKENS 1024
-# define MAX_CMD_LEN 1024
 
 typedef enum e_token_type
 {
@@ -38,17 +35,12 @@ typedef struct s_token
 	char			*value;
 }	t_token;
 
-typedef struct s_token_list
-{
-	t_token	tokens[MAX_TOKENS];
-	int		count;
-}	t_token_list;
-
-void			add_token(t_token_list *list, t_token_type t, char *v);
-t_token_list	tokenize(const char *input);
-void			print_tokens(t_token_list *list);
-void			free_tokens(t_token_list *list);
+t_list			*tokenize(const char *input);
+void			free_token(t_token *t);
 
 int				is_space(char c);
+void			lst_add(t_list **lst, void *content);
+
+void			print_tokens(t_list *list);
 
 #endif
