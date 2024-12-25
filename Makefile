@@ -15,7 +15,8 @@ SOURCES = \
         main.c \
 		token.c \
 		utils.c \
-		pathfinder.c
+		pathfinder.c \
+		command.c 
 
 OBJDIR = obj
 OBJS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))

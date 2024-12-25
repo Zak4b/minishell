@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/25 20:30:03 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/25 22:31:23 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,15 @@ static char	*clean_path(char **env)
 	return (env[i] + j + 1);
 }
 
-char	*search_path(char **env, char *cmd, char *ogcmd)
+char	*search_path(char **env, char *cmd)
 {
 	int		i;
 	char	**split;
 	char	*path;
 
 	i = 0;
-	if (access(ogcmd, F_OK | X_OK) == 0)
-		return (ogcmd);
+	if (access(cmd, F_OK | X_OK) == 0)
+		return (cmd);
 	split = ft_split(clean_path(env), ':');
 	while (split[i])
 	{
@@ -66,5 +66,5 @@ char	*search_path(char **env, char *cmd, char *ogcmd)
 	}
 	if (split)
 		killsplit(split);
-	return (cmd);
+	return (NULL);
 }

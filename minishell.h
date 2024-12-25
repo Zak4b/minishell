@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 20:13:35 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/25 22:46:45 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,8 @@ void	free_token(t_token *t);
 int		is_space(char c);
 void	lst_add(t_list **lst, void *content);
 
-void	print_tokens(t_list *list);
-
-char	*search_path(char **env, char *cmd, char *ogcmd);
+char	*search_path(char **env, char *cmd);
 char	*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
+int		cmd_or_file(char *token, char **env);
 
 #endif
