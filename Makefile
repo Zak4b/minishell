@@ -14,7 +14,8 @@ FLAGS = -Wall -Wextra -Werror -g
 SOURCES = \
         main.c \
 		token.c \
-		utils.c
+		utils.c \
+		pathfinder.c
 
 OBJDIR = obj
 OBJS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
@@ -35,6 +36,18 @@ $(OBJDIR):
 
 $(OBJDIR)/%.o: srcs/%.c | $(OBJDIR)
 	@cc $(FLAGS) $(INC) -c $< -o $@
+
+check_norm:
+	@echo "Lancement de la norminette..."
+	@norminette | grep -i "error" > norm_errors.log || true
+	@if [ -s norm_errors.log ]; then \
+		err_count=$$(wc -l < norm_errors.log); \
+		echo "$(RED)$$err_count erreur(s) détectée(s) :$(RESET)"; \
+		cat norm_errors.log; \
+	else \
+		echo "$(GREEN)OK - Aucun problème détecté par la norminette."$(RESET); \
+	fi
+	@rm norm_errors.log
 
 clean:
 	@echo "$(RED)Cleaning object files...$(RESET)"

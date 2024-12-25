@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 01:28:38 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/25 20:13:35 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,15 @@ typedef struct s_token
 	char			*value;
 }	t_token;
 
-t_list			*tokenize(const char *input);
-void			free_token(t_token *t);
+t_list	*tokenize(const char *input);
+void	free_token(t_token *t);
 
-int				is_space(char c);
-void			lst_add(t_list **lst, void *content);
+int		is_space(char c);
+void	lst_add(t_list **lst, void *content);
 
-void			print_tokens(t_list *list);
+void	print_tokens(t_list *list);
+
+char	*search_path(char **env, char *cmd, char *ogcmd);
+char	*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
 
 #endif

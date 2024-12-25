@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:49:58 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 01:24:46 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/25 20:12:37 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,15 @@ void	lst_add(t_list **lst, void *content)
 
 	e = ft_lstnew(content);
 	ft_lstadd_back(lst, e);
+}
+
+char	*ft_strdoublejoin(char const *s1, char const *s2, char const *s3)
+{
+	char	*temp;
+	char	*result;
+
+	temp = ft_strjoin(s1, s2);
+	result = ft_strjoin(temp, s3);
+	free(temp);
+	return (result);
 }

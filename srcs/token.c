@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 01:21:23 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/25 20:15:46 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token	*new_token(t_token_type type, char *value)
 	return (t);
 }
 
-char	*get_word_token(char **ptr)
+char	*get_token(char **ptr)
 {
 	int		i;
 	char	quote;
@@ -35,9 +35,9 @@ char	*get_word_token(char **ptr)
 	while ((*ptr)[i])
 	{
 		if (quote && (*ptr)[i] == quote && ++i)
-			break;
+			break ;
 		if (!quote && (is_space((*ptr)[i]) || ft_strchr("|<>\"'", (*ptr)[i])))
-			break;
+			break ;
 		i++;
 	}
 	return (res = ft_substr(*ptr, 0, i), *ptr += i, res);
@@ -67,7 +67,7 @@ t_list	*tokenize(const char *input)
 		else if (*ptr == '<' && ++ptr)
 			lst_add(&list, new_token(TOKEN_REDIRECT_IN, ft_strdup("<")));
 		else
-			lst_add(&list, new_token(TOKEN_WORD, get_word_token((char **)&ptr)));
+			lst_add(&list, new_token(TOKEN_WORD, get_token((char **)&ptr)));
 	}
 	return (lst_add(&list, new_token(TOKEN_END, NULL)), list);
 }

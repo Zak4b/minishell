@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 01:29:49 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/25 20:16:08 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int argc, char **argv, char **envp)
 			return (free(input), 0);
 		tokens = tokenize(input);
 		print_tokens(tokens);
-		ft_lstclear(&tokens,  (void (*)(void *))free_token);
+		ft_lstclear(&tokens, (void (*)(void *))free_token);
 		free(input);
 	}
 	return (0);
