@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 11:04:18 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/26 11:16:25 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,15 @@
 # include <readline/history.h>
 # include <unistd.h>
 # include <stdio.h>
+
+typedef enum e_word_type
+{
+	W_NONE,
+	W_BUILTIN,
+	W_EXECUTABLE,
+	W_FILE,
+	W_CMD
+}	t_word_type;
 
 typedef enum e_token_type
 {
@@ -40,15 +49,15 @@ typedef struct s_token
 	char			*value;
 }	t_token;
 
-t_list	*tokenize(const char *input);
-void	free_token(t_token *t);
+t_list		*tokenize(const char *input);
+void		free_token(t_token *t);
 
-int		is_space(char c);
-void	lst_add(t_list **lst, void *content);
+int			is_space(char c);
+void		lst_add(t_list **lst, void *content);
 
-char	*search_path(char **env, char *cmd);
-char	*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
-int		cmd_or_file(char *token, char **env);
-int		setup_sign(void);
+char		*search_path(char **env, char *cmd);
+char		*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
+t_word_type	cmd_or_file(char *token, char **env);
+int			setup_sign(void);
 
 #endif
