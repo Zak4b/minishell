@@ -6,11 +6,13 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 16:05:55 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/26 13:52:42 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+int	g_nal = 0;
 
 void	analyze_token(t_token *token, char **env)
 {
@@ -62,4 +64,4 @@ int	main(int argc, char **argv, char **env)
 		free(input);
 	}
 	return (0);
-} 
+}

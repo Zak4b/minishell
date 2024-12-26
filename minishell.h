@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
 /*   Updated: 2024/12/26 16:06:47 by asene            ###   ########.fr       */
@@ -20,6 +20,8 @@
 # include <readline/history.h>
 # include <unistd.h>
 # include <stdio.h>
+
+extern int	g_nal;
 
 typedef enum e_word_type
 {
@@ -48,6 +50,14 @@ typedef struct s_token
 	t_token_type	type;
 	char			*value;
 }	t_token;
+
+typedef struct s_var
+{
+	t_list	*env;
+	char 	**builtins;
+	
+} t_var;
+
 
 t_list		*tokenize(const char *input);
 void		free_token(t_token *t);

@@ -6,36 +6,32 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/26 14:03:06 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/26 16:09:34 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	find_path(char **env, char *word)
+static int	find_word(char **env, char *word)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	while (env[i])
 	{
-		j = 0;
-		while (env[i][j] == word[j])
-			j++;
-		if (env[i][j] == '=' && word[j] == '\0')
+		if (ft_strcmp(env[i], word) == 0)
 			return (i);
 		i++;
 	}
 	return (-1);
 }
 
-static char	*clean_path(char **env)
+static char	*clean_word(char **env, char *word)
 {
 	int		i;
 	int		j;
 
-	i = find_path(env, "PATH");
+	i = find_word(env, word);
 	j = 0;
 	while (env[i][j] && env[i][j] != '=')
 		j++;
@@ -51,7 +47,7 @@ char	*search_path(char **env, char *cmd)
 	i = 0;
 	if (access(cmd, F_OK | X_OK) == 0)
 		return (cmd);
-	split = ft_split(clean_path(env), ':');
+	split = ft_split(clean_word(env, "PATH"), ':');
 	while (split[i])
 	{
 		path = ft_strdoublejoin(split[i], "/", cmd);
