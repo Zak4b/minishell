@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 10:22:15 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:05:55 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	analyze_token(t_token *token, char **env)
 {
-	if (cmd_or_file(token->value, env) == 3)
+	if (cmd_or_file(token->value, env) == W_CMD)
 		printf("'%s' est une commande valide.\n", token->value);
-	else if (cmd_or_file(token->value, env) == 2)
+	else if (cmd_or_file(token->value, env) == W_FILE)
 		printf("'%s' est un fichier existant.\n", token->value);
-	else if (cmd_or_file(token->value, env) == 1)
+	else if (cmd_or_file(token->value, env) == W_EXECUTABLE)
 		printf("'%s' est un fichier executable.\n", token->value);
-	else if (cmd_or_file(token->value, env) == 4)
+	else if (cmd_or_file(token->value, env) == W_BUILTIN)
 		printf("'%s' est une commande builtin.\n", token->value);
 	else
 		printf("'%s' est une commande invalide.\n", token->value);
@@ -52,10 +52,12 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		input = readline("minishell> ");
-		if (input == NULL || ft_strncmp(input, "exit", 5) == 0)
+		add_history(input);
+		if (input == NULL)
 			return (free(input), 0);
 		tokens = tokenize(input);
 		print_tokens(tokens, env);
+		execute(tokens);
 		ft_lstclear(&tokens, (void (*)(void *))free_token);
 		free(input);
 	}

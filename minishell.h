@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 11:16:25 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/26 16:06:47 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,8 @@ char		*search_path(char **env, char *cmd);
 char		*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
 t_word_type	cmd_or_file(char *token, char **env);
 int			setup_sign(void);
+
+void		select_builtin(char *builtin, t_list *tokens);
+void		execute(t_list *tokens);
 
 #endif
