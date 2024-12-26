@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 22:17:49 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 09:38:25 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,3 @@ void	free_token(t_token *t)
 		free(t->value);
 	free(t);
 }
-

@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/25 23:51:17 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 10:06:40 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ void	ft_echo(void)
 	return ;
 }
 
-void	ft_exit(void)
+void	ft_exit(t_list *tokens)
 {
+	(void) tokens;
 	return ;
 }
 

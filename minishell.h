@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 23:48:57 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 10:07:38 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <unistd.h>
+# include <stdio.h>
 
 typedef enum e_token_type
 {
@@ -46,5 +48,6 @@ void	lst_add(t_list **lst, void *content);
 char	*search_path(char **env, char *cmd);
 char	*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
 int		cmd_or_file(char *token, char **env);
+int		setup_sign(void);
 
 #endif

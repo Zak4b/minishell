@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 23:26:46 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 10:09:18 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	main(int argc, char **argv, char **env)
 
 	if (argc > 1)
 		return (ft_fprintf(2, "Usage: %s\n", argv[0]), 1);
+	setup_sign();
 	while (1)
 	{
 		input = readline("Prompt : ");
