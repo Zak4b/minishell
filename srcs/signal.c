@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 09:30:16 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/26 10:09:53 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 10:23:15 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void	handle_signal(int sign)
 {
 	if (sign == SIGINT)
-		ft_printf("SIGINT RECU \n");
+		ft_printf("\nminishell> ");
 	if (sign == SIGQUIT)
 		ft_printf("SIQUIT RECU \n");
 }

@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 10:09:18 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 10:22:15 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int	main(int argc, char **argv, char **env)
 	setup_sign();
 	while (1)
 	{
-		input = readline("Prompt : ");
-		if (ft_strncmp(input, "exit", 5) == 0)
+		input = readline("minishell> ");
+		if (input == NULL || ft_strncmp(input, "exit", 5) == 0)
 			return (free(input), 0);
 		tokens = tokenize(input);
 		print_tokens(tokens, env);
@@ -60,4 +60,4 @@ int	main(int argc, char **argv, char **env)
 		free(input);
 	}
 	return (0);
-}
+} 
