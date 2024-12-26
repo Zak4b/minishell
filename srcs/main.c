@@ -6,11 +6,13 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 10:22:15 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 13:43:12 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+int	g_nal = 0;
 
 void	analyze_token(t_token *token, char **env)
 {
@@ -51,6 +53,11 @@ int	main(int argc, char **argv, char **env)
 	setup_sign();
 	while (1)
 	{
+		if (g_nal == SIGINT)
+		{
+			rl_on_new_line();
+			g_nal = 0;
+		}
 		input = readline("minishell> ");
 		if (input == NULL || ft_strncmp(input, "exit", 5) == 0)
 			return (free(input), 0);
@@ -60,4 +67,4 @@ int	main(int argc, char **argv, char **env)
 		free(input);
 	}
 	return (0);
-} 
+}
