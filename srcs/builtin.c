@@ -3,66 +3,80 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/26 10:06:40 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:08:40 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	ft_cd(t_list **tokens)
+{
+	(void)tokens;
+	return ;
+}
+
+void	ft_export(t_list **tokens)
+{
+	(void)tokens;
+	return ;
+}
+
+void	ft_pwd(t_list **tokens)
+{
+	(void)tokens;
+	return ;
+}
+
+void	ft_echo(t_list **tokens)
+{
+	(void)tokens;
+	return ;
+}
+
+void	ft_exit(t_list **tokens)
+{
+	unsigned char	exit_code;
+	t_token	*arg;
+
+	if ((*tokens)->next && ((t_token *)(*tokens)->next->content)->type != TOKEN_END)
+		return (ft_putendl_fd("exit: too many arguments", 2));
+	rl_clear_history();
+	arg = (*tokens)->content;
+	exit_code = 0;
+	if (arg->type == TOKEN_WORD)
+		exit_code = ft_atoi(arg->value);
+	exit(exit_code);
+}
+
+void	ft_env(t_list **tokens)
+{
+	(void)tokens;
+	return ;
+}
+
+void	ft_unset(t_list **tokens)
+{
+	(void)tokens;
+	return ;
+}
+
 void	select_builtin(char *builtin, t_list *tokens)
 {
-	if (ft_strncmp(builtin, "cd", 3) == 0)
-		ft_cd();
-	if (ft_strncmp(builtin, "export", 7) == 0)
-		ft_export();
-	if (ft_strncmp(builtin, "pwd", 4) == 0)
-		ft_pwd();
-	if (ft_strncmp(builtin, "echo", 5) == 0)
-		ft_echo();
-	if (ft_strncmp(builtin, "exit", 5) == 0)
-		ft_exit();
-	if (ft_strncmp(builtin, "env", 4) == 0)
-		ft_env();
-	if (ft_strncmp(builtin, "unset", 6) == 0)
-		ft_unset();
+	if (ft_strcmp(builtin, "cd") == 0)
+		ft_cd(&tokens);
+	if (ft_strcmp(builtin, "export") == 0)
+		ft_export(&tokens);
+	if (ft_strcmp(builtin, "pwd") == 0)
+		ft_pwd(&tokens);
+	if (ft_strcmp(builtin, "echo") == 0)
+		ft_echo(&tokens);
+	if (ft_strcmp(builtin, "exit") == 0)
+		ft_exit(&tokens);
+	if (ft_strcmp(builtin, "env") == 0)
+		ft_env(&tokens);
+	if (ft_strcmp(builtin, "unset") == 0)
+		ft_unset(&tokens);
 }
-
-void	ft_cd(void)
-{
-	return ;
-}
-
-void	ft_export(void)
-{
-	return ;
-}
-
-void	ft_pwd(void)
-{
-	return ;
-}
-
-void	ft_echo(void)
-{
-	return ;
-}
-
-void	ft_exit(t_list *tokens)
-{
-	(void) tokens;
-	return ;
-}
-
-void	ft_env(void)
-{
-	return ;
-}
-
-void	ft_unset(void)
-{
-	return ;
-}
-

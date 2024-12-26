@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   pathfinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
 /*   Updated: 2024/12/26 16:09:34 by rsebasti         ###   ########.fr       */
@@ -53,7 +53,7 @@ char	*search_path(char **env, char *cmd)
 		path = ft_strdoublejoin(split[i], "/", cmd);
 		if (access(path, F_OK | X_OK) == 0)
 		{
-			killsplit(split);
+			free_split(split);
 			return (path);
 		}
 		if (path)
@@ -61,6 +61,6 @@ char	*search_path(char **env, char *cmd)
 		i++;
 	}
 	if (split)
-		killsplit(split);
+		free_split(split);
 	return (NULL);
 }

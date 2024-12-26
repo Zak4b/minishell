@@ -1,74 +1,78 @@
 NAME = libft.a
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -I.
 OBJDIR = obj
+SUB_DIRS = $(addprefix $(OBJDIR)/, char conversions ft_printf list mem strings)
 
-SOURCES = ft_isalpha.c \
-		ft_isdigit.c \
-		ft_isalnum.c \
-		ft_isascii.c \
-		ft_isprint.c \
-		ft_toupper.c \
-		ft_tolower.c \
-		ft_strncmp.c \
-		ft_strlen.c \
-		ft_strchr.c \
-		ft_strrchr.c \
-		ft_strdup.c \
-		ft_strndup.c \
-		ft_strlcpy.c \
-		ft_strlcat.c \
-		ft_strnstr.c \
-		ft_memset.c \
-		ft_bzero.c \
-		ft_memcmp.c \
-		ft_memcpy.c \
-		ft_memmove.c \
-		ft_memchr.c \
-		ft_atoi.c \
-		ft_calloc.c \
-		ft_substr.c \
-		ft_strjoin.c \
-		ft_strtrim.c \
-		ft_split.c \
-		ft_itoa.c \
-		ft_strmapi.c \
-		ft_striteri.c \
+SOURCES = \
+		char/ft_isalpha.c \
+		char/ft_isdigit.c \
+		char/ft_isalnum.c \
+		char/ft_isascii.c \
+		char/ft_isprint.c \
+		char/ft_toupper.c \
+		char/ft_tolower.c \
+		strings/ft_strcmp.c \
+		strings/ft_strncmp.c \
+		strings/ft_strlen.c \
+		strings/ft_strchr.c \
+		strings/ft_strrchr.c \
+		strings/ft_strdup.c \
+		strings/ft_strndup.c \
+		strings/ft_strlcpy.c \
+		strings/ft_strlcat.c \
+		strings/ft_strnstr.c \
+		strings/ft_substr.c \
+		strings/ft_strjoin.c \
+		strings/ft_strtrim.c \
+		strings/ft_split.c \
+		strings/ft_strmapi.c \
+		strings/ft_striteri.c \
+		mem/ft_memset.c \
+		mem/ft_bzero.c \
+		mem/ft_memcmp.c \
+		mem/ft_memcpy.c \
+		mem/ft_memmove.c \
+		mem/ft_memchr.c \
+		mem/ft_calloc.c \
+		conversions/ft_atoi.c \
+		conversions/ft_itoa.c \
 		ft_putchar_fd.c \
 		ft_putstr_fd.c \
 		ft_putendl_fd.c \
 		ft_putnbr_fd.c \
-		 ft_lstnew_bonus.c \
-		ft_lstadd_front_bonus.c \
-		ft_lstsize_bonus.c \
-		ft_lstlast_bonus.c \
-		ft_lstadd_back_bonus.c \
-		ft_lstclear_bonus.c \
-		ft_lstdelone_bonus.c \
-		ft_lstclear_bonus.c \
-		ft_lstiter_bonus.c \
-		ft_lstmap_bonus.c \
-		ft_printf.c \
-		ft_printf_utils.c \
-		ft_printf_conversions.c \
+		list/ft_lstnew.c \
+		list/ft_lstadd_front.c \
+		list/ft_lstsize.c \
+		list/ft_lstlast.c \
+		list/ft_lstadd_back.c \
+		list/ft_lstclear.c \
+		list/ft_lstdelone.c \
+		list/ft_lstclear.c \
+		list/ft_lstiter.c \
+		list/ft_lstmap.c \
+		ft_printf/ft_printf.c \
+		ft_printf/utils.c \
+		ft_printf/conversions.c \
 		get_next_line.c
 
 OBJS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
 
 $(NAME): $(OBJS)
-	@ar -rcs $(NAME) $(OBJS)
+	ar -rcs $(NAME) $(OBJS)
 
 $(OBJDIR):
-	@mkdir -p $(OBJDIR)
+	mkdir -p $(OBJDIR)
+	mkdir -p $(SUB_DIRS)
 
-$(OBJDIR)/%.o: %.c | $(OBJDIR)
+$(OBJDIR)/%.o: srcs/%.c | $(OBJDIR)
 	@cc $(FLAGS) -c $< -o $@
 
 all: $(NAME)
 
 clean:
-	@rm -rf $(OBJDIR)
+	rm -rf $(OBJDIR)
 
 fclean: clean
-	@rm -f $(NAME)
+	rm -f $(NAME)
 
 re: fclean all
