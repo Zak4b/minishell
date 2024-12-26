@@ -6,12 +6,11 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 09:30:16 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/26 10:39:16 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 10:51:39 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "signal.h"
 
 void	handle_signal(int sign)
 {
