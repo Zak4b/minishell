@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 09:38:25 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 11:05:12 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,31 +43,42 @@ char	*get_token(char **ptr)
 	return (res = ft_substr(*ptr, 0, i), *ptr += i, res);
 }
 
+void	add_token(t_list **list, char **input)
+{
+	if (**input == '|' && ++(*input))
+		lst_add(list, new_token(TOKEN_PIPE, ft_strdup("|")));
+	else if (**input == '>' && ++(*input))
+	{
+		if (**input == '>' && ++(*input))
+			lst_add(list, new_token(TOKEN_APPEND, ft_strdup(">>")));
+		else
+			lst_add(list, new_token(TOKEN_REDIRECT_OUT, ft_strdup(">")));
+	}
+	else if (**input == '<' && ++(*input))
+	{
+		if (**input == '<' && ++(*input))
+			lst_add(list, new_token(TOKEN_HEREDOC, ft_strdup("<<")));
+		else
+			lst_add(list, new_token(TOKEN_REDIRECT_IN, ft_strdup("<")));
+	}
+	else if (**input)
+		lst_add(list, new_token(TOKEN_WORD, get_token(input)));
+}
+
 t_list	*tokenize(const char *input)
 {
 	t_list		*list;
-	const char	*ptr;
 
-	ptr = input;
 	list = NULL;
-	while (*ptr)
+	while (*input)
 	{
-		while (*ptr && is_space(*ptr))
-			ptr++;
-		if (*ptr == '|' && ++ptr)
-			lst_add(&list, new_token(TOKEN_PIPE, ft_strdup("|")));
-		else if (*ptr == '>')
+		if (*input && is_space(*input))
 		{
-			if (*(ptr + 1) == '>' && ++ptr)
-				lst_add(&list, new_token(TOKEN_APPEND, ft_strdup(">>")));
-			else
-				lst_add(&list, new_token(TOKEN_REDIRECT_OUT, ft_strdup(">")));
-			ptr++;
+			while (*input && is_space(*input))
+				input++;
+			lst_add(&list, new_token(TOKEN_SPACE, NULL));
 		}
-		else if (*ptr == '<' && ++ptr)
-			lst_add(&list, new_token(TOKEN_REDIRECT_IN, ft_strdup("<")));
-		else if (*ptr)
-			lst_add(&list, new_token(TOKEN_WORD, get_token((char **)&ptr)));
+		add_token(&list, (char **)&input);
 	}
 	return (lst_add(&list, new_token(TOKEN_END, NULL)), list);
 }
