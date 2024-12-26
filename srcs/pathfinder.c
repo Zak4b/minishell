@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pathfinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/26 16:09:34 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:25:51 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	find_word(char **env, char *word)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strcmp(env[i], word) == 0)
+		if (ft_strncmp(env[i], word, (int) ft_strlen(word)) == 0)
 			return (i);
 		i++;
 	}
