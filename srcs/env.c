@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 16:09:56 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/27 11:51:13 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:04:35 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	count_line(char **str)
 	return (i);
 }
 
-void	env_parser(char **env, t_var *vars)
+void	env_parser(char **env, t_vars *vars)
 {
 	char	**new_env;
 	int		i;
