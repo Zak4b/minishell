@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 16:59:12 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 19:27:19 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,8 @@ void	execute(t_vars *vars)
 			if (pid > 0)
 				waitpid(pid, NULL, 0);
 		}
+		else if (vars->current_token->token.value)
+			ft_printf("%s: command not found\n",
+				vars->current_token->token.value);
 	}
 }

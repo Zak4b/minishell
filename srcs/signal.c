@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 09:30:16 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/27 11:16:06 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/27 19:29:51 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	handle_signal(int sign)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-
 	}
 	if (sign == SIGQUIT)
 		ft_printf("SIQUIT RECU \n");

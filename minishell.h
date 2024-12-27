@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 16:23:36 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 19:29:42 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,13 @@ typedef struct s_exec_data
 	char	**args;
 }	t_exec_data;
 
-
 typedef struct s_vars
 {
-	char 	      **env;
-	char 	      **builtins;
-	int		      envsize;
+	char		**env;
+	char		**builtins;
+	int			envsize;
 	t_tokenlist	*token_list;
 	t_tokenlist	*current_token;
-	
 }	t_vars;
 
 t_tokenlist	*tokenize(const char *input);

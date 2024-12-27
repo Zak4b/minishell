@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 16:04:29 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 19:30:44 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	analyze_token(t_token *token, char **env)
 
 void	print_tokens(t_tokenlist *list, char **env)
 {
-
 	while (list)
 	{
 		if (list->token.type == TOKEN_WORD)
