@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 16:02:28 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 16:37:16 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_tokenlist	*tokenize(const char *input)
 		{
 			while (*input && is_space(*input))
 				input++;
-			token_append(&list, TOKEN_SPACE, " ");
+			token_append(&list, TOKEN_SPACE, ft_strdup(" "));
 		}
 		add_token(&list, (char **)&input);
 	}

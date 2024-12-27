@@ -6,58 +6,53 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 15:53:41 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 16:59:12 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-char	*list_to_string(t_list *lst)
+char	**list_to_array(t_list *lst)
 {
 	int		i;
 	int		size;
-	char	**split;
-	char	*res;
+	char	**array;
 
 	size = ft_lstsize(lst);
-	if (size == 0)
-		return (NULL);
-	split = ft_calloc(size + 1, sizeof(char *));
+	array = ft_calloc(size + 1, sizeof(char *));
 	i = 0;
 	while (lst)
 	{
-		split[i++] = lst->content;
+		array[i++] = lst->content;
 		lst = lst->next;
 	}
-	res = ft_strnjoin(split, size, " ");
-	free(split);
-	return (res);
+	return (array);
 }
 
-char	*build_word(t_tokenlist **lst)
+t_exec_data	build_exec(t_vars *vars)
 {
-	char 		*res;
+	t_exec_data	data;
 	t_list		*string_lst;
 	t_tokenlist	*t;
 
-	t = *lst;
+	t = vars->current_token;
 	string_lst = NULL;
+	data.path = search_path(vars->env, t->token.value);
 	while (t && (t->token.type == TOKEN_SPACE || t->token.type == TOKEN_WORD))
 	{
-		ft_lstadd_back(&string_lst, ft_lstnew(ft_strdup(t->token.value)));
+		if (t->token.type == TOKEN_WORD)
+			ft_lstadd_back(&string_lst,
+				ft_lstnew(ft_strtrim(t->token.value, " ")));
 		t = t->next;
 	}
-	*lst = t;
-	res = list_to_string(string_lst);
-	ft_lstclear(&string_lst, free);
-	if (res)
-		res = ft_strtrim(res, " "); // Memory leak
-	return (res);
+	vars->current_token = t;
+	data.args = list_to_array(string_lst);
+	ft_lstclear(&string_lst, NULL);
+	return (data);
 }
 
 pid_t	exec_cmd(t_vars *vars, t_exec_data data, int fd_in, int fd_out)
 {
-	static char	*args[] = {NULL, NULL, NULL};
 	pid_t		pid;
 
 	(void)vars;
@@ -73,9 +68,7 @@ pid_t	exec_cmd(t_vars *vars, t_exec_data data, int fd_in, int fd_out)
 			close(fd_in);
 			close(fd_out);
 		}
-		args[0] = data.cmd;
-		args[1] = data.args;
-		execve(args[0], args, vars->env);
+		execve(data.path, data.args, vars->env);
 	}
 	return (pid);
 }
@@ -83,21 +76,17 @@ pid_t	exec_cmd(t_vars *vars, t_exec_data data, int fd_in, int fd_out)
 void	execute(t_vars *vars)
 {
 	t_word_type	type;
-	t_exec_data	data;
 	pid_t		pid;
 
 	vars->current_token = vars->token_list;
 	if (vars->current_token->token.type == TOKEN_WORD)
 	{
-		data.cmd = vars->current_token->token.value;
-		type = cmd_or_file(data.cmd, vars->env);
+		type = cmd_or_file(vars->current_token->token.value, vars->env);
 		if (type == W_BUILTIN)
 			exec_builtin(vars);
 		else if (type == W_CMD || type == W_EXECUTABLE)
 		{
-			data.cmd = search_path(vars->env, data.cmd);
-			data.args = build_word(&vars->current_token->next);
-			pid = exec_cmd(vars, data, 0, 1);
+			pid = exec_cmd(vars, build_exec(vars), 0, 1);
 			if (pid > 0)
 				waitpid(pid, NULL, 0);
 		}
