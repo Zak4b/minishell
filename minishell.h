@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 14:13:21 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 16:01:05 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <readline/history.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <sys/wait.h>
 
 extern int	g_nal;
 
@@ -57,6 +58,13 @@ typedef struct s_tokenlist
 	struct s_tokenlist	*next;
 }	t_tokenlist;
 
+typedef struct s_exec_data
+{
+	char	*cmd;
+	char	*args;
+}	t_exec_data;
+
+
 typedef struct s_vars
 {
 	char 	      **env;
@@ -69,7 +77,7 @@ typedef struct s_vars
 
 t_tokenlist	*tokenize(const char *input);
 void		token_append(t_tokenlist **lst, t_token_type type, char *value);
-void		clear_token_list(t_tokenlist *t);
+void		clear_token_list(t_tokenlist **t);
 
 int			is_space(char c);
 
@@ -79,7 +87,7 @@ char		*ft_strnjoin(char **strs, unsigned int size, char *sep);
 t_word_type	cmd_or_file(char *token, char **env);
 int			setup_sign(void);
 
-void		select_builtin(t_vars *vars);
+void		exec_builtin(t_vars *vars);
 int			count_line(char **str);
 void		env_parser(char **env, t_vars *vars);
 void		execute(t_vars *vars);

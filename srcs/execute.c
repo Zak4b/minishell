@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 14:15:53 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 15:53:41 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ char	*list_to_string(t_list *lst)
 	char	*res;
 
 	size = ft_lstsize(lst);
+	if (size == 0)
+		return (NULL);
 	split = ft_calloc(size + 1, sizeof(char *));
 	i = 0;
 	while (lst)
@@ -28,7 +30,7 @@ char	*list_to_string(t_list *lst)
 		lst = lst->next;
 	}
 	res = ft_strnjoin(split, size, " ");
-	free_split(split);
+	free(split);
 	return (res);
 }
 
@@ -48,13 +50,56 @@ char	*build_word(t_tokenlist **lst)
 	*lst = t;
 	res = list_to_string(string_lst);
 	ft_lstclear(&string_lst, free);
+	if (res)
+		res = ft_strtrim(res, " "); // Memory leak
 	return (res);
+}
+
+pid_t	exec_cmd(t_vars *vars, t_exec_data data, int fd_in, int fd_out)
+{
+	static char	*args[] = {NULL, NULL, NULL};
+	pid_t		pid;
+
+	(void)vars;
+	pid = fork();
+	if (pid == -1)
+		perror("Error on fork ");
+	else if (pid == 0)
+	{
+		if (0)
+		{
+			if (dup2(fd_in, 0) == -1 || dup2(fd_out, 1) == -1)
+				return (perror("Error dup2 "), -1);
+			close(fd_in);
+			close(fd_out);
+		}
+		args[0] = data.cmd;
+		args[1] = data.args;
+		execve(args[0], args, vars->env);
+	}
+	return (pid);
 }
 
 void	execute(t_vars *vars)
 {
-	vars->current_token = vars->token_list;
+	t_word_type	type;
+	t_exec_data	data;
+	pid_t		pid;
 
+	vars->current_token = vars->token_list;
 	if (vars->current_token->token.type == TOKEN_WORD)
-		select_builtin(vars);
+	{
+		data.cmd = vars->current_token->token.value;
+		type = cmd_or_file(data.cmd, vars->env);
+		if (type == W_BUILTIN)
+			exec_builtin(vars);
+		else if (type == W_CMD || type == W_EXECUTABLE)
+		{
+			data.cmd = search_path(vars->env, data.cmd);
+			data.args = build_word(&vars->current_token->next);
+			pid = exec_cmd(vars, data, 0, 1);
+			if (pid > 0)
+				waitpid(pid, NULL, 0);
+		}
+	}
 }

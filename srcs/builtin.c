@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/27 14:14:42 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 14:55:19 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	ft_unset(t_vars *vars)
 	return ;
 }
 
-void	select_builtin(t_vars *vars)
+void	exec_builtin(t_vars *vars)
 {
 	char	*builtin;
 

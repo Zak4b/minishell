@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:49:58 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 13:54:28 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 15:24:01 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*ft_strnjoin(char **strs, unsigned int size, char *sep)
 		len += ft_strlen(strs[i++]);
 	if (size != 0)
 		len += (size - 1) * ft_strlen(sep);
-	result = malloc(sizeof(char) * len);
+	result = ft_calloc(len, sizeof(char));
 	i = 0;
 	while (i < size)
 	{

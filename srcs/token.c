@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 13:53:07 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 16:02:28 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,25 +84,26 @@ t_tokenlist	*tokenize(const char *input)
 		{
 			while (*input && is_space(*input))
 				input++;
-			token_append(&list, TOKEN_SPACE, NULL);
+			token_append(&list, TOKEN_SPACE, " ");
 		}
 		add_token(&list, (char **)&input);
 	}
 	return (token_append(&list, TOKEN_END, NULL), list);
 }
 
-void	clear_token_list(t_tokenlist *t)
+void	clear_token_list(t_tokenlist **t)
 {
 	t_tokenlist	*next;
 
-	while (t)
+	while (t && *t)
 	{
-		next = t->next;
-		free(t->token.value);
-		t->token.value = NULL;
-		free(t);
-		t = NULL;
-		t = next;
+		next = (*t)->next;
+		if ((*t)->token.value)
+		{
+			free((*t)->token.value);
+			(*t)->token.value = NULL;
+		}
+		free(*t);
+		*t = next;
 	}
-	
 }
