@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:49:58 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 21:44:30 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:54:28 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,6 @@ int	is_space(char c)
 	return (c == ' ' || (c >= 9 && c <= 13));
 }
 
-void	lst_add(t_list **lst, void *content)
-{
-	t_list	*e;
-
-	e = ft_lstnew(content);
-	ft_lstadd_back(lst, e);
-}
-
 char	*ft_strdoublejoin(char const *s1, char const *s2, char const *s3)
 {
 	char	*temp;
@@ -33,5 +25,28 @@ char	*ft_strdoublejoin(char const *s1, char const *s2, char const *s3)
 	temp = ft_strjoin(s1, s2);
 	result = ft_strjoin(temp, s3);
 	free(temp);
+	return (result);
+}
+
+char	*ft_strnjoin(char **strs, unsigned int size, char *sep)
+{
+	unsigned int	i;
+	unsigned int	len;
+	char			*result;
+
+	i = 0;
+	len = 1;
+	while (i < size)
+		len += ft_strlen(strs[i++]);
+	if (size != 0)
+		len += (size - 1) * ft_strlen(sep);
+	result = malloc(sizeof(char) * len);
+	i = 0;
+	while (i < size)
+	{
+		if (i != 0)
+			ft_strlcat(result, sep, len);
+		ft_strlcat(result, strs[i++], len);
+	}
 	return (result);
 }
