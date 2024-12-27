@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 11:57:26 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:23:27 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@ void	print_tokens(t_tokenlist *list, char **env)
 	}
 }
 
-void	init_shell(t_vars *vars)
+void	init_shell(t_vars *vars, char **env)
 {
 	vars->token_list = NULL;
 	vars->current_token = NULL;
 	setup_sign();
+	env_parser(env, vars);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -55,7 +56,7 @@ int	main(int argc, char **argv, char **env)
 
 	if (argc > 1)
 		return (ft_fprintf(2, "Usage: %s\n", argv[0]), 1);
-	init_shell(&vars);
+	init_shell(&vars, env);
 	while (1)
 	{
 		input = readline("minishell> ");
