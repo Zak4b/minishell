@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 13:50:29 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 13:32:57 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,9 @@ typedef struct s_tokenlist
 
 typedef struct s_vars
 {
-	t_list		*env;
-	char 		**builtins;
+	char 	      **env;
+	char 	      **builtins;
+	int		      envsize;
 	t_tokenlist	*token_list;
 	t_tokenlist	*current_token;
 	
@@ -78,7 +79,9 @@ char		*ft_strnjoin(char **strs, unsigned int size, char *sep);
 t_word_type	cmd_or_file(char *token, char **env);
 int			setup_sign(void);
 
-void		select_builtin(char *builtin, t_list *tokens);
+void		select_builtin(char *builtin, t_list *tokens, t_var *vars);
+int			count_line(char **str);
+void		env_parser(char **env, t_var *vars);
 void		execute(t_vars *vars);
 
 #endif
