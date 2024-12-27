@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/27 11:58:18 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:05:28 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	ft_exit(t_list **tokens)
 	exit(exit_code);
 }
 
-void	ft_env(t_list **tokens, t_var *vars)
+void	ft_env(t_list **tokens, t_vars *vars)
 {
 	(void)tokens;
 	int	i;
@@ -70,7 +70,7 @@ void	ft_unset(t_list **tokens)
 	return ;
 }
 
-void	select_builtin(char *builtin, t_list *tokens, t_var *vars)
+void	select_builtin(char *builtin, t_list *tokens, t_vars *vars)
 {
 	if (ft_strcmp(builtin, "cd") == 0)
 		ft_cd(&tokens);
