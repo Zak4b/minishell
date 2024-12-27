@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 14:04:39 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:13:21 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char		*ft_strnjoin(char **strs, unsigned int size, char *sep);
 t_word_type	cmd_or_file(char *token, char **env);
 int			setup_sign(void);
 
-void		select_builtin(char *builtin, t_list *tokens, t_vars *vars);
+void		select_builtin(t_vars *vars);
 int			count_line(char **str);
 void		env_parser(char **env, t_vars *vars);
 void		execute(t_vars *vars);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 11:54:46 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:15:53 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ char	*build_word(t_tokenlist **lst)
 		ft_lstadd_back(&string_lst, ft_lstnew(ft_strdup(t->token.value)));
 		t = t->next;
 	}
+	*lst = t;
 	res = list_to_string(string_lst);
 	ft_lstclear(&string_lst, free);
 	return (res);
@@ -52,11 +53,8 @@ char	*build_word(t_tokenlist **lst)
 
 void	execute(t_vars *vars)
 {
-	(void)vars;
-	// vars->current_token = vars->token_list;
+	vars->current_token = vars->token_list;
 
-	// if (vars->current_token->token.type == TOKEN_WORD)
-	// {
-	// 	select_builtin(t->value, tokens->next);
-	// }
+	if (vars->current_token->token.type == TOKEN_WORD)
+		select_builtin(vars);
 }
