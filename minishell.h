@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 16:06:47 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 13:50:29 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,26 +51,34 @@ typedef struct s_token
 	char			*value;
 }	t_token;
 
-typedef struct s_var
+typedef struct s_tokenlist
 {
-	t_list	*env;
-	char 	**builtins;
+	t_token				token;
+	struct s_tokenlist	*next;
+}	t_tokenlist;
+
+typedef struct s_vars
+{
+	t_list		*env;
+	char 		**builtins;
+	t_tokenlist	*token_list;
+	t_tokenlist	*current_token;
 	
-} t_var;
+}	t_vars;
 
-
-t_list		*tokenize(const char *input);
-void		free_token(t_token *t);
+t_tokenlist	*tokenize(const char *input);
+void		token_append(t_tokenlist **lst, t_token_type type, char *value);
+void		clear_token_list(t_tokenlist *t);
 
 int			is_space(char c);
-void		lst_add(t_list **lst, void *content);
 
 char		*search_path(char **env, char *cmd);
 char		*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
+char		*ft_strnjoin(char **strs, unsigned int size, char *sep);
 t_word_type	cmd_or_file(char *token, char **env);
 int			setup_sign(void);
 
 void		select_builtin(char *builtin, t_list *tokens);
-void		execute(t_list *tokens);
+void		execute(t_vars *vars);
 
 #endif

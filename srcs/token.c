@@ -6,20 +6,28 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 11:05:12 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 13:53:07 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_token	*new_token(t_token_type type, char *value)
-{
-	t_token	*t;
 
-	t = ft_calloc(1, sizeof(t_token));
-	t->type = type;
-	t->value = value;
-	return (t);
+void	token_append(t_tokenlist **lst, t_token_type type, char *value)
+{
+	t_tokenlist	*e;
+	t_tokenlist	*last;
+
+	e = ft_calloc(1, sizeof(t_tokenlist));
+	e->next = NULL;
+	e->token.type = type;
+	e->token.value = value;
+	if (*lst == NULL)
+		return (*lst = e, (void)0);
+	last = *lst;
+	while (last->next)
+		last = last->next;
+	last->next = e;
 }
 
 char	*get_token(char **ptr)
@@ -43,31 +51,31 @@ char	*get_token(char **ptr)
 	return (res = ft_substr(*ptr, 0, i), *ptr += i, res);
 }
 
-void	add_token(t_list **list, char **input)
+void	add_token(t_tokenlist **list, char **input)
 {
 	if (**input == '|' && ++(*input))
-		lst_add(list, new_token(TOKEN_PIPE, ft_strdup("|")));
+		token_append(list, TOKEN_PIPE, ft_strdup("|"));
 	else if (**input == '>' && ++(*input))
 	{
 		if (**input == '>' && ++(*input))
-			lst_add(list, new_token(TOKEN_APPEND, ft_strdup(">>")));
+			token_append(list, TOKEN_APPEND, ft_strdup(">>"));
 		else
-			lst_add(list, new_token(TOKEN_REDIRECT_OUT, ft_strdup(">")));
+			token_append(list, TOKEN_REDIRECT_OUT, ft_strdup(">"));
 	}
 	else if (**input == '<' && ++(*input))
 	{
 		if (**input == '<' && ++(*input))
-			lst_add(list, new_token(TOKEN_HEREDOC, ft_strdup("<<")));
+			token_append(list, TOKEN_HEREDOC, ft_strdup("<<"));
 		else
-			lst_add(list, new_token(TOKEN_REDIRECT_IN, ft_strdup("<")));
+			token_append(list, TOKEN_REDIRECT_IN, ft_strdup("<"));
 	}
 	else if (**input)
-		lst_add(list, new_token(TOKEN_WORD, get_token(input)));
+		token_append(list, TOKEN_WORD, get_token(input));
 }
 
-t_list	*tokenize(const char *input)
+t_tokenlist	*tokenize(const char *input)
 {
-	t_list		*list;
+	t_tokenlist	*list;
 
 	list = NULL;
 	while (*input)
@@ -76,16 +84,25 @@ t_list	*tokenize(const char *input)
 		{
 			while (*input && is_space(*input))
 				input++;
-			lst_add(&list, new_token(TOKEN_SPACE, NULL));
+			token_append(&list, TOKEN_SPACE, NULL);
 		}
 		add_token(&list, (char **)&input);
 	}
-	return (lst_add(&list, new_token(TOKEN_END, NULL)), list);
+	return (token_append(&list, TOKEN_END, NULL), list);
 }
 
-void	free_token(t_token *t)
+void	clear_token_list(t_tokenlist *t)
 {
-	if (t->value != NULL)
-		free(t->value);
-	free(t);
+	t_tokenlist	*next;
+
+	while (t)
+	{
+		next = t->next;
+		free(t->token.value);
+		t->token.value = NULL;
+		free(t);
+		t = NULL;
+		t = next;
+	}
+	
 }

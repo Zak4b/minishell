@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 11:03:26 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/27 13:53:13 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,39 +28,44 @@ void	analyze_token(t_token *token, char **env)
 		printf("'%s' est une commande invalide.\n", token->value);
 }
 
-void	print_tokens(t_list *list, char **env)
+void	print_tokens(t_tokenlist *list, char **env)
 {
-	t_token	*t;
 
 	while (list)
 	{
-		t = list->content;
-		if (t->type == TOKEN_WORD)
-			analyze_token(t, env);
+		if (list->token.type == TOKEN_WORD)
+			analyze_token(&list->token, env);
 		else
-			ft_printf("Type: %d, %s\n", t->type, t->value);
+			ft_printf("Type: %d, %s\n", list->token.type, list->token.value);
 		list = list->next;
 	}
+}
+
+void	init_shell(t_vars *vars)
+{
+	vars->token_list = NULL;
+	vars->current_token = NULL;
+	setup_sign();
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
-	t_list	*tokens;
+	t_vars	vars;
 
 	if (argc > 1)
 		return (ft_fprintf(2, "Usage: %s\n", argv[0]), 1);
-	setup_sign();
+	init_shell(&vars);
 	while (1)
 	{
 		input = readline("minishell> ");
 		add_history(input);
 		if (input == NULL)
 			return (free(input), 0);
-		tokens = tokenize(input);
-		print_tokens(tokens, env);
-		execute(tokens);
-		ft_lstclear(&tokens, (void (*)(void *))free_token);
+		vars.token_list = tokenize(input);
+		print_tokens(vars.token_list , env);
+		execute(&vars);
+		clear_token_list(vars.token_list);
 		free(input);
 	}
 	return (0);
