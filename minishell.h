@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 16:06:47 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 13:32:57 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,9 @@ typedef struct s_token
 
 typedef struct s_var
 {
-	t_list	*env;
+	char 	**env;
 	char 	**builtins;
+	int		envsize;
 	
 } t_var;
 
@@ -70,7 +71,10 @@ char		*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
 t_word_type	cmd_or_file(char *token, char **env);
 int			setup_sign(void);
 
-void		select_builtin(char *builtin, t_list *tokens);
-void		execute(t_list *tokens);
+void		select_builtin(char *builtin, t_list *tokens, t_var *vars);
+void		execute(t_list *tokens, t_var *vars);
+
+int			count_line(char **str);
+void		env_parser(char **env, t_var *vars);
 
 #endif

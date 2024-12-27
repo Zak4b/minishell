@@ -19,7 +19,8 @@ SOURCES = \
 		command.c \
 		signal.c \
 		builtin.c \
-		execute.c
+		execute.c \
+		env.c
 
 OBJDIR = obj
 OBJS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))

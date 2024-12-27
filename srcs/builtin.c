@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/26 16:08:40 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 11:58:18 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,17 @@ void	ft_exit(t_list **tokens)
 	exit(exit_code);
 }
 
-void	ft_env(t_list **tokens)
+void	ft_env(t_list **tokens, t_var *vars)
 {
 	(void)tokens;
-	return ;
+	int	i;
+
+	i = 0;
+	while (vars->env[i])
+	{
+		ft_printf("%s\n",vars->env[i]);
+		i++;
+	}
 }
 
 void	ft_unset(t_list **tokens)
@@ -63,7 +70,7 @@ void	ft_unset(t_list **tokens)
 	return ;
 }
 
-void	select_builtin(char *builtin, t_list *tokens)
+void	select_builtin(char *builtin, t_list *tokens, t_var *vars)
 {
 	if (ft_strcmp(builtin, "cd") == 0)
 		ft_cd(&tokens);
@@ -76,7 +83,7 @@ void	select_builtin(char *builtin, t_list *tokens)
 	if (ft_strcmp(builtin, "exit") == 0)
 		ft_exit(&tokens);
 	if (ft_strcmp(builtin, "env") == 0)
-		ft_env(&tokens);
+		ft_env(&tokens, vars);
 	if (ft_strcmp(builtin, "unset") == 0)
 		ft_unset(&tokens);
 }

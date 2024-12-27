@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2024/12/26 16:04:19 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 11:54:46 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	execute(t_list *tokens)
+void	execute(t_list *tokens, t_var *vars)
 {
 	t_token * 	t = tokens->content;
 	if (t->type == TOKEN_WORD)
 	{
-		select_builtin(t->value, tokens->next);
+		select_builtin(t->value, tokens->next, vars);
 	}
 }

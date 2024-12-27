@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 11:03:26 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:57:26 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ int	main(int argc, char **argv, char **env)
 {
 	char	*input;
 	t_list	*tokens;
+	t_var	*vars;
 
+	vars = malloc(sizeof(t_var));
+	env_parser(env, vars);
 	if (argc > 1)
 		return (ft_fprintf(2, "Usage: %s\n", argv[0]), 1);
 	setup_sign();
@@ -59,7 +62,7 @@ int	main(int argc, char **argv, char **env)
 			return (free(input), 0);
 		tokens = tokenize(input);
 		print_tokens(tokens, env);
-		execute(tokens);
+		execute(tokens, vars);
 		ft_lstclear(&tokens, (void (*)(void *))free_token);
 		free(input);
 	}
