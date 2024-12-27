@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/26 16:25:51 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/27 16:13:28 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	find_word(char **env, char *word)
 	return (-1);
 }
 
-static char	*clean_word(char **env, char *word)
+char	*clean_word(char **env, char *word)
 {
 	int		i;
 	int		j;

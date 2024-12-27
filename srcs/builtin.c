@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/27 14:55:19 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/27 16:14:57 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ void	ft_export(t_vars *vars)
 
 void	ft_pwd(t_vars *vars)
 {
-	(void)vars;
-	return ;
+	printf("%s\n", clean_word(vars->env, "PWD"));
 }
 
 void	ft_echo(t_vars *vars)
