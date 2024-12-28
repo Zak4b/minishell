@@ -6,11 +6,21 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 19:27:19 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/28 22:41:48 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+void	end_exec(t_exec_data data, int pid)
+{
+	waitpid(pid, NULL, 0);
+	if (data.path)
+		free(data.path);
+	if (data.args)
+		free_split(data.args);
+	g_nal = 0;
+}
 
 char	**list_to_array(t_list *lst)
 {
@@ -77,6 +87,7 @@ void	execute(t_vars *vars)
 {
 	t_word_type	type;
 	pid_t		pid;
+	t_exec_data	data;
 
 	vars->current_token = vars->token_list;
 	if (vars->current_token->token.type == TOKEN_WORD)
@@ -86,9 +97,11 @@ void	execute(t_vars *vars)
 			exec_builtin(vars);
 		else if (type == W_CMD || type == W_EXECUTABLE)
 		{
-			pid = exec_cmd(vars, build_exec(vars), 0, 1);
+			data = build_exec(vars);
+			g_nal = 1;
+			pid = exec_cmd(vars, data, 0, 1);
 			if (pid > 0)
-				waitpid(pid, NULL, 0);
+				end_exec(data, pid);
 		}
 		else if (vars->current_token->token.value)
 			ft_printf("%s: command not found\n",

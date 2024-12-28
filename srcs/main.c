@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 19:30:44 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/28 13:57:28 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	main(int argc, char **argv, char **env)
 		input = readline("minishell> ");
 		add_history(input);
 		if (input == NULL)
-			return (free(input), 0);
+			return (free(input), free_split(vars.env), 0);
 		vars.token_list = tokenize(input);
 		execute(&vars);
 		clear_token_list(&(vars.token_list));

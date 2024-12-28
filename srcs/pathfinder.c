@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/27 16:13:28 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/28 22:41:15 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*search_path(char **env, char *cmd)
 
 	i = 0;
 	if (access(cmd, F_OK | X_OK) == 0)
-		return (cmd);
+		return (ft_strdup(cmd));
 	split = ft_split(clean_word(env, "PATH"), ':');
 	while (split[i])
 	{
