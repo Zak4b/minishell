@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 09:30:16 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/28 14:07:38 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/29 14:17:30 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,16 @@ void	handle_signal(int sign)
 {
 	if (sign == SIGINT)
 	{
-		printf("\n");
+		if (g_nal != 2)
+			ft_printf("\n");
 		if (g_nal == 0)
 		{
 			rl_on_new_line();
 			rl_replace_line("", 0);
 			rl_redisplay();
 		}
-		else
-			g_nal = 1;
+		if (g_nal == 1)
+			g_nal = 0;
 	}
 	if (sign == SIGQUIT)
 		ft_printf("SIQUIT RECU \n");

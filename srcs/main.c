@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/29 14:00:22 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/29 14:02:44 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*set_prompt(t_vars *vars)
 	int		size;
 	int		homesize;
 
-	arg = malloc(sizeof(char *) * 4);
+	arg = malloc(sizeof(char *) * 3);
 	if (arg == NULL)
 		return (NULL);
 	arg[1] = clean_word(vars->env, "PWD");

@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2024/12/29 13:33:52 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/29 14:14:01 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ t_exec_data	build_exec(t_vars *vars)
 	t = vars->current_token;
 	string_lst = NULL;
 	data.path = search_path(vars->env, t->token.value);
+	if (strcmp("./minishell", data.path) == 0)
+		g_nal = 2;
 	while (t && (t->token.type == TOKEN_SPACE || t->token.type == TOKEN_WORD))
 	{
 		if (t->token.type == TOKEN_WORD)
@@ -97,8 +99,8 @@ void	execute(t_vars *vars)
 			exec_builtin(vars);
 		else if (type == W_CMD || type == W_EXECUTABLE)
 		{
-			data = build_exec(vars);
 			g_nal = 1;
+			data = build_exec(vars);
 			pid = exec_cmd(vars, data, 0, 1);
 			if (pid > 0)
 				end_exec(data, pid);
