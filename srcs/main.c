@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/28 13:57:28 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/29 14:00:22 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,34 @@ void	init_shell(t_vars *vars, char **env)
 	env_parser(env, vars);
 }
 
+char	*set_prompt(t_vars *vars)
+{
+	char	*prompt;
+	char	**arg;
+	int		size;
+	int		homesize;
+
+	arg = malloc(sizeof(char *) * 4);
+	if (arg == NULL)
+		return (NULL);
+	arg[1] = clean_word(vars->env, "PWD");
+	size = (int) ft_strlen(arg[1]);
+	arg[0] = clean_word(vars->env, "HOME");
+	homesize = (int) ft_strlen(arg[0]);
+	if (strncmp(arg[0], arg[1], homesize) == 0)
+		prompt = ft_strdoublejoin("minishell:~",
+				arg[1] + (size - homesize), "> ");
+	else
+	{
+		arg[0] = "minishell:";
+		arg[2] = "> ";
+		prompt = ft_strdoublejoin(arg[0], arg[1], arg[2]);
+	}
+	free(arg);
+	vars->prompt = prompt;
+	return (prompt);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
@@ -58,14 +86,15 @@ int	main(int argc, char **argv, char **env)
 	init_shell(&vars, env);
 	while (1)
 	{
-		input = readline("minishell> ");
+		input = readline(set_prompt(&vars));
 		add_history(input);
 		if (input == NULL)
-			return (free(input), free_split(vars.env), 0);
+			return (free(input), free_split(vars.env), free(vars.prompt), 0);
 		vars.token_list = tokenize(input);
 		execute(&vars);
 		clear_token_list(&(vars.token_list));
 		free(input);
+		free(vars.prompt);
 	}
 	return (0);
 }

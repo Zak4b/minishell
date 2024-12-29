@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 19:29:42 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/28 22:47:40 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_vars
 	char		**env;
 	char		**builtins;
 	int			envsize;
+	char		*prompt;
 	t_tokenlist	*token_list;
 	t_tokenlist	*current_token;
 }	t_vars;

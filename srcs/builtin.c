@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/28 22:34:06 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/29 13:57:07 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	ft_exit(t_vars *vars)
 	exit_code = 0;
 	if (vars->env)
 		free_split(vars->env);
+	free(vars->prompt);
 	clear_token_list(&(vars->token_list));
 	// if (arg->type == TOKEN_WORD)
 	// 	exit_code = ft_atoi(arg->value);
