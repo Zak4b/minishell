@@ -1,32 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_strnjoin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/26 16:09:56 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/30 16:16:27 by asene            ###   ########.fr       */
+/*   Created: 2024/12/30 15:55:36 by asene             #+#    #+#             */
+/*   Updated: 2024/12/30 15:56:41 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <libft.h>
 
-void	parse_env(char **env, t_vars *vars)
+char	*ft_strnjoin(char **strs, unsigned int size, char *sep)
 {
-	char	**new_env;
-	int		i;
+	unsigned int	i;
+	unsigned int	len;
+	char			*result;
 
-	vars->envsize = count_line(env);
-	new_env = malloc(sizeof(char *) * (vars->envsize + 13));
-	if (!new_env)
-		return ;
 	i = 0;
-	while (env[i])
+	len = 1;
+	while (i < size)
+		len += ft_strlen(strs[i++]);
+	if (size != 0)
+		len += (size - 1) * ft_strlen(sep);
+	result = ft_calloc(len, sizeof(char));
+	i = 0;
+	while (i < size)
 	{
-		new_env[i] = ft_strdup(env[i]);
-		i++;
+		if (i != 0)
+			ft_strlcat(result, sep, len);
+		ft_strlcat(result, strs[i++], len);
 	}
-	new_env[i] = NULL;
-	vars->env = new_env;
+	return (result);
 }

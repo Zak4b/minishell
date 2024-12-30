@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/29 13:57:07 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/30 17:06:24 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_export(t_vars *vars)
 
 void	ft_pwd(t_vars *vars)
 {
-	printf("%s\n", clean_word(vars->env, "PWD"));
+	printf("%s\n", getenv_value(vars->env, "PWD"));
 }
 
 void	ft_echo(t_vars *vars)
@@ -79,16 +79,16 @@ void	exec_builtin(t_vars *vars)
 	builtin = vars->current_token->token.value;
 	if (ft_strcmp(builtin, "cd") == 0)
 		ft_cd(vars);
-	if (ft_strcmp(builtin, "export") == 0)
+	else if (ft_strcmp(builtin, "export") == 0)
 		ft_export(vars);
-	if (ft_strcmp(builtin, "pwd") == 0)
+	else if (ft_strcmp(builtin, "pwd") == 0)
 		ft_pwd(vars);
-	if (ft_strcmp(builtin, "echo") == 0)
+	else if (ft_strcmp(builtin, "echo") == 0)
 		ft_echo(vars);
-	if (ft_strcmp(builtin, "exit") == 0)
+	else if (ft_strcmp(builtin, "exit") == 0)
 		ft_exit(vars);
-	if (ft_strcmp(builtin, "env") == 0)
+	else if (ft_strcmp(builtin, "env") == 0)
 		ft_env(vars);
-	if (ft_strcmp(builtin, "unset") == 0)
+	else if (ft_strcmp(builtin, "unset") == 0)
 		ft_unset(vars);
 }

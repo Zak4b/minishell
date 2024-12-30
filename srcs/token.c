@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 19:30:16 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/30 16:10:17 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	token_append(t_tokenlist **lst, t_token_type type, char *value)
 	last->next = e;
 }
 
-char	*get_token(char **ptr)
+char	*grab_word(char **p)
 {
 	int		i;
 	char	quote;
@@ -37,20 +37,20 @@ char	*get_token(char **ptr)
 
 	i = 0;
 	quote = 0;
-	if (ft_strchr("'\"", **ptr))
-		quote = **ptr + i++;
-	while ((*ptr)[i])
+	if (ft_strchr("'\"", **p))
+		quote = **p + i++;
+	while ((*p)[i])
 	{
-		if (quote && (*ptr)[i] == quote && ++i)
+		if (quote && (*p)[i] == quote && ++i)
 			break ;
-		if (!quote && (is_space((*ptr)[i]) || ft_strchr("|<>\"'", (*ptr)[i])))
+		if (!quote && (ft_isspace((*p)[i]) || ft_strchr("|<>\"'", (*p)[i])))
 			break ;
 		i++;
 	}
-	return (res = ft_substr(*ptr, 0, i), *ptr += i, res);
+	return (res = ft_substr(*p, 0, i), *p += i, res);
 }
 
-void	add_token(t_tokenlist **list, char **input)
+void	get_next_token(t_tokenlist **list, char **input)
 {
 	if (**input == '|' && ++(*input))
 		token_append(list, TOKEN_PIPE, ft_strdup("|"));
@@ -69,7 +69,7 @@ void	add_token(t_tokenlist **list, char **input)
 			token_append(list, TOKEN_REDIRECT_IN, ft_strdup("<"));
 	}
 	else if (**input)
-		token_append(list, TOKEN_WORD, get_token(input));
+		token_append(list, TOKEN_WORD, grab_word(input));
 }
 
 t_tokenlist	*tokenize(const char *input)
@@ -79,13 +79,13 @@ t_tokenlist	*tokenize(const char *input)
 	list = NULL;
 	while (*input)
 	{
-		if (*input && is_space(*input))
+		if (*input && ft_isspace(*input))
 		{
-			while (*input && is_space(*input))
+			while (*input && ft_isspace(*input))
 				input++;
 			token_append(&list, TOKEN_SPACE, ft_strdup(" "));
 		}
-		add_token(&list, (char **)&input);
+		get_next_token(&list, (char **)&input);
 	}
 	return (token_append(&list, TOKEN_END, NULL), list);
 }

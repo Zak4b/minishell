@@ -1,32 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/26 16:09:56 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/30 16:16:27 by asene            ###   ########.fr       */
+/*   Created: 2024/12/30 13:00:50 by asene             #+#    #+#             */
+/*   Updated: 2024/12/30 13:02:02 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <libft.h>
 
-void	parse_env(char **env, t_vars *vars)
+int	ft_isspace(char c)
 {
-	char	**new_env;
-	int		i;
-
-	vars->envsize = count_line(env);
-	new_env = malloc(sizeof(char *) * (vars->envsize + 13));
-	if (!new_env)
-		return ;
-	i = 0;
-	while (env[i])
-	{
-		new_env[i] = ft_strdup(env[i]);
-		i++;
-	}
-	new_env[i] = NULL;
-	vars->env = new_env;
+	return (c == ' ' || (c >= 9 && c <= 13));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/29 14:02:44 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/30 17:28:18 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,34 +44,25 @@ void	init_shell(t_vars *vars, char **env)
 {
 	vars->token_list = NULL;
 	vars->current_token = NULL;
-	setup_sign();
-	env_parser(env, vars);
+	setup_signal();
+	parse_env(env, vars);
 }
 
 char	*set_prompt(t_vars *vars)
 {
 	char	*prompt;
-	char	**arg;
-	int		size;
-	int		homesize;
+	char	*pwd;
+	char	*home;
+	int		home_len;
 
-	arg = malloc(sizeof(char *) * 3);
-	if (arg == NULL)
-		return (NULL);
-	arg[1] = clean_word(vars->env, "PWD");
-	size = (int) ft_strlen(arg[1]);
-	arg[0] = clean_word(vars->env, "HOME");
-	homesize = (int) ft_strlen(arg[0]);
-	if (strncmp(arg[0], arg[1], homesize) == 0)
+	pwd = getenv_value(vars->env, "PWD");
+	home = getenv_value(vars->env, "HOME");
+	home_len = (int) ft_strlen(home);
+	if (ft_strncmp(home, pwd, home_len) == 0)
 		prompt = ft_strdoublejoin("minishell:~",
-				arg[1] + (size - homesize), "> ");
+				pwd + (ft_strlen(pwd) + 1 - home_len), "> ");
 	else
-	{
-		arg[0] = "minishell:";
-		arg[2] = "> ";
-		prompt = ft_strdoublejoin(arg[0], arg[1], arg[2]);
-	}
-	free(arg);
+		prompt = ft_strdoublejoin("minishell:", pwd, "> ");
 	vars->prompt = prompt;
 	return (prompt);
 }

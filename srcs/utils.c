@@ -6,47 +6,45 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:49:58 by asene             #+#    #+#             */
-/*   Updated: 2024/12/27 15:24:01 by asene            ###   ########.fr       */
+/*   Updated: 2024/12/30 16:34:11 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	is_space(char c)
-{
-	return (c == ' ' || (c >= 9 && c <= 13));
-}
-
 char	*ft_strdoublejoin(char const *s1, char const *s2, char const *s3)
 {
-	char	*temp;
-	char	*result;
+	char	*data[3];
 
-	temp = ft_strjoin(s1, s2);
-	result = ft_strjoin(temp, s3);
-	free(temp);
-	return (result);
+	data[0] = (char *)s1;
+	data[1] = (char *)s2;
+	data[2] = (char *)s3;
+	return (ft_strnjoin(data, 3, ""));
 }
 
-char	*ft_strnjoin(char **strs, unsigned int size, char *sep)
+int	count_line(char **str)
 {
-	unsigned int	i;
-	unsigned int	len;
-	char			*result;
+	int	i;
 
 	i = 0;
-	len = 1;
-	while (i < size)
-		len += ft_strlen(strs[i++]);
-	if (size != 0)
-		len += (size - 1) * ft_strlen(sep);
-	result = ft_calloc(len, sizeof(char));
+	while (str[i])
+		i++;
+	return (i);
+}
+
+void	**list_to_array(t_list *lst)
+{
+	int		i;
+	int		size;
+	void	**array;
+
+	size = ft_lstsize(lst);
+	array = ft_calloc(size + 1, sizeof(void *));
 	i = 0;
-	while (i < size)
+	while (lst)
 	{
-		if (i != 0)
-			ft_strlcat(result, sep, len);
-		ft_strlcat(result, strs[i++], len);
+		array[i++] = lst->content;
+		lst = lst->next;
 	}
-	return (result);
+	return (array);
 }

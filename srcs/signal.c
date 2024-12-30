@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 09:30:16 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/29 14:17:30 by rsebasti         ###   ########.fr       */
+/*   Updated: 2024/12/30 16:01:58 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	handle_signal(int sign)
 		ft_printf("SIQUIT RECU \n");
 }
 
-int	setup_sign(void)
+int	setup_signal(void)
 {
 	if (signal(SIGINT, handle_signal) == SIG_ERR)
 		return (perror("Erreur lors de la configuration de SIGINT"), 1);
