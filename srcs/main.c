@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2024/12/30 17:28:18 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/02 17:09:12 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,21 +50,30 @@ void	init_shell(t_vars *vars, char **env)
 
 char	*set_prompt(t_vars *vars)
 {
-	char	*prompt;
+	int		i;
+	char	*prompt[5];
 	char	*pwd;
 	char	*home;
 	int		home_len;
 
+	i = 0;
+	prompt[i++] = "minishell:";
 	pwd = getenv_value(vars->env, "PWD");
 	home = getenv_value(vars->env, "HOME");
-	home_len = (int) ft_strlen(home);
-	if (ft_strncmp(home, pwd, home_len) == 0)
-		prompt = ft_strdoublejoin("minishell:~",
-				pwd + (ft_strlen(pwd) + 1 - home_len), "> ");
-	else
-		prompt = ft_strdoublejoin("minishell:", pwd, "> ");
-	vars->prompt = prompt;
-	return (prompt);
+	if (pwd && home)
+	{
+		home_len = (int) ft_strlen(home);
+		if (ft_strncmp(home, pwd, home_len) == 0)
+		{
+			prompt[i++] = "~";
+			prompt[i++] = pwd + home_len;
+		}
+	}
+	else if (pwd)
+		prompt[i++] = pwd;
+	prompt[i++] = "> ";
+	vars->prompt = ft_strnjoin(prompt, i, "");
+	return (vars->prompt);
 }
 
 int	main(int argc, char **argv, char **env)
