@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pathfinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2024/12/30 15:53:49 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/04 20:38:38 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*search_path(char **env, char *cmd)
 	char	*path;
 
 	i = 0;
-	if (access(cmd, F_OK | X_OK) == 0)
+	if (access(cmd, F_OK | X_OK) == 0 && ft_strncmp(cmd, "./", 2) == 0)
 		return (ft_strdup(cmd));
 	split = ft_split(getenv_value(env, "PATH"), ':');
 	while (split[i])
@@ -62,4 +62,31 @@ char	*search_path(char **env, char *cmd)
 	if (split)
 		free_split(split);
 	return (NULL);
+}
+
+int	correct_path(char **env, char *cmd)
+{
+	int		i;
+	char	**split;
+	char	*path;
+
+	i = 0;
+	split = ft_split(getenv_value(env, "PATH"), ':');
+	if (access(cmd, F_OK | X_OK) == 0 && strncmp(cmd, "./", 2) == 0)
+		return (2);
+	while (split[i])
+	{
+		path = ft_strdoublejoin(split[i], "/", cmd);
+		if (access(path, F_OK | X_OK) == 0)
+		{
+			free(path);
+			return (1);
+		}
+		if (path)
+			free(path);
+		i++;
+	}
+	if (split)
+		free_split(split);
+	return (0);
 }

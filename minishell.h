@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2024/12/30 17:16:13 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/03 13:53:26 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,6 @@ void		exec_builtin(t_vars *vars);
 int			count_line(char **str);
 void		parse_env(char **env, t_vars *vars);
 void		execute(t_vars *vars);
+int			correct_path(char **env, char *cmd);
 
 #endif
