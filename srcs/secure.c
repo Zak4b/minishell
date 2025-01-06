@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 11:26:31 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/06 13:43:54 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/06 13:51:36 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	syntax_check(t_vars *vars)
 	tok_list = vars->token_list;
 	if (tok_list->token.type == TOKEN_PIPE)
 		return (ft_fprintf(2,
-				"minishell: syntax error near unexpected token `|'"), 0);
+				"minishell: syntax error near unexpected token `|'\n"), 0);
 	while (tok_list)
 	{
 		if (tok_list->token.type >= TOKEN_REDIRECT_IN
@@ -29,10 +29,10 @@ int	syntax_check(t_vars *vars)
 		{
 			if (tok_list->next->token.type != TOKEN_END)
 				return (ft_fprintf(2,
-						"minishell: syntax error near unexpected token %c",
+						"mini: syntax error near unexpected token `%s'\n",
 						tab[tok_list->next->token.type - 1]), 0);
 			return (ft_fprintf(2,
-					"minishell: syntax error near unexpected token `newline'")
+					"minishell: syntax error near unexpected token `newline'\n")
 				, 0);
 		}
 	}

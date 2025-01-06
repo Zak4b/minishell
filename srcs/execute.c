@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2024/12/30 17:27:06 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/06 13:53:13 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,7 @@ void	execute(t_vars *vars)
 			ft_fprintf(2, "%s: command not found\n",
 				vars->current_token->token.value);
 	}
+	else if (vars->current_token->token.type >= TOKEN_PIPE
+		&& vars->current_token->token.type <= TOKEN_HEREDOC)
+		syntax_check(vars);
 }
