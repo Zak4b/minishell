@@ -52,39 +52,33 @@ char	*grab_word(char **p)
 
 void	get_next_token(t_tokenlist **list, char **input)
 {
+	t_token_type	type;
+
+	type = TOKEN_WORD;
 	if (**input == '|' && ++(*input))
-		token_append(list, TOKEN_PIPE, ft_strdup("|"));
+		return (token_append(list, TOKEN_PIPE, NULL));
+	if (**input == '>' && *(*input +1) == '>' && ++(*input) && ++(*input))
+		type = TOKEN_APPEND;
 	else if (**input == '>' && ++(*input))
-	{
-		if (**input == '>' && ++(*input))
-			token_append(list, TOKEN_APPEND, ft_strdup(">>"));
-		else
-			token_append(list, TOKEN_REDIRECT_OUT, ft_strdup(">"));
-	}
+		type = TOKEN_REDIRECT_OUT;
+	else if (**input == '<' && *(*input +1) == '<' && ++(*input) && ++(*input))
+		type = TOKEN_HEREDOC;
 	else if (**input == '<' && ++(*input))
-	{
-		if (**input == '<' && ++(*input))
-			token_append(list, TOKEN_HEREDOC, ft_strdup("<<"));
-		else
-			token_append(list, TOKEN_REDIRECT_IN, ft_strdup("<"));
-	}
-	else if (**input)
-		token_append(list, TOKEN_WORD, grab_word(input));
+		type = TOKEN_REDIRECT_IN;
+	if (type != TOKEN_WORD)
+		skip_spaces(input);
+	token_append(list, type, grab_word(input));
 }
 
-t_tokenlist	*tokenize(const char *input)
+t_tokenlist	*tokenize(char *input)
 {
 	t_tokenlist	*list;
 
 	list = NULL;
 	while (*input)
 	{
-		if (*input && ft_isspace(*input))
-		{
-			while (*input && ft_isspace(*input))
-				input++;
-			token_append(&list, TOKEN_SPACE, ft_strdup(" "));
-		}
+		if (skip_spaces(&input))
+			token_append(&list, TOKEN_SPACE, NULL);
 		get_next_token(&list, (char **)&input);
 	}
 	return (token_append(&list, TOKEN_END, NULL), list);

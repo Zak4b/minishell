@@ -78,9 +78,11 @@ typedef struct s_vars
 }	t_vars;
 
 char		*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
+int			count_line(char **str);
 void		**list_to_array(t_list *lst);
+int			skip_spaces(char **str);
 
-t_tokenlist	*tokenize(const char *input);
+t_tokenlist	*tokenize(char *input);
 void		token_append(t_tokenlist **lst, t_token_type type, char *value);
 void		clear_token_list(t_tokenlist **t);
 
@@ -90,7 +92,6 @@ t_word_type	cmd_or_file(char *token, char **env);
 int			setup_signal(void);
 
 void		exec_builtin(t_vars *vars);
-int			count_line(char **str);
 void		parse_env(char **env, t_vars *vars);
 void		execute(t_vars *vars);
 int			correct_path(char **env, char *cmd);
