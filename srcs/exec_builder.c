@@ -45,16 +45,22 @@ char	*eval_string(char *str, char **env)
 {
 	char	*p;
 	char	*res;
+	char	quote;
 
 	p = NULL;
+	quote = 0;
 	if (ft_strchr("'\"", *str))
 	{
+		quote = *str;
 		if (str[ft_strlen(str) - 1] != str[0])
 			return (NULL);
 		p = ft_strdup(str + 1);
 		str = p;
 		str[ft_strlen(str) - 1] = '\0';
 	}
+	if (quote == '\'')
+		res = ft_strdup(str);
+	else
 	res = replace_vars(str, env);
 	if (p)
 		free (p);
