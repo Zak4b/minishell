@@ -19,6 +19,7 @@ SOURCES = \
 		command.c \
 		signal.c \
 		builtin.c \
+		error.c \
 		execute.c \
 		env.c
 
