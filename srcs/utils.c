@@ -48,3 +48,12 @@ void	**list_to_array(t_list *lst)
 	}
 	return (array);
 }
+
+int	skip_spaces(char **str)
+{
+	if (!ft_isspace(**str))
+		return (0);
+	while (**str && ft_isspace(**str))
+		(*str)++;
+	return (1);
+}
