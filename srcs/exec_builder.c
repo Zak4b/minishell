@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/06 15:51:58 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/06 17:21:53 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,35 @@ char	*build_word(t_vars *vars, t_tokenlist **lst)
 	return (value);
 }
 
+void	handle_redirect(t_vars *vars, t_exec_data *data, t_token token)
+{
+	int	fd;
+
+	vars->current_token = vars->current_token->next;
+	if (token.type == TOKEN_REDIRECT_OUT)
+		fd = open(token.value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (token.type == TOKEN_APPEND)
+		fd = open(token.value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else if (token.type == TOKEN_REDIRECT_IN)
+		fd = open(token.value, O_RDONLY);
+	else
+		fd = -404;
+	if (fd == -1)
+		return ;
+	if (token.type == TOKEN_REDIRECT_OUT || token.type == TOKEN_APPEND)
+	{
+		if (data->fd_out != 1)
+			close(data->fd_out);
+		data->fd_out = fd;
+	}
+	if (token.type == TOKEN_REDIRECT_IN || token.type == TOKEN_HEREDOC)
+	{
+		if (data->fd_in != 0)
+			close(data->fd_in);
+		data->fd_in = fd;
+	}
+}
+
 t_exec_data	build_exec(t_vars *vars)
 {
 	t_exec_data	data;
@@ -85,20 +114,20 @@ t_exec_data	build_exec(t_vars *vars)
 
 	t = &vars->current_token;
 	lst = NULL;
-	data.fd_in = 0;
-	data.fd_out = 1;
-	while ((*t) && (*t)->token.type != TOKEN_PIPE && (*t)->token.type != TOKEN_END)
+	data = (t_exec_data){NULL, NULL, 0, 0, 1, NULL};
+	while ((*t) && (*t)->token.type != TOKEN_PIPE
+		&& (*t)->token.type != TOKEN_END)
 	{
 		if ((*t)->token.type == TOKEN_WORD)
 			ft_lstadd_back(&lst, ft_lstnew(build_word(vars, t)));
+		else if ((*t)->token.type >= TOKEN_REDIRECT_IN
+			&& (*t)->token.type <= TOKEN_HEREDOC)
+			handle_redirect(vars, &data, (*t)->token);
 		else
 			(*t) = (*t)->next;
 	}
 	data.args = (char **)list_to_array(lst);
-	ft_lstclear(&lst, NULL);
-	data.argc = count_line(data.args);
-	data.path = NULL;
-	if (1)
+	if (data.args[0])
 		data.path = search_path(vars->env, data.args[0]);
-	return (data);
+	return (ft_lstclear(&lst, NULL), data.argc = count_line(data.args), data);
 }
