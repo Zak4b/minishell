@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   secure.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 11:26:31 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/06 13:51:36 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:01:41 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	syntax_check(t_vars *vars)
 	while (tok_list)
 	{
 		if (tok_list->token.type >= TOKEN_REDIRECT_IN
-			&& tok_list->token.type <= TOKEN_REDIRECT_OUT
+			&& tok_list->token.type <= TOKEN_HEREDOC
 			&& ft_strlen(tok_list->token.value) == 0)
 		{
 			if (tok_list->next->token.type != TOKEN_END)
@@ -35,6 +35,7 @@ int	syntax_check(t_vars *vars)
 					"minishell: syntax error near unexpected token `newline'\n")
 				, 0);
 		}
+		tok_list = tok_list->next;
 	}
 	return (1);
 }

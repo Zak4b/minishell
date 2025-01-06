@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/06 13:53:13 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:17:04 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,6 @@ void	execute(t_vars *vars)
 	}
 	else if (vars->current_token->token.type >= TOKEN_PIPE
 		&& vars->current_token->token.type <= TOKEN_HEREDOC)
-		syntax_check(vars);
-}
+			syntax_check(vars);
+		}
+
