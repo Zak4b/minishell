@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/06 17:16:58 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/06 22:50:17 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 
 extern int	g_nal;
 

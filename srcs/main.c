@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/02 17:09:12 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/06 22:51:22 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,26 +54,21 @@ char	*set_prompt(t_vars *vars)
 	char	*prompt[5];
 	char	*pwd;
 	char	*home;
-	int		home_len;
 
 	i = 0;
 	prompt[i++] = "minishell:";
-	pwd = getenv_value(vars->env, "PWD");
+	pwd = getcwd(NULL, 150);
 	home = getenv_value(vars->env, "HOME");
-	if (pwd && home)
+	if (pwd && home && ft_strncmp(home, pwd, ft_strlen(home)) == 0)
 	{
-		home_len = (int) ft_strlen(home);
-		if (ft_strncmp(home, pwd, home_len) == 0)
-		{
-			prompt[i++] = "~";
-			prompt[i++] = pwd + home_len;
-		}
+		prompt[i++] = "~";
+		prompt[i++] = pwd + ft_strlen(home);
 	}
 	else if (pwd)
 		prompt[i++] = pwd;
-	prompt[i++] = "> ";
+	prompt[i++] = " > ";
 	vars->prompt = ft_strnjoin(prompt, i, "");
-	return (vars->prompt);
+	return (free(pwd), vars->prompt);
 }
 
 int	main(int argc, char **argv, char **env)

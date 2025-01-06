@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/06 17:22:14 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/06 22:50:25 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,20 @@
 
 void	ft_cd(t_vars *vars, t_exec_data data)
 {
+	struct stat	st;
+
 	(void)vars;
-	if (data.argc == 1);
-		//HOME && set PWD VALUE
-	else if (access(data.args[1], F_OK) == 0)
+	if (data.argc != 2)
+		return ;
+	if (stat(data.args[1], &st) != 0)
+		return (perror("stat: "), (void)0);
+	if (S_ISDIR(st.st_mode))
 	{
 		chdir(data.args[1]);
 		// set PWD VALUE
 	}
-	else;
-		//error directory
+	else
+		return ;
 }
 
 void	ft_export(t_vars *vars, t_exec_data data)
