@@ -79,6 +79,7 @@ t_tokenlist	*tokenize(char *input)
 	{
 		if (skip_spaces(&input))
 			token_append(&list, TOKEN_SPACE, NULL);
+		if (*input)
 		get_next_token(&list, (char **)&input);
 	}
 	return (token_append(&list, TOKEN_END, NULL), list);
