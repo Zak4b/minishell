@@ -6,13 +6,13 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/06 17:21:53 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 17:09:05 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-char	*replace_vars(char *str, char **env)
+char	*replace_vars(t_vars *vars, char *str)
 {
 	int		i;
 	t_list	*lst;
@@ -31,7 +31,7 @@ char	*replace_vars(char *str, char **env)
 		if (*str == '$' && ++str)
 		{
 			var = grab_word(&str);
-			ft_lstadd_back(&lst, ft_lstnew(getenv_value(env, var)));
+			ft_lstadd_back(&lst, ft_lstnew(getenv_value(vars, var)));
 			str += ft_strlen(var);
 			free(var);
 		}
@@ -41,7 +41,7 @@ char	*replace_vars(char *str, char **env)
 	return (ft_lstclear(&lst, NULL), free(array), res);
 }
 
-char	*eval_string(char *str, char **env)
+char	*eval_string(t_vars *vars, char *str)
 {
 	char	*p;
 	char	*res;
@@ -61,7 +61,7 @@ char	*eval_string(char *str, char **env)
 	if (quote == '\'')
 		res = ft_strdup(str);
 	else
-	res = replace_vars(str, env);
+	res = replace_vars(vars, str);
 	if (p)
 		free (p);
 	return (res);
@@ -75,7 +75,7 @@ char	*build_word(t_vars *vars, t_tokenlist **lst)
 	value = ft_calloc(1, sizeof(char));
 	while ((*lst)->token.type == TOKEN_WORD)
 	{
-		tmp = eval_string((*lst)->token.value, vars->env);
+		tmp = eval_string(vars, (*lst)->token.value);
 		str_append(&value, tmp);
 		free(tmp);
 		(*lst) = (*lst)->next;
@@ -134,6 +134,6 @@ t_exec_data	build_exec(t_vars *vars)
 	}
 	data.args = (char **)list_to_array(lst);
 	if (data.args[0])
-		data.path = search_path(vars->env, data.args[0]);
+		data.path = search_path(vars, data.args[0]);
 	return (ft_lstclear(&lst, NULL), data.argc = count_line(data.args), data);
 }

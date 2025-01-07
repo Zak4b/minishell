@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/06 22:50:17 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 18:30:23 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,8 @@ typedef struct s_exec_data
 
 typedef struct s_vars
 {
-	char		**env;
+	t_list		*env;
 	char		**builtins;
-	int			envsize;
 	char		*prompt;
 	t_tokenlist	*token_list;
 	t_tokenlist	*current_token;
@@ -90,17 +89,20 @@ char		*grab_word(char **p);
 void		token_append(t_tokenlist **lst, t_token_type type, char *value);
 void		clear_token_list(t_tokenlist **t);
 
-char		*search_path(char **env, char *cmd);
-char		*getenv_value(char **env, char *word);
-t_word_type	cmd_or_file(char *token, char **env);
+char		*search_path(t_vars *vars, char *cmd);
+char		*getenv_value(t_vars *vars, char *word);
+t_word_type	cmd_or_file(t_vars *vars, char *token);
 int			setup_signal(void);
 
 t_exec_data	build_exec(t_vars *vars);
 
 void		exec_builtin(t_vars *vars, t_exec_data data);
 void		parse_env(char **env, t_vars *vars);
+char		**build_env(t_vars *vars);
+void		set_env(t_vars *vars, char *key, char *value);
+void		unset_env(t_vars *vars, char *key);
 void		execute(t_vars *vars);
-int			correct_path(char **env, char *cmd);
+int			correct_path(t_vars *vars, char *cmd);
 int			syntax_check(t_vars *vars);
 
 void		ft_cd(t_vars *vars, t_exec_data data);

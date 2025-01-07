@@ -3,44 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   pathfinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/04 20:38:38 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:49:53 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_getenv(char **env, char *word)
+char	**ft_getenv(t_vars *vars, char *word)
 {
-	int	i;
+	t_list	*env;
 
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], word, (int) ft_strlen(word)) == 0)
-			return (env[i]);
-		i++;
+	env = vars->env;
+	while (env)
+	{	
+		if (strcmp(((char **)env->content)[0], word) == 0)
+			return (env->content);
+		env = env->next;
 	}
 	return (NULL);
 }
 
-char	*getenv_value(char **env, char *word)
+char	*getenv_value(t_vars *vars, char *word)
 {
-	char	*env_str;
-	int		j;
+	char	**env;
 
-	env_str = ft_getenv(env, word);
-	if (env_str == NULL)
-		return (NULL);
-	j = 0;
-	while (env_str[j] && env_str[j] != '=')
-		j++;
-	return (env_str + j + 1);
+	env = ft_getenv(vars, word);
+	if (env)
+		return (env[1]);
+	return (NULL);
 }
 
-char	*search_path(char **env, char *cmd)
+char	*search_path(t_vars *vars, char *cmd)
 {
 	int		i;
 	char	**split;
@@ -49,7 +45,7 @@ char	*search_path(char **env, char *cmd)
 	i = 0;
 	if (access(cmd, F_OK | X_OK) == 0 && ft_strncmp(cmd, "./", 2) == 0)
 		return (ft_strdup(cmd));
-	split = ft_split(getenv_value(env, "PATH"), ':');
+	split = ft_split(getenv_value(vars, "PATH"), ':');
 	while (split[i])
 	{
 		path = ft_strdoublejoin(split[i], "/", cmd);
@@ -64,14 +60,14 @@ char	*search_path(char **env, char *cmd)
 	return (NULL);
 }
 
-int	correct_path(char **env, char *cmd)
+int	correct_path(t_vars *vars, char *cmd)
 {
 	int		i;
 	char	**split;
 	char	*path;
 
 	i = 0;
-	split = ft_split(getenv_value(env, "PATH"), ':');
+	split = ft_split(getenv_value(vars, "PATH"), ':');
 	if (access(cmd, F_OK | X_OK) == 0 && strncmp(cmd, "./", 2) == 0)
 		return (2);
 	while (split[i])

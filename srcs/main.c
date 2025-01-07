@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/06 22:51:22 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 17:05:39 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,29 @@
 
 int	g_nal = 0;
 
-void	analyze_token(t_token *token, char **env)
+void	analyze_token(t_vars *vars,t_token *token)
 {
-	if (cmd_or_file(token->value, env) == W_CMD)
+	t_word_type	type;
+
+	type = cmd_or_file(vars, token->value);
+	if (type == W_CMD)
 		printf("'%s' est une commande valide.\n", token->value);
-	else if (cmd_or_file(token->value, env) == W_FILE)
+	else if (type == W_FILE)
 		printf("'%s' est un fichier existant.\n", token->value);
-	else if (cmd_or_file(token->value, env) == W_EXECUTABLE)
+	else if (type == W_EXECUTABLE)
 		printf("'%s' est un fichier executable.\n", token->value);
-	else if (cmd_or_file(token->value, env) == W_BUILTIN)
+	else if (type == W_BUILTIN)
 		printf("'%s' est une commande builtin.\n", token->value);
 	else
 		printf("'%s' est une commande invalide.\n", token->value);
 }
 
-void	print_tokens(t_tokenlist *list, char **env)
+void	print_tokens(t_vars *vars, t_tokenlist *list)
 {
 	while (list)
 	{
 		if (list->token.type == TOKEN_WORD)
-			analyze_token(&list->token, env);
+			analyze_token(vars, &list->token);
 		else
 			ft_printf("Type: %d, %s\n", list->token.type, list->token.value);
 		list = list->next;
@@ -58,7 +61,7 @@ char	*set_prompt(t_vars *vars)
 	i = 0;
 	prompt[i++] = "minishell:";
 	pwd = getcwd(NULL, 150);
-	home = getenv_value(vars->env, "HOME");
+	home = getenv_value(vars, "HOME");
 	if (pwd && home && ft_strncmp(home, pwd, ft_strlen(home)) == 0)
 	{
 		prompt[i++] = "~";
@@ -84,8 +87,9 @@ int	main(int argc, char **argv, char **env)
 		input = readline(set_prompt(&vars));
 		add_history(input);
 		if (input == NULL)
-			return (free(input), free_split(vars.env), free(vars.prompt), 0);
+			return (free(input), ft_lstclear(&vars.env, (void (*)(void *))free_split), free(vars.prompt), 0);
 		vars.token_list = tokenize(input);
+		//print_tokens(vars.token_list, vars.env);
 		execute(&vars);
 		clear_token_list(&(vars.token_list));
 		free(input);

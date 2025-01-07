@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/06 17:21:18 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 17:28:47 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	end_exec(t_exec_data data, int pid)
 
 pid_t	exec_cmd(t_vars *vars, t_exec_data data)
 {
-	pid_t		pid;
+	pid_t	pid;
+	char	**env;
 
 	(void)vars;
 	if (ft_strcmp("./minishell", data.path) == 0)
@@ -46,7 +47,9 @@ pid_t	exec_cmd(t_vars *vars, t_exec_data data)
 			close(data.fd_in);
 		if (dup2(data.fd_out, 1) != 1)
 			close(data.fd_out);
-		execve(data.path, data.args, vars->env);
+		env = build_env(vars);
+		execve(data.path, data.args, env);
+		free_split(env);
 	}
 	return (pid);
 }
@@ -61,7 +64,7 @@ void	execute(t_vars *vars)
 	while (vars->current_token->token.type != TOKEN_END)
 	{
 		data = build_exec(vars);
-		type = cmd_or_file(data.args[0], vars->env);
+		type = cmd_or_file(vars, data.args[0]);
 		if (type == W_BUILTIN)
 			exec_builtin(vars, data);
 		else if (type == W_CMD || type == W_EXECUTABLE)

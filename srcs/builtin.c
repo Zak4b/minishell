@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/06 22:50:25 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 18:36:37 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,22 @@ void	ft_cd(t_vars *vars, t_exec_data data)
 
 void	ft_export(t_vars *vars, t_exec_data data)
 {
+	int		i;
+	char	**key_value;
+
 	if (data.argc == 1)
 		return (ft_env(vars, data));
-	return ;
+	i = 1;
+	while (i < data.argc)
+	{
+		key_value = ft_split(data.args[i], '=');
+		if (count_line(key_value) != 2)
+			ft_fprintf(2, "export: '%s': not a valid identifier\n", data.args[i]);
+		else
+			set_env(vars, key_value[0], key_value[1]);
+		free_split(key_value);
+		i++;
+	}
 }
 
 void	ft_pwd(t_vars *vars, t_exec_data data)
@@ -44,7 +57,7 @@ void	ft_pwd(t_vars *vars, t_exec_data data)
 		ft_fprintf(2, "pwd: too many arguments\n");
 		return ;
 	}
-	printf("%s\n", getenv_value(vars->env, "PWD"));
+	printf("%s\n", getenv_value(vars, "PWD"));
 }
 
 void	ft_echo(t_vars *vars, t_exec_data data)
@@ -76,8 +89,7 @@ void	ft_exit(t_vars *vars, t_exec_data data)
 		ft_fprintf(2, "exit: too many arguments\n");
 		return ;
 	}
-	if (vars->env)
-		free_split(vars->env);
+	ft_lstclear(&vars->env, (void (*)(void *))free_split);
 	free(vars->prompt);
 	clear_token_list(&(vars->token_list));
 	free_split(data.args);
@@ -87,21 +99,27 @@ void	ft_exit(t_vars *vars, t_exec_data data)
 
 void	ft_env(t_vars *vars, t_exec_data data)
 {
-	int	i;
+	t_list	*env;
+	char	**value;
 
 	(void)data;
-	i = 0;
-	while (vars->env[i])
+	env = vars->env;
+	while (env)
 	{
-		ft_printf("%s\n", vars->env[i]);
-		i++;
+		value = env->content;
+		ft_printf("%s=%s\n", value[0], value[1]);
+		env = env->next;
 	}
 }
 
 void	ft_unset(t_vars *vars, t_exec_data data)
 {
+	int		i;
+
 	(void)vars;
-	(void)data;
+	i = 1;
+	while (i < data.argc)
+		unset_env(vars, data.args[i++]);
 	return ;
 }
 
