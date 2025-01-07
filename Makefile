@@ -19,6 +19,8 @@ SOURCES = \
 		command.c \
 		signal.c \
 		builtin.c \
+		builtin_env.c \
+		builtin_utils.c \
 		exec_builder.c \
 		secure.c \
 		execute.c \
