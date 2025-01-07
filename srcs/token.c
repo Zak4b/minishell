@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2024/12/30 16:10:17 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 21:22:55 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_tokenlist	*tokenize(char *input)
 		if (skip_spaces(&input))
 			token_append(&list, TOKEN_SPACE, NULL);
 		if (*input)
-		get_next_token(&list, (char **)&input);
+			get_next_token(&list, (char **)&input);
 	}
 	return (token_append(&list, TOKEN_END, NULL), list);
 }

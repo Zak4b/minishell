@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 16:09:56 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/07 18:29:06 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 21:11:41 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,13 @@ void	parse_env(char **env, t_vars *vars)
 	{
 		e = ft_lstnew(ft_calloc(3, sizeof(char *)));
 		pos = ft_strchr(env[i], '=');
-		((char **)e->content)[0] = ft_substr(env[i], 0, pos - 
-		env[i]);
+		((char **)e->content)[0] = ft_substr(env[i], 0, pos - env[i]);
 		((char **)e->content)[1] = ft_substr(pos +1, 0, ft_strlen(pos +1));
 		ft_lstadd_back(&env_lst, e);
 		i++;
 	}
 	vars->env = env_lst;
 }
-
 
 char	**build_env(t_vars *vars)
 {
@@ -56,29 +54,25 @@ void	set_env(t_vars *vars, char *key, char *value)
 {
 	t_list	*env;
 	char	**content;
-	int		found;
 
+	if (value == NULL)
+		value = "";
 	env = vars->env;
-	found = 0;
-	while (env && !found)
+	while (env)
 	{
 		content = env->content;
 		if (ft_strcmp(content[0], key) == 0)
 		{
 			free(content[1]);
 			content[1] = ft_strdup(value);
-			found = 1;
-			break ;
+			return ;
 		}
 		env = env->next;
 	}
-	if (!found)
-	{
-		content = ft_calloc(3, sizeof(char *));
-		content[0] = ft_strdup(key);
-		content[1] = ft_strdup(value);
-		ft_lstadd_back(&vars->env, ft_lstnew(content));
-	}
+	content = ft_calloc(3, sizeof(char *));
+	content[0] = ft_strdup(key);
+	content[1] = ft_strdup(value);
+	ft_lstadd_back(&vars->env, ft_lstnew(content));
 }
 
 void	unset_env(t_vars *vars, char *key)

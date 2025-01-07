@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/07 16:49:53 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 21:23:33 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	**ft_getenv(t_vars *vars, char *word)
 
 	env = vars->env;
 	while (env)
-	{	
+	{
 		if (strcmp(((char **)env->content)[0], word) == 0)
 			return (env->content);
 		env = env->next;

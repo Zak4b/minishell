@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/07 17:05:39 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 20:53:04 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	g_nal = 0;
 
-void	analyze_token(t_vars *vars,t_token *token)
+void	analyze_token(t_vars *vars, t_token *token)
 {
 	t_word_type	type;
 
@@ -60,7 +60,7 @@ char	*set_prompt(t_vars *vars)
 
 	i = 0;
 	prompt[i++] = "minishell:";
-	pwd = getcwd(NULL, 150);
+	pwd = getcwd(NULL, 0);
 	home = getenv_value(vars, "HOME");
 	if (pwd && home && ft_strncmp(home, pwd, ft_strlen(home)) == 0)
 	{
@@ -89,7 +89,6 @@ int	main(int argc, char **argv, char **env)
 		if (input == NULL)
 			return (free(input), ft_lstclear(&vars.env, (void (*)(void *))free_split), free(vars.prompt), 0);
 		vars.token_list = tokenize(input);
-		//print_tokens(vars.token_list, vars.env);
 		execute(&vars);
 		clear_token_list(&(vars.token_list));
 		free(input);

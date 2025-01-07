@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/07 18:36:37 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 21:04:08 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	ft_cd(t_vars *vars, t_exec_data data)
 {
 	struct stat	st;
 
-	(void)vars;
 	if (data.argc != 2)
 		return ;
 	if (stat(data.args[1], &st) != 0)
@@ -24,7 +23,8 @@ void	ft_cd(t_vars *vars, t_exec_data data)
 	if (S_ISDIR(st.st_mode))
 	{
 		chdir(data.args[1]);
-		// set PWD VALUE
+		set_env(vars, "OLDPWD", getenv_value(vars, "PWD"));
+		set_env(vars, "PWD", getcwd(NULL, 0));
 	}
 	else
 		return ;
@@ -42,7 +42,8 @@ void	ft_export(t_vars *vars, t_exec_data data)
 	{
 		key_value = ft_split(data.args[i], '=');
 		if (count_line(key_value) != 2)
-			ft_fprintf(2, "export: '%s': not a valid identifier\n", data.args[i]);
+			ft_fprintf(2, "export: '%s': not a valid identifier\n",
+				data.args[i]);
 		else
 			set_env(vars, key_value[0], key_value[1]);
 		free_split(key_value);
@@ -80,7 +81,6 @@ void	ft_exit(t_vars *vars, t_exec_data data)
 {
 	unsigned char	exit_code;
 
-	(void)vars;
 	exit_code = 0;
 	if (data.argc == 2)
 		exit_code = ft_atoi(data.args[1]);
@@ -116,7 +116,6 @@ void	ft_unset(t_vars *vars, t_exec_data data)
 {
 	int		i;
 
-	(void)vars;
 	i = 1;
 	while (i < data.argc)
 		unset_env(vars, data.args[i++]);

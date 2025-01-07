@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/07 17:09:05 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/07 21:23:24 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*eval_string(t_vars *vars, char *str)
 	if (quote == '\'')
 		res = ft_strdup(str);
 	else
-	res = replace_vars(vars, str);
+		res = replace_vars(vars, str);
 	if (p)
 		free (p);
 	return (res);
