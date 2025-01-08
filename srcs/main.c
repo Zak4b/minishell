@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/07 20:53:04 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/08 14:41:07 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	init_shell(t_vars *vars, char **env)
 {
 	vars->token_list = NULL;
 	vars->current_token = NULL;
-	setup_signal();
+	setup_signal(vars);
 	parse_env(env, vars);
 }
 

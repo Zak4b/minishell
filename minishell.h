@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/07 18:30:23 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/08 14:41:28 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,12 @@ typedef struct s_exec_data
 
 typedef struct s_vars
 {
-	t_list		*env;
-	char		**builtins;
-	char		*prompt;
-	t_tokenlist	*token_list;
-	t_tokenlist	*current_token;
+	t_list			*env;
+	char			**builtins;
+	char			*prompt;
+	t_tokenlist		*token_list;
+	t_tokenlist		*current_token;
+	struct sigaction sa;
 }	t_vars;
 
 char		*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
@@ -92,7 +93,7 @@ void		clear_token_list(t_tokenlist **t);
 char		*search_path(t_vars *vars, char *cmd);
 char		*getenv_value(t_vars *vars, char *word);
 t_word_type	cmd_or_file(t_vars *vars, char *token);
-int			setup_signal(void);
+int			setup_signal(t_vars *vars);
 
 t_exec_data	build_exec(t_vars *vars);
 
