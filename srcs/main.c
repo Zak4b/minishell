@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/08 14:41:07 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/09 00:08:09 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,11 @@ int	main(int argc, char **argv, char **env)
 	init_shell(&vars, env);
 	while (1)
 	{
+		if (g_nal == SIGINT)
+		{
+			ft_printf("\n");
+			g_nal = 0;
+		}
 		input = readline(set_prompt(&vars));
 		add_history(input);
 		if (input == NULL)

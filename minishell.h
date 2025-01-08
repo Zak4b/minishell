@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/08 14:41:28 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/08 23:39:45 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,8 @@ void		ft_echo(t_vars *vars, t_exec_data data);
 void		ft_exit(t_vars *vars, t_exec_data data);
 void		ft_env(t_vars *vars, t_exec_data data);
 void		ft_unset(t_vars *vars, t_exec_data data);
+
+int			start_signal(t_vars *vars);
+int			stop_signal(t_vars *vars);
 
 #endif
