@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 16:02:38 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 17:47:58 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	g_nal = 0;
+volatile sig_atomic_t g_nal = 0;
 
 void	analyze_token(t_vars *vars, t_token *token)
 {
@@ -85,16 +85,10 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		if (g_nal == SIGINT)
-		{
 			ft_printf("\n");
-			g_nal = 0;
-		}
 		if (g_nal == SIGQUIT)
-		{
 			ft_printf("Quit (core dumped)\n");
-			g_nal = 0;
-		}
-
+		g_nal = 0;
 		input = readline(set_prompt(&vars));
 		add_history(input);
 		if (input == NULL)
