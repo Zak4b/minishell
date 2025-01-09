@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/09 15:11:36 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 15:22:41 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,27 @@ void	ft_cd(t_vars *vars, t_exec_data data)
 
 void	ft_echo(t_vars *vars, t_exec_data data)
 {
-	int	i;
+	int		i;
+	int		new_line;
 
 	(void)vars;
 	i = 1;
+	new_line = 1;
 	while (i < data.argc)
 	{
-		ft_putstr_fd(data.args[i], 1);
-		if (++i < data.argc)
+		if (ft_strcmp(data.args[i], "-n") )
+			break;
+		new_line = 0;
+		i++;
+	}
+	while (i < data.argc)
+	{
+		ft_putstr_fd(data.args[i++], 1);
+		if (i < data.argc)
 			ft_putchar_fd(' ', 1);
 	}
-	ft_putchar_fd('\n', 1);
+	if (new_line)
+		ft_putchar_fd('\n', 1);
 	return ;
 }
 
