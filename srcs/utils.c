@@ -6,21 +6,11 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:49:58 by asene             #+#    #+#             */
-/*   Updated: 2025/01/06 13:08:11 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 14:22:40 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-char	*ft_strdoublejoin(char const *s1, char const *s2, char const *s3)
-{
-	char	*data[3];
-
-	data[0] = (char *)s1;
-	data[1] = (char *)s2;
-	data[2] = (char *)s3;
-	return (ft_strnjoin(data, 3, ""));
-}
 
 int	count_line(char **str)
 {
