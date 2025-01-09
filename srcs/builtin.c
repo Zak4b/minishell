@@ -14,20 +14,30 @@
 
 void	ft_cd(t_vars *vars, t_exec_data data)
 {
+	char		*dest;
 	struct stat	st;
 
-	if (data.argc != 2)
-		return ;
-	if (stat(data.args[1], &st) != 0)
-		return (perror("stat: "), (void)0);
+	if (data.argc > 2)
+		return (ft_fprintf(2, "cd: too many arguments"), (void)0);
+	if (data.argc == 1 || ft_strcmp(data.args[1], "~") == 0)
+	{
+		dest = getenv_value(vars, "HOME");
+		if (dest== NULL)
+			return (ft_fprintf(2, "cd: HOME not set\n"), (void)0);
+	}
+	else
+		dest = data.args[1];
+	if (stat(dest, &st) != 0)
+		return (ft_fprintf(2, "cd: %s: No such file or directory\n", dest),
+			(void)0);
 	if (S_ISDIR(st.st_mode))
 	{
-		chdir(data.args[1]);
+		chdir(dest);
 		set_env(vars, "OLDPWD", getenv_value(vars, "PWD"));
 		set_env(vars, "PWD", getcwd(NULL, 0));
 	}
 	else
-		return ;
+		return (ft_fprintf(2, "cd: %s: not a directory\n", dest), (void)0);
 }
 
 void	ft_echo(t_vars *vars, t_exec_data data)
