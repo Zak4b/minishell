@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-int	end_exec(t_exec_data data, int pid, t_vars *vars)
+int	end_exec(t_exec_data data, int pid)
 {
 	int		status;
 	pid_t	wpid;
@@ -22,7 +22,6 @@ int	end_exec(t_exec_data data, int pid, t_vars *vars)
 	if (data.args)
 		free_split(data.args);
 	wpid = waitpid(pid, &status, 0);
-	start_signal(vars);
 	if (wpid == -1)
 		return (wpid);
 	if (!WIFEXITED(status))
@@ -54,31 +53,57 @@ pid_t	exec_cmd(t_vars *vars, t_exec_data data)
 	return (pid);
 }
 
+int	handle_pipe(t_vars *vars, t_exec_data *data, int *fd_in, int *fd_out)
+{
+	int	pipe_fd[2];
+
+	if (vars->current_token->token.type == TOKEN_PIPE)
+	{
+		vars->current_token = vars->current_token->next;
+		if (pipe(pipe_fd) == 0)
+		{
+			*fd_in = pipe_fd[0];
+			*fd_out = pipe_fd[1];
+			data->pipe = pipe_fd;
+			if (data->fd_out == 1)
+				data->fd_out = *fd_out;
+			return (1);
+		}
+	}
+	*fd_in = 0;
+	*fd_out = 1;
+	return (0);
+}
+
 void	execute(t_vars *vars)
 {
-	t_word_type	type;
+	int			use_pipe;
+	int			fd[2];
 	pid_t		pid;
 	t_exec_data	data;
 
 	vars->current_token = vars->token_list;
+	use_pipe = 0;
+	stop_signal(vars);
 	while (vars->current_token->token.type != TOKEN_END)
 	{
 		data = build_exec(vars);
-		type = cmd_or_file(vars, data.args[0]);
-		if (type == W_BUILTIN)
+		if (use_pipe)
+			data.fd_in = fd[0];
+		use_pipe = handle_pipe(vars, &data, &fd[0], &fd[1]);
+		if (isatty(data.fd_in))
+			data.fd_in = fd[0];
+		if (isatty(data.fd_out))
+			data.fd_out = fd[1];
+		if (is_builtin(data.args[0]))
 			exec_builtin(vars, data);
-		else if (type == W_CMD || type == W_EXECUTABLE)
+		else if (data.path)
 		{
-			stop_signal(vars);
 			pid = exec_cmd(vars, data);
-			end_exec(data, pid, vars);
+			end_exec(data, pid);
 		}
 		else if (data.args[0])
 			ft_fprintf(2, "%s: command not found\n", data.args[0]);
-		if (vars->current_token->token.type == TOKEN_PIPE)
-			vars->current_token = vars->current_token->next;
 	}
-	// else if (vars->current_token->token.type >= TOKEN_PIPE
-	// 	&& vars->current_token->token.type <= TOKEN_HEREDOC)
-	// 		syntax_check(vars);
+	start_signal(vars);
 }

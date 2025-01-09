@@ -97,6 +97,7 @@ int			setup_signal(t_vars *vars);
 
 t_exec_data	build_exec(t_vars *vars);
 
+int			is_builtin(char *cmd);
 void		exec_builtin(t_vars *vars, t_exec_data data);
 void		parse_env(char **env, t_vars *vars);
 char		**build_env(t_vars *vars);
