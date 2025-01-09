@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 09:30:16 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/09 00:13:04 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/09 11:22:43 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void	handle_signal(int sign)
 void	catch_sign(int sign)
 {
 	g_nal = sign;
-	if (sign == SIGQUIT)
-		ft_printf("Quit (core dumped)\n");
 }
 
 int	setup_signal(t_vars *vars)
