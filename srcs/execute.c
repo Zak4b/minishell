@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 14:39:57 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:06:57 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	free_exec(t_exec_data data)
 		free(data.path);
 	if (data.args)
 		free_split(data.args);
+	if (data.pipe)
+		free(data.pipe);
 	return (0);
 }
 
@@ -105,12 +107,10 @@ int	execute(t_vars *vars)
 		if (is_builtin(data.args[0]))
 			exec_builtin(vars, data);
 		else if (data.path)
-		{
 			pid = exec_cmd(vars, data);
-			free_exec(data);
-		}
 		else if (data.args[0])
 			ft_fprintf(2, "%s: command not found\n", data.args[0]);
+		free_exec(data);
 	}
 	return (end_exec(pid, vars));
 }
