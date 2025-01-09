@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/08 23:39:45 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:38:54 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void		parse_env(char **env, t_vars *vars);
 char		**build_env(t_vars *vars);
 void		set_env(t_vars *vars, char *key, char *value);
 void		unset_env(t_vars *vars, char *key);
-void		execute(t_vars *vars);
+int			execute(t_vars *vars);
 int			correct_path(t_vars *vars, char *cmd);
 int			syntax_check(t_vars *vars);
 

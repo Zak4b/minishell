@@ -6,27 +6,19 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/08 23:53:24 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:50:22 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	end_exec(t_exec_data data, int pid)
+int	free_exec(t_exec_data data)
 {
-	int		status;
-	pid_t	wpid;
-
 	if (data.path)
 		free(data.path);
 	if (data.args)
 		free_split(data.args);
-	wpid = waitpid(pid, &status, 0);
-	if (wpid == -1)
-		return (wpid);
-	if (!WIFEXITED(status))
-		return (-2);
-	return (WEXITSTATUS(status));
+	return (0);
 }
 
 pid_t	exec_cmd(t_vars *vars, t_exec_data data)
@@ -40,8 +32,6 @@ pid_t	exec_cmd(t_vars *vars, t_exec_data data)
 		perror("Error on fork ");
 	else if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-        signal(SIGQUIT, SIG_DFL);
 		if (dup2(data.fd_in, 0) != 0)
 			close(data.fd_in);
 		if (dup2(data.fd_out, 1) != 1)
@@ -75,12 +65,29 @@ int	handle_pipe(t_vars *vars, t_exec_data *data, int *fd_in, int *fd_out)
 	return (0);
 }
 
-void	execute(t_vars *vars)
+int	end_exec(pid_t pid, t_vars *vars)
+{
+	int		status;
+	int		exit_status;
+
+	if (waitpid(pid, &status, 0) > 0)
+	{
+		if (WIFEXITED(status))
+			exit_status = WEXITSTATUS(status);
+	}
+	while (wait(&(int){0}) > 0)
+		;
+	start_signal(vars);
+	return (exit_status);
+}
+
+int	execute(t_vars *vars)
 {
 	int			use_pipe;
 	int			fd[2];
 	pid_t		pid;
 	t_exec_data	data;
+
 
 	vars->current_token = vars->token_list;
 	use_pipe = 0;
@@ -100,10 +107,10 @@ void	execute(t_vars *vars)
 		else if (data.path)
 		{
 			pid = exec_cmd(vars, data);
-			end_exec(data, pid);
+			free_exec(data);
 		}
 		else if (data.args[0])
 			ft_fprintf(2, "%s: command not found\n", data.args[0]);
 	}
-	start_signal(vars);
+	return (end_exec(pid, vars));
 }
