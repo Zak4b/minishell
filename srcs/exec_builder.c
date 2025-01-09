@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/07 21:23:24 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 15:48:00 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*replace_vars(t_vars *vars, char *str)
 	}
 	array = (char **)list_to_array(lst);
 	res = ft_strnjoin(array, count_line(array), "");
-	return (ft_lstclear(&lst, NULL), free(array), res);
+	return (ft_lstclear(&lst, NULL), free_split(array), res);
 }
 
 char	*eval_string(t_vars *vars, char *str)

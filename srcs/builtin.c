@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/07 21:36:54 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 15:36:14 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,55 @@
 
 void	ft_cd(t_vars *vars, t_exec_data data)
 {
+	char		*dest;
 	struct stat	st;
 
-	if (data.argc != 2)
-		return ;
-	if (stat(data.args[1], &st) != 0)
-		return (perror("stat: "), (void)0);
+	if (data.argc > 2)
+		return (ft_fprintf(2, "cd: too many arguments"), (void)0);
+	if (data.argc == 1 || ft_strcmp(data.args[1], "~") == 0)
+	{
+		dest = getenv_value(vars, "HOME");
+		if (dest== NULL)
+			return (ft_fprintf(2, "cd: HOME not set\n"), (void)0);
+	}
+	else
+		dest = data.args[1];
+	if (stat(dest, &st) != 0)
+		return (ft_fprintf(2, "cd: %s: No such file or directory\n", dest),
+			(void)0);
 	if (S_ISDIR(st.st_mode))
 	{
-		chdir(data.args[1]);
-		set_env(vars, "OLDPWD", getenv_value(vars, "PWD"));
+		set_env(vars, "OLDPWD", getcwd(NULL, 0));
+		chdir(dest);
 		set_env(vars, "PWD", getcwd(NULL, 0));
 	}
 	else
-		return ;
+		return (ft_fprintf(2, "cd: %s: not a directory\n", dest), (void)0);
 }
 
 void	ft_echo(t_vars *vars, t_exec_data data)
 {
-	int	i;
+	int		i;
+	int		new_line;
 
 	(void)vars;
 	i = 1;
+	new_line = 1;
 	while (i < data.argc)
 	{
-		ft_putstr_fd(data.args[i], 1);
-		if (++i < data.argc)
+		if (ft_strcmp(data.args[i], "-n") )
+			break;
+		new_line = 0;
+		i++;
+	}
+	while (i < data.argc)
+	{
+		ft_putstr_fd(data.args[i++], 1);
+		if (i < data.argc)
 			ft_putchar_fd(' ', 1);
 	}
-	ft_putchar_fd('\n', 1);
+	if (new_line)
+		ft_putchar_fd('\n', 1);
 	return ;
 }
 
@@ -58,10 +78,6 @@ void	ft_exit(t_vars *vars, t_exec_data data)
 		ft_fprintf(2, "exit: too many arguments\n");
 		return ;
 	}
-	ft_lstclear(&vars->env, (void (*)(void *))free_split);
-	free(vars->prompt);
-	clear_token_list(&(vars->token_list));
 	free_split(data.args);
-	rl_clear_history();
-	exit(exit_code);
+	clean_exit(vars, exit_code);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 13:38:54 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:02:36 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ typedef struct s_vars
 	struct sigaction sa;
 }	t_vars;
 
-char		*ft_strdoublejoin(char const *s1, char const *s2, char const *s3);
+void		clean_exit(t_vars *vars, int exit_code);
 int			count_line(char **str);
 void		**list_to_array(t_list *lst);
 int			skip_spaces(char **str);

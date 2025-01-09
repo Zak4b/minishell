@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/07 21:23:33 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 15:06:28 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,25 @@ char	*search_path(t_vars *vars, char *cmd)
 {
 	int		i;
 	char	**split;
+	char	*env_path;
 	char	*path;
+	char	*join_data[2];
 
 	i = 0;
-	if (access(cmd, F_OK | X_OK) == 0 && ft_strncmp(cmd, "./", 2) == 0)
+	if (access(cmd, F_OK | X_OK) == 0 && ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
-	split = ft_split(getenv_value(vars, "PATH"), ':');
+	env_path = getenv_value(vars, "PATH");
+	if (!env_path)
+		return (NULL);
+	split = ft_split(env_path, ':');
+	join_data[1] = cmd;
 	while (split[i])
 	{
-		path = ft_strdoublejoin(split[i], "/", cmd);
+		join_data[0] = split[i++];
+		path = ft_strnjoin(join_data, 2, "/");
 		if (access(path, F_OK | X_OK) == 0)
 			return (free_split(split), path);
-		if (path)
-			free(path);
-		i++;
+		free(path);
 	}
 	if (split)
 		free_split(split);
@@ -62,27 +67,10 @@ char	*search_path(t_vars *vars, char *cmd)
 
 int	correct_path(t_vars *vars, char *cmd)
 {
-	int		i;
-	char	**split;
-	char	*path;
-
-	i = 0;
-	split = ft_split(getenv_value(vars, "PATH"), ':');
-	if (access(cmd, F_OK | X_OK) == 0 && strncmp(cmd, "./", 2) == 0)
-		return (2);
-	while (split[i])
-	{
-		path = ft_strdoublejoin(split[i], "/", cmd);
-		if (access(path, F_OK | X_OK) == 0)
-		{
-			free(path);
-			return (1);
-		}
-		if (path)
-			free(path);
-		i++;
-	}
-	if (split)
-		free_split(split);
-	return (0);
+	int		valid;
+	char	*res;
+	res = search_path(vars, cmd);
+	valid = !!res;
+	free(res);
+	return (valid);
 }
