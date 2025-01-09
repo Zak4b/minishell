@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 14:22:47 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 15:35:57 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_vars
 	struct sigaction sa;
 }	t_vars;
 
+void		clean_exit(t_vars *vars, int exit_code);
 int			count_line(char **str);
 void		**list_to_array(t_list *lst);
 int			skip_spaces(char **str);

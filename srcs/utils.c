@@ -6,11 +6,20 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:49:58 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 14:22:40 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 15:34:03 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+void	clean_exit(t_vars *vars, int exit_code)
+{
+	ft_lstclear(&vars->env, (void (*)(void *))free_split);
+	free(vars->prompt);
+	clear_token_list(&(vars->token_list));
+	rl_clear_history();
+	exit(exit_code);
+}
 
 int	count_line(char **str)
 {

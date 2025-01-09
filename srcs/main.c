@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 00:08:09 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:41:15 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int argc, char **argv, char **env)
 		input = readline(set_prompt(&vars));
 		add_history(input);
 		if (input == NULL)
-			return (free(input), ft_lstclear(&vars.env, (void (*)(void *))free_split), free(vars.prompt), 0);
+			return (free(input), clean_exit(&vars, 0), 0);
 		vars.token_list = tokenize(input);
 		execute(&vars);
 		clear_token_list(&(vars.token_list));

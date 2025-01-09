@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/09 15:22:41 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 15:36:14 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,6 @@ void	ft_exit(t_vars *vars, t_exec_data data)
 		ft_fprintf(2, "exit: too many arguments\n");
 		return ;
 	}
-	ft_lstclear(&vars->env, (void (*)(void *))free_split);
-	free(vars->prompt);
-	clear_token_list(&(vars->token_list));
 	free_split(data.args);
-	rl_clear_history();
-	exit(exit_code);
+	clean_exit(vars, exit_code);
 }
