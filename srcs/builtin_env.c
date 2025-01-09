@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:34:32 by asene             #+#    #+#             */
-/*   Updated: 2025/01/07 21:36:06 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 13:09:22 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,15 @@ void	ft_unset(t_vars *vars, t_exec_data data)
 
 void	ft_pwd(t_vars *vars, t_exec_data data)
 {
+	char	*pwd;
+
+	(void)vars;
 	if (data.argc > 1)
 	{
 		ft_fprintf(2, "pwd: too many arguments\n");
 		return ;
 	}
-	printf("%s\n", getenv_value(vars, "PWD"));
+	pwd = getcwd(NULL, 0);
+	printf("%s\n", pwd);
+	free(pwd);
 }
