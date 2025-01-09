@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/07 21:36:54 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 15:11:36 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	ft_cd(t_vars *vars, t_exec_data data)
 			(void)0);
 	if (S_ISDIR(st.st_mode))
 	{
+		set_env(vars, "OLDPWD", getcwd(NULL, 0));
 		chdir(dest);
-		set_env(vars, "OLDPWD", getenv_value(vars, "PWD"));
 		set_env(vars, "PWD", getcwd(NULL, 0));
 	}
 	else
