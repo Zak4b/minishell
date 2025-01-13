@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:36:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/07 21:56:42 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/09 16:45:16 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,28 @@ void	(*get_builtin(char *cmd))(t_vars *vars, t_exec_data data)
 void	exec_builtin(t_vars *vars, t_exec_data data)
 {
 	void	(*builtin)(t_vars *, t_exec_data);
+	pid_t	pid;
+	int		is_fork;
 
+	is_fork = !isatty(data.fd_in) || !isatty(data.fd_out);
+	if (is_fork)
+	{
+		pid = fork();
+		if (pid == -1)
+			return (perror("Error on fork "));
+		else if (pid > 0)
+			return ;
+		if (dup2(data.fd_in, 0) != 0)
+			close(data.fd_in);
+		if (dup2(data.fd_out, 1) != 1)
+			close(data.fd_out);
+	}
 	builtin = get_builtin(data.args[0]);
-	if (builtin)
-		builtin(vars, data);
+	if (!builtin)
+		return ;//(EXIT_FAILURE);
+	if (is_fork)
+		return ((builtin(vars, data))); //exit
+	else
+		return (builtin(vars, data));
+	return ;
 }

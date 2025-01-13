@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/11 13:16:32 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:01:01 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@ int	free_exec(t_exec_data data)
 		unlink(".heredoc");
 	if (data.pipe)
 	{
-		close(data.pipe[0]);
 		close(data.pipe[1]);
-		data.pipe = NULL;
+		free(data.pipe);
 	}
 	return (0);
 }
@@ -34,7 +33,6 @@ pid_t	exec_cmd(t_vars *vars, t_exec_data data)
 	pid_t	pid;
 	char	**env;
 
-	(void)vars;
 	pid = fork();
 	if (pid == -1)
 		perror("Error on fork ");
@@ -44,32 +42,39 @@ pid_t	exec_cmd(t_vars *vars, t_exec_data data)
 			close(data.fd_in);
 		if (dup2(data.fd_out, 1) != 1)
 			close(data.fd_out);
+		if (data.pipe)
+		{
+			close(data.pipe[0]);
+			close(data.pipe[1]);
+		}
 		env = build_env(vars);
 		execve(data.path, data.args, env);
 		free_split(env);
+		exit(1);
 	}
+	else if (data.pipe)
+		close(data.pipe[1]);
 	return (pid);
 }
 
-int	handle_pipe(t_vars *vars, t_exec_data *data, int *fd_in, int *fd_out)
+int	handle_pipe(t_vars *vars, t_exec_data *data, int *fd_in)
 {
-	int	pipe_fd[2];
+	int	*pipe_fd;
 
 	if (vars->current_token->token.type == TOKEN_PIPE)
 	{
 		vars->current_token = vars->current_token->next;
+		pipe_fd = calloc(2, sizeof(int));
 		if (pipe(pipe_fd) == 0)
 		{
 			*fd_in = pipe_fd[0];
-			*fd_out = pipe_fd[1];
 			data->pipe = pipe_fd;
-			if (data->fd_out == 1)
-				data->fd_out = *fd_out;
+			if (isatty(data->fd_out))
+				data->fd_out = pipe_fd[1];
 			return (1);
 		}
 	}
 	*fd_in = 0;
-	*fd_out = 1;
 	return (0);
 }
 
@@ -89,14 +94,13 @@ int	end_exec(pid_t pid, t_vars *vars)
 	return (exit_status);
 }
 
-
-
 int	execute(t_vars *vars)
 {
 	int			use_pipe;
-	int			fd[2];
+	int			prev_fd;
 	pid_t		pid;
 	t_exec_data	data;
+
 
 	vars->current_token = vars->token_list;
 	use_pipe = 0;
@@ -104,13 +108,11 @@ int	execute(t_vars *vars)
 	while (vars->current_token->token.type != TOKEN_END)
 	{
 		data = build_exec(vars);
-		if (use_pipe)
-			data.fd_in = fd[0];
-		use_pipe = handle_pipe(vars, &data, &fd[0], &fd[1]);
-		if (isatty(data.fd_in))
-			data.fd_in = fd[0];
-		if (isatty(data.fd_out))
-			data.fd_out = fd[1];
+		if (use_pipe && isatty(data.fd_in))
+			data.fd_in = prev_fd;
+		else if (use_pipe)
+			close(prev_fd);
+		use_pipe = handle_pipe(vars, &data, &prev_fd);
 		if (is_builtin(data.args[0]))
 			exec_builtin(vars, data);
 		else if (data.path)
