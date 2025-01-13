@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/09 15:36:14 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/13 15:02:03 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_cd(t_vars *vars, t_exec_data data)
 		return (ft_fprintf(2, "cd: too many arguments"), (void)0);
 	if (data.argc == 1 || ft_strcmp(data.args[1], "~") == 0)
 	{
-		dest = getenv_value(vars, "HOME");
+		dest = getenv_value(vars, "HOME", false);
 		if (dest== NULL)
 			return (ft_fprintf(2, "cd: HOME not set\n"), (void)0);
 	}

@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/09 15:06:28 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/13 15:02:37 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,18 @@ char	**ft_getenv(t_vars *vars, char *word)
 	return (NULL);
 }
 
-char	*getenv_value(t_vars *vars, char *word)
+char	*getenv_value(t_vars *vars, char *key, bool dup)
 {
 	char	**env;
 
-	env = ft_getenv(vars, word);
+	env = ft_getenv(vars, key);
 	if (env)
-		return (env[1]);
+	{
+		if (dup)
+			return (ft_strdup(env[1]));
+		else
+			return (env[1]);
+	}
 	return (NULL);
 }
 
@@ -47,7 +52,7 @@ char	*search_path(t_vars *vars, char *cmd)
 	i = 0;
 	if (access(cmd, F_OK | X_OK) == 0 && ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
-	env_path = getenv_value(vars, "PATH");
+	env_path = getenv_value(vars, "PATH", false);
 	if (!env_path)
 		return (NULL);
 	split = ft_split(env_path, ':');

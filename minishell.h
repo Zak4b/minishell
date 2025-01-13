@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/10 13:50:35 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:00:59 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "./libft/libft.h"
 # include <fcntl.h>
+# include <stdbool.h>
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -91,7 +92,7 @@ void		token_append(t_tokenlist **lst, t_token_type type, char *value);
 void		clear_token_list(t_tokenlist **t);
 
 char		*search_path(t_vars *vars, char *cmd);
-char		*getenv_value(t_vars *vars, char *word);
+char		*getenv_value(t_vars *vars, char *key, bool dup);
 t_word_type	cmd_or_file(t_vars *vars, char *token);
 int			setup_signal(t_vars *vars);
 

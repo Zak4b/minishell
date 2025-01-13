@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/10 13:50:23 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:02:13 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*replace_vars(t_vars *vars, char *str)
 		if (*str == '$' && ++str)
 		{
 			var = grab_word(&str);
-			ft_lstadd_back(&lst, ft_lstnew(getenv_value(vars, var)));
+			ft_lstadd_back(&lst, ft_lstnew(getenv_value(vars, var, true)));
 			str += ft_strlen(var);
 			free(var);
 		}

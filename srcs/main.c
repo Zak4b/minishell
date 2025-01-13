@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 17:47:58 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:02:31 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*set_prompt(t_vars *vars)
 	i = 0;
 	prompt[i++] = "minishell:";
 	pwd = getcwd(NULL, 0);
-	home = getenv_value(vars, "HOME");
+	home = getenv_value(vars, "HOME", false);
 	if (pwd && home && ft_strncmp(home, pwd, ft_strlen(home)) == 0)
 	{
 		prompt[i++] = "~";
