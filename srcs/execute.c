@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 17:49:31 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/11 13:16:32 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@ int	free_exec(t_exec_data data)
 		free(data.path);
 	if (data.args)
 		free_split(data.args);
+	if (access(".heredoc", F_OK) == 0)
+		unlink(".heredoc");
+	if (data.pipe)
+	{
+		close(data.pipe[0]);
+		close(data.pipe[1]);
+		data.pipe = NULL;
+	}
 	return (0);
 }
 
@@ -81,13 +89,14 @@ int	end_exec(pid_t pid, t_vars *vars)
 	return (exit_status);
 }
 
+
+
 int	execute(t_vars *vars)
 {
 	int			use_pipe;
 	int			fd[2];
 	pid_t		pid;
 	t_exec_data	data;
-
 
 	vars->current_token = vars->token_list;
 	use_pipe = 0;

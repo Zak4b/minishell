@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 15:48:00 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/10 13:50:23 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	handle_redirect(t_vars *vars, t_exec_data *data, t_token token)
 	else if (token.type == TOKEN_REDIRECT_IN)
 		fd = open(token.value, O_RDONLY);
 	else
-		fd = -404;
+		fd = open(heredoc(token.value, vars), O_RDONLY);
 	if (fd == -1)
 		return ;
 	if (token.type == TOKEN_REDIRECT_OUT || token.type == TOKEN_APPEND)

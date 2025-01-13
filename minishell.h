@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 17:48:35 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:50:35 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,12 @@ typedef struct s_exec_data
 
 typedef struct s_vars
 {
-	t_list			*env;
-	char			**builtins;
-	char			*prompt;
-	t_tokenlist		*token_list;
-	t_tokenlist		*current_token;
-	struct sigaction sa;
+	t_list				*env;
+	char				**builtins;
+	char				*prompt;
+	t_tokenlist			*token_list;
+	t_tokenlist			*current_token;
+	struct sigaction	sa;
 }	t_vars;
 
 void		clean_exit(t_vars *vars, int exit_code);
@@ -117,5 +117,6 @@ void		ft_unset(t_vars *vars, t_exec_data data);
 
 int			start_signal(t_vars *vars);
 int			stop_signal(t_vars *vars);
+char		*heredoc(char *delimiter, t_vars *vars);
 
 #endif

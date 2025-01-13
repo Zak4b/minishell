@@ -24,6 +24,7 @@ SOURCES = \
 		exec_builder.c \
 		secure.c \
 		execute.c \
+		heredoc.c \
 		env.c
 
 OBJDIR = obj
