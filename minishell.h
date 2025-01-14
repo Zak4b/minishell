@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/13 15:25:40 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/14 15:46:25 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ typedef struct s_tokenlist
 
 typedef struct s_exec_data
 {
-	char	*path;
-	char	**args;
-	int		argc;
-	int		fd_in;
-	int		fd_out;
-	int		*pipe;
+	char				*path;
+	char				**args;
+	int					argc;
+	int					fd_in;
+	int					fd_out;
+	struct s_exec_data	*pipe;
 }	t_exec_data;
 
 typedef struct s_vars
@@ -96,7 +96,7 @@ char		*getenv_value(t_vars *vars, char *key, bool dup);
 t_word_type	cmd_or_file(t_vars *vars, char *token);
 int			setup_signal(t_vars *vars);
 
-t_exec_data	build_exec(t_vars *vars);
+t_exec_data	*build_exec(t_vars *vars, t_tokenlist *lst, t_exec_data **dest);
 
 int			is_builtin(char *cmd);
 int			exec_builtin(t_vars *vars, t_exec_data data);

@@ -6,120 +6,107 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/13 14:01:01 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/14 16:25:46 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	free_exec(t_exec_data data)
+void	free_exec(t_exec_data *data)
 {
-	if (data.path)
-		free(data.path);
-	if (data.args)
-		free_split(data.args);
+	if (data->path)
+		free(data->path);
+	if (data->args)
+		free_split(data->args);
 	if (access(".heredoc", F_OK) == 0)
 		unlink(".heredoc");
-	if (data.pipe)
-	{
-		close(data.pipe[1]);
-		free(data.pipe);
-	}
-	return (0);
+	if (data->pipe)
+		free_exec(data->pipe);
+	free(data);
 }
 
-pid_t	exec_cmd(t_vars *vars, t_exec_data data)
+void	exec_cmd(t_vars *vars, t_exec_data *data)
 {
-	pid_t	pid;
 	char	**env;
 
-	pid = fork();
-	if (pid == -1)
-		perror("Error on fork ");
-	else if (pid == 0)
+	if (dup2(data->fd_in, 0) != 0)
+		close(data->fd_in);
+	if (dup2(data->fd_out, 1) != 1)
+		close(data->fd_out);
+	if (!data->path)
 	{
-		if (dup2(data.fd_in, 0) != 0)
-			close(data.fd_in);
-		if (dup2(data.fd_out, 1) != 1)
-			close(data.fd_out);
-		if (data.pipe)
-		{
-			close(data.pipe[0]);
-			close(data.pipe[1]);
-		}
-		env = build_env(vars);
-		execve(data.path, data.args, env);
-		free_split(env);
-		exit(1);
+		ft_fprintf(2, "%s: command not found\n", data->args[0]);
+		clean_exit(vars, 1);
 	}
-	else if (data.pipe)
-		close(data.pipe[1]);
-	return (pid);
+	env = build_env(vars);
+	execve(data->path, data->args, env);
+	free_split(env);
+	clean_exit(vars, 1);
 }
 
-int	handle_pipe(t_vars *vars, t_exec_data *data, int *fd_in)
+int	execute_pipeline(t_vars *vars, t_exec_data *data, int input_fd)
 {
-	int	*pipe_fd;
+	pid_t	pid;
+	int		fds[2];
+	int		status;
 
-	if (vars->current_token->token.type == TOKEN_PIPE)
+	if (data->pipe)
 	{
-		vars->current_token = vars->current_token->next;
-		pipe_fd = calloc(2, sizeof(int));
-		if (pipe(pipe_fd) == 0)
-		{
-			*fd_in = pipe_fd[0];
-			data->pipe = pipe_fd;
-			if (isatty(data->fd_out))
-				data->fd_out = pipe_fd[1];
-			return (1);
-		}
+		pipe(fds);
+		if (isatty(data->fd_out))
+			data->fd_out = fds[1];
+		if (isatty(data->pipe->fd_in))
+			data->pipe->fd_in = fds[0];
 	}
-	*fd_in = 0;
-	return (0);
+	pid = fork();
+	if (pid == 0)
+	{
+		close(fds[0]);
+		if (is_builtin(data->args[0]))
+			exec_builtin(vars, *data);
+		else if (data->path)
+			exec_cmd(vars, data);
+		free_exec(data);
+		exit(15); // TODO
+	}
+	if (!isatty(input_fd))
+		close(input_fd);
+	if (data->pipe == NULL)
+		return (waitpid(pid, &status, 0), status);
+	close(fds[1]);
+	status = execute_pipeline(vars, data->pipe, fds[0]);
+	waitpid(pid, NULL, 0);
+	return (status);
 }
 
-int	end_exec(pid_t pid, t_vars *vars)
+int	run_cmd(t_vars *vars, t_exec_data *data)
 {
 	int		status;
-	int		exit_status;
+	pid_t	pid;
 
-	if (waitpid(pid, &status, 0) > 0)
-	{
-		if (WIFEXITED(status))
-			exit_status = WEXITSTATUS(status);
-	}
-	while (wait(&(int){0}) > 0)
-		;
-	start_signal(vars);
-	return (exit_status);
+	pid = fork();
+	if (pid == 0)
+		exec_cmd(vars, data);
+	return (waitpid(pid, &status, 0), status);
 }
 
 int	execute(t_vars *vars)
 {
-	int			use_pipe;
-	int			prev_fd;
-	pid_t		pid;
-	t_exec_data	data;
+	int			status;
+	t_exec_data	*data;
 
-
-	vars->current_token = vars->token_list;
-	use_pipe = 0;
 	stop_signal(vars);
-	while (vars->current_token->token.type != TOKEN_END)
-	{
-		data = build_exec(vars);
-		if (use_pipe && isatty(data.fd_in))
-			data.fd_in = prev_fd;
-		else if (use_pipe)
-			close(prev_fd);
-		use_pipe = handle_pipe(vars, &data, &prev_fd);
-		if (is_builtin(data.args[0]))
-			exec_builtin(vars, data);
-		else if (data.path)
-			pid = exec_cmd(vars, data);
-		else if (data.args[0])
-			ft_fprintf(2, "%s: command not found\n", data.args[0]);
-		free_exec(data);
-	}
-	return (end_exec(pid, vars));
+	data = NULL;
+	build_exec(vars, vars->token_list, &data);
+	if (data->pipe)
+		status = execute_pipeline(vars, data, STDIN_FILENO);
+	else if (is_builtin(data->args[0]))
+		status = exec_builtin(vars, *data);
+	else
+		status = run_cmd(vars, data);
+	start_signal(vars);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else
+		return (1);
 }
