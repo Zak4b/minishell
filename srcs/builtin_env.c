@@ -6,13 +6,13 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:34:32 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 13:09:22 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/14 11:46:00 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_export(t_vars *vars, t_exec_data data)
+int	ft_export(t_vars *vars, t_exec_data data)
 {
 	int		i;
 	char	**key_value;
@@ -31,14 +31,17 @@ void	ft_export(t_vars *vars, t_exec_data data)
 		free_split(key_value);
 		i++;
 	}
+	return (0);
 }
 
-void	ft_env(t_vars *vars, t_exec_data data)
+int	ft_env(t_vars *vars, t_exec_data data)
 {
 	t_list	*env;
 	char	**value;
 
 	(void)data;
+	if (data.argc > 1)
+		return (ft_fprintf(2, "env: too many arguments\n"), 1);
 	env = vars->env;
 	while (env)
 	{
@@ -46,29 +49,15 @@ void	ft_env(t_vars *vars, t_exec_data data)
 		ft_printf("%s=%s\n", value[0], value[1]);
 		env = env->next;
 	}
+	return (0);
 }
 
-void	ft_unset(t_vars *vars, t_exec_data data)
+int	ft_unset(t_vars *vars, t_exec_data data)
 {
 	int		i;
 
 	i = 1;
 	while (i < data.argc)
 		unset_env(vars, data.args[i++]);
-	return ;
-}
-
-void	ft_pwd(t_vars *vars, t_exec_data data)
-{
-	char	*pwd;
-
-	(void)vars;
-	if (data.argc > 1)
-	{
-		ft_fprintf(2, "pwd: too many arguments\n");
-		return ;
-	}
-	pwd = getcwd(NULL, 0);
-	printf("%s\n", pwd);
-	free(pwd);
+	return (0);
 }

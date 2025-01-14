@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:36:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/09 16:45:16 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/13 15:17:52 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	is_builtin(char *cmd)
 		return (0);
 }
 
-void	(*get_builtin(char *cmd))(t_vars *vars, t_exec_data data)
+int	(*get_builtin(char *cmd))(t_vars *vars, t_exec_data data)
 {
 	if (ft_strcmp(cmd, "cd") == 0)
 		return (ft_cd);
@@ -42,31 +42,30 @@ void	(*get_builtin(char *cmd))(t_vars *vars, t_exec_data data)
 	return (NULL);
 }
 
-void	exec_builtin(t_vars *vars, t_exec_data data)
+int	exec_builtin(t_vars *vars, t_exec_data data)
 {
-	void	(*builtin)(t_vars *, t_exec_data);
+	int	(*builtin)(t_vars *, t_exec_data);
 	pid_t	pid;
 	int		is_fork;
 
+	builtin = get_builtin(data.args[0]);
+	if (!builtin)
+		return (-1);
 	is_fork = !isatty(data.fd_in) || !isatty(data.fd_out);
 	if (is_fork)
 	{
 		pid = fork();
 		if (pid == -1)
-			return (perror("Error on fork "));
+			return (perror("Error on fork "), -1);
 		else if (pid > 0)
-			return ;
+			return (pid);
 		if (dup2(data.fd_in, 0) != 0)
 			close(data.fd_in);
 		if (dup2(data.fd_out, 1) != 1)
 			close(data.fd_out);
 	}
-	builtin = get_builtin(data.args[0]);
-	if (!builtin)
-		return ;//(EXIT_FAILURE);
 	if (is_fork)
-		return ((builtin(vars, data))); //exit
+		return (exit(builtin(vars, data)), 0);
 	else
 		return (builtin(vars, data));
-	return ;
 }

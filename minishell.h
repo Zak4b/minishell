@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/13 15:00:59 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/13 15:25:40 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int			setup_signal(t_vars *vars);
 t_exec_data	build_exec(t_vars *vars);
 
 int			is_builtin(char *cmd);
-void		exec_builtin(t_vars *vars, t_exec_data data);
+int			exec_builtin(t_vars *vars, t_exec_data data);
 void		parse_env(char **env, t_vars *vars);
 char		**build_env(t_vars *vars);
 void		set_env(t_vars *vars, char *key, char *value);
@@ -108,13 +108,13 @@ int			execute(t_vars *vars);
 int			correct_path(t_vars *vars, char *cmd);
 int			syntax_check(t_vars *vars);
 
-void		ft_cd(t_vars *vars, t_exec_data data);
-void		ft_export(t_vars *vars, t_exec_data data);
-void		ft_pwd(t_vars *vars, t_exec_data data);
-void		ft_echo(t_vars *vars, t_exec_data data);
-void		ft_exit(t_vars *vars, t_exec_data data);
-void		ft_env(t_vars *vars, t_exec_data data);
-void		ft_unset(t_vars *vars, t_exec_data data);
+int			ft_cd(t_vars *vars, t_exec_data data);
+int			ft_export(t_vars *vars, t_exec_data data);
+int			ft_pwd(t_vars *vars, t_exec_data data);
+int			ft_echo(t_vars *vars, t_exec_data data);
+int			ft_exit(t_vars *vars, t_exec_data data);
+int			ft_env(t_vars *vars, t_exec_data data);
+int			ft_unset(t_vars *vars, t_exec_data data);
 
 int			start_signal(t_vars *vars);
 int			stop_signal(t_vars *vars);
