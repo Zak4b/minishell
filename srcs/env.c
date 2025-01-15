@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 16:09:56 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/07 21:11:41 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/15 22:12:49 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,32 @@ void	parse_env(char **env, t_vars *vars)
 		e = ft_lstnew(ft_calloc(3, sizeof(char *)));
 		pos = ft_strchr(env[i], '=');
 		((char **)e->content)[0] = ft_substr(env[i], 0, pos - env[i]);
-		((char **)e->content)[1] = ft_substr(pos +1, 0, ft_strlen(pos +1));
+		((char **)e->content)[1] = ft_strdup(pos + 1);
 		ft_lstadd_back(&env_lst, e);
 		i++;
 	}
 	vars->env = env_lst;
+}
+
+char	*getenv_value(t_vars *vars, char *key, bool dup)
+{
+	t_list	*env;
+
+	if (key == NULL)
+		return (NULL);
+	env = vars->env;
+	while (env)
+	{
+		if (strcmp(((char **)env->content)[0], key) == 0)
+		{
+			if (dup)
+				return (ft_strdup(((char **)(env->content))[1]));
+			else
+				return (((char **)(env->content))[1]);
+		}
+		env = env->next;
+	}
+	return (NULL);
 }
 
 char	**build_env(t_vars *vars)
@@ -60,10 +81,11 @@ void	set_env(t_vars *vars, char *key, char *value)
 	env = vars->env;
 	while (env)
 	{
-		content = env->content;
+		content = (char **)env->content;
 		if (ft_strcmp(content[0], key) == 0)
 		{
-			free(content[1]);
+			if (content[1] != NULL)
+				free(content[1]);
 			content[1] = ft_strdup(value);
 			return ;
 		}

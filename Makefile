@@ -13,10 +13,10 @@ FLAGS = -Wall -Wextra -Werror -g
 
 SOURCES = \
         main.c \
+		prompt.c \
 		token.c \
 		utils.c \
 		pathfinder.c \
-		command.c \
 		signal.c \
 		builtin.c \
 		builtin_env.c \

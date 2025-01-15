@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/15 10:59:43 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/15 22:15:50 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,9 +134,6 @@ t_exec_data	*build_exec(t_vars *vars, t_tokenlist *tok_lst, t_exec_data **data)
 	if ((*data)->args[0])
 		(*data)->path = search_path(vars, (*data)->args[0]);
 	if (tok_lst->token.type == TOKEN_PIPE)
-	{
-		tok_lst = tok_lst->next;
-		build_exec(vars, tok_lst, &(*data)->pipe);
-	}
+		build_exec(vars, tok_lst->next, &(*data)->pipe);
 	return (ft_lstclear(&lst, NULL), (*data)->argc = count_line((*data)->args), *data);
 }

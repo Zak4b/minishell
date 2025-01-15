@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/15 10:58:48 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/15 22:10:15 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,6 @@
 # include <sys/stat.h>
 
 extern volatile sig_atomic_t	g_nal;
-
-typedef enum e_word_type
-{
-	W_NONE,
-	W_BUILTIN,
-	W_EXECUTABLE,
-	W_FILE,
-	W_CMD
-}	t_word_type;
 
 typedef enum e_token_type
 {
@@ -73,12 +64,11 @@ typedef struct s_exec_data
 typedef struct s_vars
 {
 	t_list				*env;
-	char				**builtins;
-	char				*prompt;
 	t_tokenlist			*token_list;
-	t_tokenlist			*current_token;
 	struct sigaction	sa;
 }	t_vars;
+
+char		*readline_prompt(t_vars *vars, char **dest);
 
 void		clean_exit(t_vars *vars, int exit_code);
 int			count_line(char **str);
@@ -92,20 +82,19 @@ void		token_append(t_tokenlist **lst, t_token_type type, char *value);
 void		clear_token_list(t_tokenlist **t);
 
 char		*search_path(t_vars *vars, char *cmd);
+int			correct_path(t_vars *vars, char *cmd);
+
+void		parse_env(char **env, t_vars *vars);
 char		*getenv_value(t_vars *vars, char *key, bool dup);
-t_word_type	cmd_or_file(t_vars *vars, char *token);
-int			setup_signal(t_vars *vars);
+char		**build_env(t_vars *vars);
+void		set_env(t_vars *vars, char *key, char *value);
+void		unset_env(t_vars *vars, char *key);
 
 t_exec_data	*build_exec(t_vars *vars, t_tokenlist *lst, t_exec_data **dest);
 
 int			is_builtin(char *cmd);
 int			exec_builtin(t_vars *vars, t_exec_data data);
-void		parse_env(char **env, t_vars *vars);
-char		**build_env(t_vars *vars);
-void		set_env(t_vars *vars, char *key, char *value);
-void		unset_env(t_vars *vars, char *key);
 int			execute(t_vars *vars);
-int			correct_path(t_vars *vars, char *cmd);
 int			syntax_check(t_vars *vars);
 
 int			ft_cd(t_vars *vars, t_exec_data data);
@@ -115,6 +104,8 @@ int			ft_echo(t_vars *vars, t_exec_data data);
 int			ft_exit(t_vars *vars, t_exec_data data);
 int			ft_env(t_vars *vars, t_exec_data data);
 int			ft_unset(t_vars *vars, t_exec_data data);
+
+int			setup_signal(t_vars *vars);
 
 int			start_signal(t_vars *vars);
 int			stop_signal(t_vars *vars);
