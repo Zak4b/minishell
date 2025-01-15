@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:36:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/13 15:17:52 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/14 16:45:35 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	(*get_builtin(char *cmd))(t_vars *vars, t_exec_data data)
 
 int	exec_builtin(t_vars *vars, t_exec_data data)
 {
-	int	(*builtin)(t_vars *, t_exec_data);
+	int		(*builtin)(t_vars *, t_exec_data);
 	pid_t	pid;
 	int		is_fork;
 

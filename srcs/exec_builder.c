@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/14 15:46:48 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/15 10:59:43 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*replace_vars(t_vars *vars, char *str)
 	t_list	*lst;
 	char	*var;
 	char	**array;
-	char	*res;
 
 	lst = NULL;
 	while (*str)
@@ -32,13 +31,12 @@ char	*replace_vars(t_vars *vars, char *str)
 		{
 			var = grab_word(&str);
 			ft_lstadd_back(&lst, ft_lstnew(getenv_value(vars, var, true)));
-			str += ft_strlen(var);
 			free(var);
 		}
 	}
 	array = (char **)list_to_array(lst);
-	res = ft_strnjoin(array, count_line(array), "");
-	return (ft_lstclear(&lst, NULL), free_split(array), res);
+	var = ft_strnjoin(array, count_line(array), "");
+	return (ft_lstclear(&lst, NULL), free_split(array), var);
 }
 
 char	*eval_string(t_vars *vars, char *str)

@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:34:03 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/14 11:19:12 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/15 10:59:03 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ char	*heredoc(char *delimiter, t_vars *vars)
 			fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			close(fd);
 		}
-
 	}
 	return (".heredoc");
 }
-

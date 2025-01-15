@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/14 11:46:43 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/14 16:31:12 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_cd(t_vars *vars, t_exec_data data)
 	if (data.argc == 1 || ft_strcmp(data.args[1], "~") == 0)
 	{
 		dest = getenv_value(vars, "HOME", false);
-		if (dest== NULL)
+		if (dest == NULL)
 			return (ft_fprintf(2, "cd: HOME not set\n"), 1);
 	}
 	else
@@ -51,8 +51,8 @@ int	ft_echo(t_vars *vars, t_exec_data data)
 	new_line = 1;
 	while (i < data.argc)
 	{
-		if (ft_strcmp(data.args[i], "-n") )
-			break;
+		if (ft_strcmp(data.args[i], "-n"))
+			break ;
 		new_line = 0;
 		i++;
 	}

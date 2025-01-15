@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/14 15:46:25 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/15 10:58:48 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 
-extern volatile sig_atomic_t g_nal;
+extern volatile sig_atomic_t	g_nal;
 
 typedef enum e_word_type
 {
