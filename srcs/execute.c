@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/15 11:16:51 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/15 12:58:07 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	execute(t_vars *vars)
 	data = NULL;
 	build_exec(vars, vars->token_list, &data);
 	if(!data->args[0])
-		return (1);
+		return (start_signal(vars), 1);
 	if (data->pipe)
 		status = execute_pipeline(vars, data, STDIN_FILENO);
 	else if (is_builtin(data->args[0]))
