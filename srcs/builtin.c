@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/16 16:23:55 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:27:33 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	ft_echo(t_vars *vars, t_exec_data data)
 
 int	ft_exit(t_vars *vars, t_exec_data data)
 {
-	unsigned char	exit_code;
+	int	exit_code;
 
 	exit_code = vars->exit_code;
 	if (data.argc == 2)
@@ -108,6 +108,7 @@ int	ft_pwd(t_vars *vars, t_exec_data data)
 	char	*pwd;
 
 	(void)vars;
+	(void)data;
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
 	free(pwd);
