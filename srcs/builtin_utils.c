@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:36:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/14 16:45:35 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 10:12:46 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_builtin(char *cmd)
-{
-	if (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "export") \
-		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "echo") \
-		|| !ft_strcmp(cmd, "exit") || !ft_strcmp(cmd, "env") \
-		|| !ft_strcmp(cmd, "unset"))
-		return (1);
-	else
-		return (0);
-}
 
 int	(*get_builtin(char *cmd))(t_vars *vars, t_exec_data data)
 {
@@ -42,30 +31,25 @@ int	(*get_builtin(char *cmd))(t_vars *vars, t_exec_data data)
 	return (NULL);
 }
 
+int	is_builtin(char *cmd)
+{
+	return (!!(get_builtin(cmd)));
+}
+
 int	exec_builtin(t_vars *vars, t_exec_data data)
 {
 	int		(*builtin)(t_vars *, t_exec_data);
-	pid_t	pid;
-	int		is_fork;
+	int		exit_code;
 
 	builtin = get_builtin(data.args[0]);
 	if (!builtin)
 		return (-1);
-	is_fork = !isatty(data.fd_in) || !isatty(data.fd_out);
-	if (is_fork)
-	{
-		pid = fork();
-		if (pid == -1)
-			return (perror("Error on fork "), -1);
-		else if (pid > 0)
-			return (pid);
-		if (dup2(data.fd_in, 0) != 0)
-			close(data.fd_in);
-		if (dup2(data.fd_out, 1) != 1)
-			close(data.fd_out);
-	}
-	if (is_fork)
-		return (exit(builtin(vars, data)), 0);
-	else
-		return (builtin(vars, data));
+	if (dup2(data.fd_in, 0) != 0)
+		close(data.fd_in);
+	if (dup2(data.fd_out, 1) != 1)
+		close(data.fd_out);
+	exit_code = builtin(vars, data);
+	if (data.pipe)
+		exit(exit_code);
+	return (exit_code);
 }
