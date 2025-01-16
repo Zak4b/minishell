@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/15 12:58:07 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/16 13:48:08 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,17 @@ void	exec_cmd(t_vars *vars, t_exec_data *data)
 	clean_exit(vars, 1);
 }
 
+void	child_process(t_vars *vars, t_exec_data *data, int *fds)
+{
+	close(fds[0]);
+	if (is_builtin(data->args[0]))
+		exec_builtin(vars, *data);
+	else if (data->path)
+		exec_cmd(vars, data);
+	free_exec(data);
+	exit(15); // TODO
+}
+
 int	execute_pipeline(t_vars *vars, t_exec_data *data, int input_fd)
 {
 	pid_t	pid;
@@ -60,15 +71,7 @@ int	execute_pipeline(t_vars *vars, t_exec_data *data, int input_fd)
 	}
 	pid = fork();
 	if (pid == 0)
-	{
-		close(fds[0]);
-		if (is_builtin(data->args[0]))
-			exec_builtin(vars, *data);
-		else if (data->path)
-			exec_cmd(vars, data);
-		free_exec(data);
-		exit(15); // TODO
-	}
+		child_process(vars, data, fds);
 	if (!isatty(input_fd))
 		close(input_fd);
 	if (data->pipe == NULL)
