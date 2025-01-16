@@ -6,11 +6,30 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/14 16:31:12 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:12:27 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	dest_for_cd(t_vars *vars, t_exec_data data, char **dest)
+{
+	if (data.argc == 1 || ft_strcmp(data.args[1], "~") == 0)
+	{
+		*dest = getenv_value(vars, "HOME", true);
+		if (*dest == NULL)
+			return (ft_fprintf(2, "cd: HOME not set\n"), 1);
+	}
+	else if (ft_strcmp(data.args[1], "-") == 0)
+	{
+		*dest = getenv_value(vars, "OLDPWD", true);
+		if (*dest == NULL)
+			return (ft_fprintf(2, "cd: OLDPWD not set\n"), 1);
+	}
+	else
+		*dest = ft_strdup(data.args[1]);
+	return (0);
+}
 
 int	ft_cd(t_vars *vars, t_exec_data data)
 {
@@ -19,25 +38,21 @@ int	ft_cd(t_vars *vars, t_exec_data data)
 
 	if (data.argc > 2)
 		return (ft_fprintf(2, "cd: too many arguments\n"), 1);
-	if (data.argc == 1 || ft_strcmp(data.args[1], "~") == 0)
-	{
-		dest = getenv_value(vars, "HOME", false);
-		if (dest == NULL)
-			return (ft_fprintf(2, "cd: HOME not set\n"), 1);
-	}
-	else
-		dest = data.args[1];
+	if (dest_for_cd(vars, data, &dest) == 1)
+		return (1);
 	if (stat(dest, &st) != 0)
 		return (ft_fprintf(2, "cd: %s: No such file or directory\n", dest),
-			1);
+			free(dest), 1);
 	if (S_ISDIR(st.st_mode))
 	{
 		set_env(vars, "OLDPWD", getcwd(NULL, 0));
 		chdir(dest);
 		set_env(vars, "PWD", getcwd(NULL, 0));
+		free(dest);
 	}
 	else
-		return (ft_fprintf(2, "cd: %s: not a directory\n", dest), 1);
+		return (ft_fprintf(2, "cd: %s: not a directory\n", dest),
+			free(dest), 1);
 	return (0);
 }
 
