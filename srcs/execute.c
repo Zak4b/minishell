@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/15 12:58:07 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/16 10:48:13 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	exec_cmd(t_vars *vars, t_exec_data *data)
 	if (!data->path)
 	{
 		ft_fprintf(2, "%s: command not found\n", data->args[0]);
-		clean_exit(vars, 1);
+		clean_exit(vars, CMD_NOT_FOUND);
 	}
 	env = build_env(vars);
 	execve(data->path, data->args, env);
@@ -109,6 +109,7 @@ int	execute(t_vars *vars)
 	start_signal(vars);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	else
-		return (1);
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
 }

@@ -6,17 +6,18 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/15 22:10:32 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/16 10:43:57 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <minishell.h>	
 
 volatile sig_atomic_t	g_nal = 0;
 
 void	init_shell(t_vars *vars, char **env)
 {
 	vars->token_list = NULL;
+	vars->exit_code = 0;
 	setup_signal(vars);
 	parse_env(env, vars);
 }
@@ -39,7 +40,7 @@ int	main(int argc, char **argv, char **env)
 		if (readline_prompt(&vars, &input) == NULL)
 			return (free(input), clean_exit(&vars, 0), 0);
 		vars.token_list = tokenize(input);
-		execute(&vars);
+		vars.exit_code = execute(&vars);
 		clear_token_list(&(vars.token_list));
 		free(input);
 	}
