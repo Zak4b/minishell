@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 16:31:36 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/16 17:30:58 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,17 @@ void	exec_cmd(t_vars *vars, t_exec_data *data)
 
 void	child_process(t_vars *vars, t_exec_data *data, int *fds)
 {
+	int	exit_code;
+
 	close(fds[0]);
 	if (is_builtin(data->args[0]))
-		exec_builtin(vars, *data);
+	{
+		exit_code = exec_builtin(vars, *data);
+		free_exec(data);
+		clean_exit(vars, exit_code);
+	}
 	else if (data->path)
 		exec_cmd(vars, data);
-	free_exec(data);
-	exit(15); // TODO
 }
 
 int	execute_pipeline(t_vars *vars, t_exec_data *data, int input_fd)
@@ -97,7 +101,7 @@ int	execute(t_vars *vars)
 	data = NULL;
 	build_exec(vars, vars->token_list, &data);
 	if(!data->args[0])
-		return (vars->exit_code);
+		return (free_exec(data), vars->exit_code);
 	stop_signal(vars);
 	vars->nbheredoc = 0;
 	if (data->pipe)
@@ -106,6 +110,7 @@ int	execute(t_vars *vars)
 		status = exec_builtin(vars, *data);
 	else
 		status = run_cmd(vars, data);
+	free_exec(data);
 	start_signal(vars);
 	heredoc_killer(vars->nbheredoc);
 	if (WIFEXITED(status))
