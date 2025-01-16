@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 14:09:03 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:41:14 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_vars
 {
 	t_list				*env;
 	t_tokenlist			*token_list;
+	int					nbheredoc;
 	struct sigaction	sa;
 }	t_vars;
 
@@ -109,6 +110,7 @@ int			setup_signal(t_vars *vars);
 
 int			start_signal(t_vars *vars);
 int			stop_signal(t_vars *vars);
-char		*heredoc(char *delimiter, t_vars *vars);
+int			heredoc(char *delimiter, t_vars *vars);
+void		heredoc_killer(int nbheredoc);
 
 #endif

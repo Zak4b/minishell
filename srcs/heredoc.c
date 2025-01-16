@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:34:03 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/15 10:59:03 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/16 15:42:51 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	signal_heredoc(t_vars *vars)
 	return (1);
 }
 
-void	heredoc_child(char *delimiter)
+void	heredoc_child(char *delimiter, char *name)
 {
 	char	*line;
 	int		fd;
 
-	fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	while (1)
 	{
 		line = readline("> ");
@@ -50,14 +50,33 @@ void	heredoc_child(char *delimiter)
 	exit(0);
 }
 
-char	*heredoc(char *delimiter, t_vars *vars)
+void	heredoc_killer(int nbheredoc)
+{
+	int		i;
+	char	*name;
+
+	if (nbheredoc == 0)
+		return ;
+	i = 0;
+	while (i <= nbheredoc)
+	{
+		name = ft_strjoin(".heredoc", ft_itoa(i));
+		unlink(name);
+		i++;
+		free(name);
+	}
+}
+
+int	heredoc(char *delimiter, t_vars *vars)
 {
 	int		fd;
 	pid_t	pid;
+	char	*name;
 
+	name = ft_strjoin(".heredoc", ft_itoa(vars->nbheredoc));
 	pid = fork();
 	if (pid == 0 && signal_heredoc(vars))
-		heredoc_child(delimiter);
+		heredoc_child(delimiter, name);
 	else
 	{
 		waitpid(pid, 0, 0);
@@ -67,5 +86,8 @@ char	*heredoc(char *delimiter, t_vars *vars)
 			close(fd);
 		}
 	}
-	return (".heredoc");
+	fd = open(name, O_RDONLY, 0644);
+	free(name);
+	vars->nbheredoc = vars->nbheredoc + 1;
+	return (fd);
 }

@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 14:09:16 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:41:43 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int	execute(t_vars *vars)
 	t_exec_data	*data;
 
 	stop_signal(vars);
+	vars->nbheredoc = 0;
 	data = NULL;
 	build_exec(vars, vars->token_list, &data);
 	if(!data->args[0])
@@ -110,6 +111,7 @@ int	execute(t_vars *vars)
 	else
 		status = run_cmd(vars, data);
 	start_signal(vars);
+	heredoc_killer(vars->nbheredoc);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else
