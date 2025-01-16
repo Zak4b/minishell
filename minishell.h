@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 16:22:19 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:32:23 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char		*search_path(t_vars *vars, char *cmd);
 int			correct_path(t_vars *vars, char *cmd);
 
 void		parse_env(char **env, t_vars *vars);
-char		*getenv_value(t_vars *vars, char *key, bool dup);
+char		*getenv_value(t_vars *vars, char *key);
 char		**build_env(t_vars *vars);
 void		set_env(t_vars *vars, char *key, char *value);
 void		unset_env(t_vars *vars, char *key);
@@ -106,7 +106,7 @@ t_exec_data	*build_exec(t_vars *vars, t_tokenlist *lst, t_exec_data **dest);
 int			is_builtin(char *cmd);
 int			exec_builtin(t_vars *vars, t_exec_data data);
 int			execute(t_vars *vars);
-int			syntax_check(t_vars *vars);
+bool		check_syntax(t_tokenlist *tok_lst);
 
 int			ft_cd(t_vars *vars, t_exec_data data);
 int			ft_export(t_vars *vars, t_exec_data data);

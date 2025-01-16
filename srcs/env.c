@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 16:09:56 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/15 22:12:49 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/16 15:54:37 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,19 @@ void	parse_env(char **env, t_vars *vars)
 	vars->env = env_lst;
 }
 
-char	*getenv_value(t_vars *vars, char *key, bool dup)
+char	*getenv_value(t_vars *vars, char *key)
 {
 	t_list	*env;
 
 	if (key == NULL)
 		return (NULL);
+	else if (ft_strcmp(key, "?") == 0)
+		return (ft_itoa(vars->exit_code));
 	env = vars->env;
 	while (env)
 	{
 		if (strcmp(((char **)env->content)[0], key) == 0)
-		{
-			if (dup)
-				return (ft_strdup(((char **)(env->content))[1]));
-			else
-				return (((char **)(env->content))[1]);
-		}
+			return (ft_strdup(((char **)(env->content))[1]));
 		env = env->next;
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 21:56:27 by asene             #+#    #+#             */
-/*   Updated: 2025/01/15 22:08:11 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/16 15:57:20 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*get_prompt(t_vars *vars)
 	i = 0;
 	prompt_parts[i++] = "minishell:";
 	pwd = getcwd(NULL, 0);
-	home = getenv_value(vars, "HOME", false);
+	home = getenv_value(vars, "HOME");
 	if (pwd && home && ft_strncmp(home, pwd, ft_strlen(home)) == 0)
 	{
 		prompt_parts[i++] = "~";
@@ -31,6 +31,7 @@ char	*get_prompt(t_vars *vars)
 	}
 	else if (pwd)
 		prompt_parts[i++] = pwd;
+	free(home);
 	prompt_parts[i++] = " > ";
 	prompt = ft_strnjoin(prompt_parts, i, "");
 	free(pwd);

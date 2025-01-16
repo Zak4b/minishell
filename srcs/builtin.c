@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/16 16:27:33 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:33:01 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ int	dest_for_cd(t_vars *vars, t_exec_data data, char **dest)
 {
 	if (data.argc == 1 || ft_strcmp(data.args[1], "~") == 0)
 	{
-		*dest = getenv_value(vars, "HOME", true);
+		*dest = getenv_value(vars, "HOME");
 		if (*dest == NULL)
 			return (ft_fprintf(2, "cd: HOME not set\n"), 1);
 	}
 	else if (ft_strcmp(data.args[1], "-") == 0)
 	{
-		*dest = getenv_value(vars, "OLDPWD", true);
+		*dest = getenv_value(vars, "OLDPWD");
 		if (*dest == NULL)
 			return (ft_fprintf(2, "cd: OLDPWD not set\n"), 1);
 	}

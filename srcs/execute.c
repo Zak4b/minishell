@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 16:24:14 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:31:36 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,11 @@ void	exec_cmd(t_vars *vars, t_exec_data *data)
 		close(data->fd_in);
 	if (dup2(data->fd_out, 1) != 1)
 		close(data->fd_out);
-	if (!data->path)
-	{
-		ft_fprintf(2, "%s: command not found\n", data->args[0]);
-		clean_exit(vars, CMD_NOT_FOUND);
-	}
 	env = build_env(vars);
 	execve(data->path, data->args, env);
 	free_split(env);
-	clean_exit(vars, 1);
+	ft_fprintf(2, "%s: command not found\n", data->args[0]);
+	clean_exit(vars, CMD_NOT_FOUND);
 }
 
 void	child_process(t_vars *vars, t_exec_data *data, int *fds)
@@ -98,12 +94,12 @@ int	execute(t_vars *vars)
 	int			status;
 	t_exec_data	*data;
 
-	stop_signal(vars);
-	vars->nbheredoc = 0;
 	data = NULL;
 	build_exec(vars, vars->token_list, &data);
 	if(!data->args[0])
-		return (start_signal(vars), 1);
+		return (vars->exit_code);
+	stop_signal(vars);
+	vars->nbheredoc = 0;
 	if (data->pipe)
 		status = execute_pipeline(vars, data, STDIN_FILENO);
 	else if (is_builtin(data->args[0]))

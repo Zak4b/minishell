@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 16:24:39 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:32:22 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ int	main(int argc, char **argv, char **env)
 		if (readline_prompt(&vars, &input) == NULL)
 			return (free(input), clean_exit(&vars, 0), 0);
 		vars.token_list = tokenize(input);
-		vars.exit_code = execute(&vars);
+		if (!check_syntax(vars.token_list))
+			ft_fprintf(2, "ERROR\n");
+		else
+			vars.exit_code = execute(&vars);
 		clear_token_list(&(vars.token_list));
 		free(input);
 	}
