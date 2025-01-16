@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/16 16:12:27 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:23:55 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ int	ft_cd(t_vars *vars, t_exec_data data)
 	if (data.argc > 2)
 		return (ft_fprintf(2, "cd: too many arguments\n"), 1);
 	if (dest_for_cd(vars, data, &dest) == 1)
-		return (1);
+		return (FAILURE);
 	if (stat(dest, &st) != 0)
 		return (ft_fprintf(2, "cd: %s: No such file or directory\n", dest),
-			free(dest), 1);
+			free(dest), FAILURE);
 	if (S_ISDIR(st.st_mode))
 	{
 		set_env(vars, "OLDPWD", getcwd(NULL, 0));
@@ -52,8 +52,8 @@ int	ft_cd(t_vars *vars, t_exec_data data)
 	}
 	else
 		return (ft_fprintf(2, "cd: %s: not a directory\n", dest),
-			free(dest), 1);
-	return (0);
+			free(dest), FAILURE);
+	return (SUCCESS);
 }
 
 int	ft_echo(t_vars *vars, t_exec_data data)
@@ -79,24 +79,28 @@ int	ft_echo(t_vars *vars, t_exec_data data)
 	}
 	if (new_line)
 		ft_putchar_fd('\n', 1);
-	return (0);
+	return (SUCCESS);
 }
 
 int	ft_exit(t_vars *vars, t_exec_data data)
 {
 	unsigned char	exit_code;
 
-	exit_code = 0;
+	exit_code = vars->exit_code;
 	if (data.argc == 2)
-		exit_code = ft_atoi(data.args[1]);
+	{
+		exit_code = ft_atoi(data.args[1]); //TODO atol
+		if (exit_code > MAX_EXIT_CODE)
+			exit_code = MAX_EXIT_CODE;
+	}
 	else if (data.argc > 2)
 	{
 		ft_fprintf(2, "exit: too many arguments\n");
-		return (1);
+		exit_code = FAILURE;
 	}
 	free_split(data.args);
 	clean_exit(vars, exit_code);
-	return (0);
+	return (exit_code);
 }
 
 int	ft_pwd(t_vars *vars, t_exec_data data)
@@ -104,13 +108,8 @@ int	ft_pwd(t_vars *vars, t_exec_data data)
 	char	*pwd;
 
 	(void)vars;
-	if (data.argc > 1)
-	{
-		ft_fprintf(2, "pwd: too many arguments\n");
-		return (1);
-	}
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
 	free(pwd);
-	return (0);
+	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 15:41:43 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:24:14 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	exec_cmd(t_vars *vars, t_exec_data *data)
 	if (!data->path)
 	{
 		ft_fprintf(2, "%s: command not found\n", data->args[0]);
-		clean_exit(vars, 1);
+		clean_exit(vars, CMD_NOT_FOUND);
 	}
 	env = build_env(vars);
 	execve(data->path, data->args, env);
@@ -114,6 +114,7 @@ int	execute(t_vars *vars)
 	heredoc_killer(vars->nbheredoc);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	else
-		return (1);
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
 }

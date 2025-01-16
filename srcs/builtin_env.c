@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:34:32 by asene             #+#    #+#             */
-/*   Updated: 2025/01/14 11:46:00 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/16 10:55:36 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,27 @@ int	ft_export(t_vars *vars, t_exec_data data)
 {
 	int		i;
 	char	**key_value;
+	int		exit_code;
 
 	if (data.argc == 1)
 		return (ft_env(vars, data));
 	i = 1;
+	exit_code = 0;
 	while (i < data.argc)
 	{
 		key_value = ft_split(data.args[i], '=');
 		if (count_line(key_value) != 2)
+		{
 			ft_fprintf(2, "export: '%s': not a valid identifier\n",
 				data.args[i]);
+			exit_code = 1;
+		}
 		else
 			set_env(vars, key_value[0], key_value[1]);
 		free_split(key_value);
 		i++;
 	}
-	return (0);
+	return (exit_code);
 }
 
 int	ft_env(t_vars *vars, t_exec_data data)
@@ -41,7 +46,7 @@ int	ft_env(t_vars *vars, t_exec_data data)
 
 	(void)data;
 	if (data.argc > 1)
-		return (ft_fprintf(2, "env: too many arguments\n"), 1);
+		return (ft_fprintf(2, "env: too many arguments\n"), BAD_USAGE);
 	env = vars->env;
 	while (env)
 	{

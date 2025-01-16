@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 15:41:14 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:22:19 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@
 # include <sys/stat.h>
 
 extern volatile sig_atomic_t	g_nal;
+
+typedef enum e_exit_code
+{
+	SUCCESS = 0,
+	FAILURE = 1,
+	BAD_USAGE = 2,
+	CMD_NOT_FOUND = 127,
+	MAX_EXIT_CODE = 255
+}	t_exit_code;
 
 typedef enum e_token_type
 {
@@ -65,6 +74,7 @@ typedef struct s_vars
 {
 	t_list				*env;
 	t_tokenlist			*token_list;
+	int					exit_code;
 	int					nbheredoc;
 	struct sigaction	sa;
 }	t_vars;
