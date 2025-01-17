@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 17:30:58 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/17 11:31:32 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,11 @@ int	execute(t_vars *vars)
 	t_exec_data	*data;
 
 	data = NULL;
+	vars->nbheredoc = 0;
 	build_exec(vars, vars->token_list, &data);
 	if(!data->args[0])
 		return (free_exec(data), vars->exit_code);
 	stop_signal(vars);
-	vars->nbheredoc = 0;
 	if (data->pipe)
 		status = execute_pipeline(vars, data, STDIN_FILENO);
 	else if (is_builtin(data->args[0]))
