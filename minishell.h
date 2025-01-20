@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 16:32:23 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/20 08:44:48 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,6 @@ int			start_signal(t_vars *vars);
 int			stop_signal(t_vars *vars);
 int			heredoc(char *delimiter, t_vars *vars);
 void		heredoc_killer(int nbheredoc);
+int			check(t_tokenlist *tok_list);
 
 #endif

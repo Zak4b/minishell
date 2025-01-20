@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 16:32:22 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/20 10:34:44 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	init_shell(t_vars *vars, char **env)
 	vars->exit_code = 0;
 	setup_signal(vars);
 	parse_env(env, vars);
+	set_env(vars, "SHLVL", ft_itoa(ft_atoi(getenv_value(vars, "SHLVL")) + 1));
 }
 
 int	main(int argc, char **argv, char **env)
@@ -40,8 +41,8 @@ int	main(int argc, char **argv, char **env)
 		if (readline_prompt(&vars, &input) == NULL)
 			return (free(input), clean_exit(&vars, 0), 0);
 		vars.token_list = tokenize(input);
-		if (!check_syntax(vars.token_list))
-			ft_fprintf(2, "ERROR\n");
+		if (!check(vars.token_list))
+			vars.exit_code = 2;
 		else
 			vars.exit_code = execute(&vars);
 		clear_token_list(&(vars.token_list));

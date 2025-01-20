@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/17 11:31:32 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:05:35 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	child_process(t_vars *vars, t_exec_data *data, int *fds)
 	int	exit_code;
 
 	close(fds[0]);
+	if (data->fd_in == -1 || data->fd_out == -1)
+		clean_exit(vars, 1);
 	if (is_builtin(data->args[0]))
 	{
 		exit_code = exec_builtin(vars, *data);
@@ -87,6 +89,8 @@ int	run_cmd(t_vars *vars, t_exec_data *data)
 	int		status;
 	pid_t	pid;
 
+	if (data->fd_in == -1 || data->fd_out == -1)
+		return (1);
 	pid = fork();
 	if (pid == 0)
 		exec_cmd(vars, data);
@@ -101,7 +105,7 @@ int	execute(t_vars *vars)
 	data = NULL;
 	vars->nbheredoc = 0;
 	build_exec(vars, vars->token_list, &data);
-	if(!data->args[0])
+	if (!data->args[0])
 		return (free_exec(data), vars->exit_code);
 	stop_signal(vars);
 	if (data->pipe)

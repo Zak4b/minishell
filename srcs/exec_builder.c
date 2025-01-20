@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 16:31:02 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/20 12:42:48 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,14 @@ char	*build_word(t_vars *vars, t_tokenlist **lst)
 	return (value);
 }
 
+void	file_error(t_token token)
+{
+	if (access(token.value, F_OK) == 0)
+		ft_fprintf(2, "minishell: %s: Permission denied\n", token.value);
+	else
+		ft_fprintf(2, "minishell: %s: No such file or directory\n", token.value);
+}
+
 void	handle_redirect(t_vars *vars, t_exec_data *data, t_token token)
 {
 	int	fd;
@@ -94,7 +102,7 @@ void	handle_redirect(t_vars *vars, t_exec_data *data, t_token token)
 	else
 		fd = heredoc(token.value, vars);
 	if (fd == -1)
-		return ;
+		file_error(token);
 	if (token.type == TOKEN_REDIRECT_OUT || token.type == TOKEN_APPEND)
 	{
 		if (data->fd_out != 1)
