@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 17:33:02 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 18:21:08 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,10 @@
 
 void	free_exec(t_exec_data *data)
 {
-	void	*tmp;
-
-	if (data->prev)
-	{
-		tmp = data->prev;
-		data->prev = NULL;
-		return (free_exec(tmp));
-	}
 	if (data->path)
 		free(data->path);
 	if (data->args)
 		free_split(data->args);
-	if (access(".heredoc", F_OK) == 0)
-		unlink(".heredoc");
 	if (data->pipe)
 		free_exec(data->pipe);
 	free(data);

@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 18:01:37 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 18:20:03 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_vars
 {
 	t_list				*env;
 	t_tokenlist			*token_list;
+	t_exec_data			*exec_data;
 	int					exit_code;
 	int					nbheredoc;
 	struct sigaction	sa;

@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 13:31:03 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 18:28:56 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	exec_cmd(t_vars *vars, t_exec_data *data)
 	execve(data->path, data->args, env);
 	free_split(env);
 	ft_fprintf(2, "%s: command not found\n", data->args[0]);
+	free_exec(vars->exec_data);
 	clean_exit(vars, CMD_NOT_FOUND);
 }
 
@@ -101,19 +102,18 @@ int	execute_pipeline(t_vars *vars, t_exec_data *data, int input_fd)
 int	execute(t_vars *vars)
 {
 	int			exit_code;
-	t_exec_data	*data;
 
-	data = NULL;
+	vars->exec_data = NULL;
 	vars->nbheredoc = 0;
-	build_exec(vars, vars->token_list, &data, NULL);
-	if (!data->args[0])
-		return (free_exec(data), vars->exit_code);
+	build_exec(vars, vars->token_list, &vars->exec_data, NULL);
+	if (!vars->exec_data->args[0])
+		return (free_exec(vars->exec_data), vars->exit_code);
 	stop_signal(vars);
-	if (data->pipe)
-		exit_code = get_exit_code(execute_pipeline(vars, data, STDIN_FILENO));
+	if (vars->exec_data->pipe)
+		exit_code = get_exit_code(execute_pipeline(vars, vars->exec_data, 0));
 	else
-		exit_code = run_cmd(vars, data, true);
-	free_exec(data);
+		exit_code = run_cmd(vars, vars->exec_data, true);
+	free_exec(vars->exec_data);
 	start_signal(vars);
 	heredoc_killer(vars->nbheredoc);
 	return (exit_code);

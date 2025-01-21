@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 11:24:20 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 18:20:21 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	update_shell_lvl(t_vars *vars)
 void	init_shell(t_vars *vars, char **env)
 {
 	vars->token_list = NULL;
+	vars->exec_data = NULL;
 	vars->exit_code = 0;
 	setup_signal(vars);
 	parse_env(env, vars);
