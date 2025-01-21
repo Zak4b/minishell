@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/20 10:34:44 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:03:38 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,18 @@ volatile sig_atomic_t	g_nal = 0;
 
 void	init_shell(t_vars *vars, char **env)
 {
+	char	*shell_lvl;
+	int		shell_lvl_value;
 	vars->token_list = NULL;
 	vars->exit_code = 0;
 	setup_signal(vars);
 	parse_env(env, vars);
-	set_env(vars, "SHLVL", ft_itoa(ft_atoi(getenv_value(vars, "SHLVL")) + 1));
+	shell_lvl = getenv_value(vars, "SHLVL");
+	shell_lvl_value = ft_atoi(shell_lvl) + 1;
+	free(shell_lvl);
+	shell_lvl = ft_itoa(shell_lvl_value);
+	set_env(vars, "SHLVL", shell_lvl);
+	free(shell_lvl);
 }
 
 int	main(int argc, char **argv, char **env)
