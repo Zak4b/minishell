@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 14:21:17 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 17:18:41 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_exec_data
 	int					argc;
 	int					fd_in;
 	int					fd_out;
+	struct s_exec_data	*prev;
 	struct s_exec_data	*pipe;
 }	t_exec_data;
 
@@ -102,13 +103,12 @@ char		**build_env(t_vars *vars);
 void		set_env(t_vars *vars, char *key, char *value);
 void		unset_env(t_vars *vars, char *key);
 
-t_exec_data	*build_exec(t_vars *vars, t_tokenlist *lst, t_exec_data **dest);
+t_exec_data	*build_exec(t_vars *vars, t_tokenlist *lst, t_exec_data **dest, t_exec_data *prev);
 void		free_exec(t_exec_data *data);
 
 int			is_builtin(char *cmd);
 int			exec_builtin(t_vars *vars, t_exec_data data);
 int			execute(t_vars *vars);
-bool		check_syntax(t_tokenlist *tok_lst);
 
 int			ft_cd(t_vars *vars, t_exec_data data);
 int			ft_export(t_vars *vars, t_exec_data data);
@@ -125,5 +125,7 @@ int			stop_signal(t_vars *vars);
 int			heredoc(char *delimiter, t_vars *vars);
 void		heredoc_killer(int nbheredoc);
 int			check(t_tokenlist *tok_list);
+bool		is_redirection(t_token t);
+bool		is_limit_token(t_token t);
 
 #endif

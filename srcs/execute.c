@@ -105,7 +105,7 @@ int	execute(t_vars *vars)
 
 	data = NULL;
 	vars->nbheredoc = 0;
-	build_exec(vars, vars->token_list, &data);
+	build_exec(vars, vars->token_list, &data, NULL);
 	if (!data->args[0])
 		return (free_exec(data), vars->exit_code);
 	stop_signal(vars);

@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 14:18:36 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 17:33:02 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 
 void	free_exec(t_exec_data *data)
 {
+	void	*tmp;
+
+	if (data->prev)
+	{
+		tmp = data->prev;
+		data->prev = NULL;
+		return (free_exec(tmp));
+	}
 	if (data->path)
 		free(data->path);
 	if (data->args)
@@ -31,11 +39,13 @@ char	*build_word(t_vars *vars, t_tokenlist **lst)
 	char	*tmp;
 
 	value = ft_calloc(1, sizeof(char));
-	while ((*lst)->token.type == TOKEN_WORD)
+	while (1)
 	{
 		tmp = eval_string(vars, (*lst)->token.value);
 		str_append(&value, tmp);
 		free(tmp);
+		if ((*lst)->next->token.type != TOKEN_WORD)
+			break ;
 		(*lst) = (*lst)->next;
 	}
 	return (value);
@@ -77,24 +87,21 @@ void	handle_redirect(t_vars *vars, t_exec_data *data, t_token token)
 	}
 }
 
-t_exec_data	*build_exec(t_vars *vars, t_tokenlist *tok_lst, t_exec_data **data)
+t_exec_data	*build_exec(t_vars *vars, t_tokenlist *tok_lst, t_exec_data **data, t_exec_data *prev)
 {
 	t_list		*lst;
+	t_exec_data	**next;
 
 	lst = NULL;
-	if (!*data)
-		*data = ft_calloc(1, sizeof(t_exec_data));
-	**data = (t_exec_data){NULL, NULL, 0, 0, 1, NULL};
-	while (tok_lst && tok_lst->token.type != TOKEN_PIPE
-		&& tok_lst->token.type != TOKEN_END)
+	*data = ft_calloc(1, sizeof(t_exec_data));
+	**data = (t_exec_data){NULL, NULL, 0, 0, 1, NULL, NULL};
+	if (prev)
+		(*data)->prev = prev;
+	while (tok_lst && ! is_limit_token(tok_lst->token))
 	{
 		if (tok_lst->token.type == TOKEN_WORD)
-		{
 			ft_lstadd_back(&lst, ft_lstnew(build_word(vars, &tok_lst)));
-			continue ;
-		}
-		else if (tok_lst->token.type >= TOKEN_REDIRECT_IN
-			&& tok_lst->token.type <= TOKEN_HEREDOC)
+		else if (is_redirection(tok_lst->token))
 			handle_redirect(vars, *data, tok_lst->token);
 		tok_lst = tok_lst->next;
 	}
@@ -102,6 +109,9 @@ t_exec_data	*build_exec(t_vars *vars, t_tokenlist *tok_lst, t_exec_data **data)
 	if ((*data)->args[0])
 		(*data)->path = search_path(vars, (*data)->args[0]);
 	if (tok_lst->token.type == TOKEN_PIPE)
-		build_exec(vars, tok_lst->next, &(*data)->pipe);
+	{
+		next = &(*data)->pipe;
+		build_exec(vars, tok_lst->next, next, prev);
+	}
 	return (ft_lstclear(&lst, NULL), (*data)->argc = count_line((*data)->args), *data);
 }
