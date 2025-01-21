@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 11:26:31 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/21 15:56:45 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:19:10 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,7 @@ int	check(t_tokenlist *tok_list)
 	while (tok_list)
 	{
 		if ((is_redirection(tok_list->token)
-				&& (next_token(tok_list).type == TOKEN_END
-					|| next_token(tok_list).type == TOKEN_PIPE
-					|| is_redirection(next_token(tok_list))))
+				&& (next_token(tok_list).type == TOKEN_END))
 			|| (tok_list->token.type == TOKEN_PIPE
 				&& (next_token(tok_list).type == TOKEN_END
 					|| next_token(tok_list).type == TOKEN_PIPE)))
