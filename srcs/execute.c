@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 13:19:57 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 13:31:03 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	exec_cmd(t_vars *vars, t_exec_data *data)
 }
 
 // Return exit code
-int	run_cmd(t_vars *vars, t_exec_data *data)
+int	run_cmd(t_vars *vars, t_exec_data *data, bool need_fork)
 {
 	int		status;
 	pid_t	pid;
@@ -49,7 +49,10 @@ int	run_cmd(t_vars *vars, t_exec_data *data)
 		return (exec_builtin(vars, *data));
 	else
 	{
-		pid = fork();
+		if (need_fork)
+			pid = fork();
+		else
+			pid = 0;
 		if (pid == 0)
 			exec_cmd(vars, data);
 		waitpid(pid, &status, 0);
@@ -63,7 +66,7 @@ void	child_process(t_vars *vars, t_exec_data *data, int *fds)
 
 	if (fds[0])
 		close(fds[0]);
-	exit_code = run_cmd(vars, data);
+	exit_code = run_cmd(vars, data, false);
 	clean_exit(vars, exit_code);
 }
 
@@ -109,7 +112,7 @@ int	execute(t_vars *vars)
 	if (data->pipe)
 		exit_code = get_exit_code(execute_pipeline(vars, data, STDIN_FILENO));
 	else
-		exit_code = run_cmd(vars, data);
+		exit_code = run_cmd(vars, data, true);
 	free_exec(data);
 	start_signal(vars);
 	heredoc_killer(vars->nbheredoc);
