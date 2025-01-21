@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/21 18:00:47 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 22:05:32 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	dest_for_cd(t_vars *vars, t_exec_data *data, char **dest)
 int	ft_cd(t_vars *vars, t_exec_data *data)
 {
 	char		*dest;
+	char		*tmp;
 	struct stat	st;
 
 	if (data->argc > 2)
@@ -43,16 +44,17 @@ int	ft_cd(t_vars *vars, t_exec_data *data)
 	if (stat(dest, &st) != 0)
 		return (ft_fprintf(2, "cd: %s: No such file or directory\n", dest),
 			free(dest), FAILURE);
-	if (S_ISDIR(st.st_mode))
-	{
-		set_env(vars, "OLDPWD", getcwd(NULL, 0));
-		chdir(dest);
-		set_env(vars, "PWD", getcwd(NULL, 0));
-		free(dest);
-	}
-	else
+	if (!S_ISDIR(st.st_mode))
 		return (ft_fprintf(2, "cd: %s: not a directory\n", dest),
 			free(dest), FAILURE);
+	tmp = getenv_value(vars, "PWD");
+	set_env(vars, "OLDPWD", tmp);
+	free(tmp);
+	chdir(dest);
+	free(dest);
+	tmp = getcwd(NULL, 0);
+	set_env(vars, "PWD", tmp);
+	free(tmp);
 	return (SUCCESS);
 }
 
