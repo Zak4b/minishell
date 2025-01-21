@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/20 13:05:35 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:50:30 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	child_process(t_vars *vars, t_exec_data *data, int *fds)
 {
 	int	exit_code;
 
-	close(fds[0]);
+	if (fds[0])
+		close(fds[0]);
 	if (data->fd_in == -1 || data->fd_out == -1)
 		clean_exit(vars, 1);
 	if (is_builtin(data->args[0]))
@@ -63,6 +64,7 @@ int	execute_pipeline(t_vars *vars, t_exec_data *data, int input_fd)
 	int		fds[2];
 	int		status;
 
+	fds[0] = 0;
 	if (data->pipe)
 	{
 		pipe(fds);
