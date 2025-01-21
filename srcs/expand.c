@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   TEST.c                                             :+:      :+:    :+:   */
+/*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:32:57 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 14:18:26 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 16:39:17 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,35 @@ char	*grab_var_name(char **p)
 	i = 0;
 	while ((*p)[i])
 	{
-		if (ft_isspace((*p)[i]) || ft_strchr("$|<>\"'", (*p)[i]))
+		if (ft_isspace((*p)[i]) || ft_strchr("$|<>/\"'", (*p)[i]))
 			break ;
 		i++;
 	}
 	return (res = ft_substr(*p, 0, i), *p += i, res);
 }
 
+char	*get_var_value(t_vars *vars, char **p)
+{
+	char	*var_name;
+	char	*value;
+	
+	var_name = grab_var_name(p);
+	if (ft_strlen(var_name) == 0)
+		value = ft_strdup("$");
+	else
+		value = getenv_value(vars, var_name);
+	free(var_name);
+	if (value)
+		return (value);
+	else
+		return (ft_strdup(""));
+}
+
 char	*replace_vars(t_vars *vars, char *str)
 {
 	int		i;
 	t_list	*lst;
-	char	*var_name;
+	char	*result;
 	char	**array;
 
 	lst = NULL;
@@ -43,15 +60,11 @@ char	*replace_vars(t_vars *vars, char *str)
 		ft_lstadd_back(&lst, ft_lstnew(ft_substr(str, 0, i)));
 		str = str + i;
 		if (*str == '$' && ++str)
-		{
-			var_name = grab_var_name(&str);
-			ft_lstadd_back(&lst, ft_lstnew(getenv_value(vars, var_name)));
-			free(var_name);
-		}
+			ft_lstadd_back(&lst, ft_lstnew(get_var_value(vars, &str)));
 	}
 	array = (char **)list_to_array(lst);
-	var_name = ft_strnjoin(array, count_line(array), "");
-	return (ft_lstclear(&lst, NULL), free_split(array), var_name);
+	result = ft_strnjoin(array, count_line(array), "");
+	return (ft_lstclear(&lst, NULL), free_split(array), result);
 }
 
 char	*eval_string(t_vars *vars, char *str)
