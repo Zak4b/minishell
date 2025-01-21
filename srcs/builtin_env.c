@@ -6,29 +6,29 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:34:32 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 10:55:36 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 17:59:50 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_export(t_vars *vars, t_exec_data data)
+int	ft_export(t_vars *vars, t_exec_data *data)
 {
 	int		i;
 	char	**key_value;
 	int		exit_code;
 
-	if (data.argc == 1)
+	if (data->argc == 1)
 		return (ft_env(vars, data));
 	i = 1;
 	exit_code = 0;
-	while (i < data.argc)
+	while (i < data->argc)
 	{
-		key_value = ft_split(data.args[i], '=');
+		key_value = ft_split(data->args[i], '=');
 		if (count_line(key_value) != 2)
 		{
 			ft_fprintf(2, "export: '%s': not a valid identifier\n",
-				data.args[i]);
+				data->args[i]);
 			exit_code = 1;
 		}
 		else
@@ -39,13 +39,13 @@ int	ft_export(t_vars *vars, t_exec_data data)
 	return (exit_code);
 }
 
-int	ft_env(t_vars *vars, t_exec_data data)
+int	ft_env(t_vars *vars, t_exec_data *data)
 {
 	t_list	*env;
 	char	**value;
 
 	(void)data;
-	if (data.argc > 1)
+	if (data->argc > 1)
 		return (ft_fprintf(2, "env: too many arguments\n"), BAD_USAGE);
 	env = vars->env;
 	while (env)
@@ -57,12 +57,12 @@ int	ft_env(t_vars *vars, t_exec_data data)
 	return (0);
 }
 
-int	ft_unset(t_vars *vars, t_exec_data data)
+int	ft_unset(t_vars *vars, t_exec_data *data)
 {
 	int		i;
 
 	i = 1;
-	while (i < data.argc)
-		unset_env(vars, data.args[i++]);
+	while (i < data->argc)
+		unset_env(vars, data->args[i++]);
 	return (0);
 }

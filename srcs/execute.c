@@ -46,7 +46,7 @@ int	run_cmd(t_vars *vars, t_exec_data *data, bool need_fork)
 	if (data->fd_in == -1 || data->fd_out == -1)
 		return (1);
 	if (is_builtin(data->args[0]))
-		return (exec_builtin(vars, *data));
+		return (exec_builtin(vars, data));
 	else
 	{
 		if (need_fork)

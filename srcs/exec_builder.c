@@ -111,7 +111,7 @@ t_exec_data	*build_exec(t_vars *vars, t_tokenlist *tok_lst, t_exec_data **data, 
 	if (tok_lst->token.type == TOKEN_PIPE)
 	{
 		next = &(*data)->pipe;
-		build_exec(vars, tok_lst->next, next, prev);
+		build_exec(vars, tok_lst->next, next, *data);
 	}
 	return (ft_lstclear(&lst, NULL), (*data)->argc = count_line((*data)->args), *data);
 }

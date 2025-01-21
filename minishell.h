@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 17:18:41 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 18:01:37 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,16 +107,16 @@ t_exec_data	*build_exec(t_vars *vars, t_tokenlist *lst, t_exec_data **dest, t_ex
 void		free_exec(t_exec_data *data);
 
 int			is_builtin(char *cmd);
-int			exec_builtin(t_vars *vars, t_exec_data data);
+int			exec_builtin(t_vars *vars, t_exec_data *data);
 int			execute(t_vars *vars);
 
-int			ft_cd(t_vars *vars, t_exec_data data);
-int			ft_export(t_vars *vars, t_exec_data data);
-int			ft_pwd(t_vars *vars, t_exec_data data);
-int			ft_echo(t_vars *vars, t_exec_data data);
-int			ft_exit(t_vars *vars, t_exec_data data);
-int			ft_env(t_vars *vars, t_exec_data data);
-int			ft_unset(t_vars *vars, t_exec_data data);
+int			ft_cd(t_vars *vars, t_exec_data *data);
+int			ft_export(t_vars *vars, t_exec_data *data);
+int			ft_pwd(t_vars *vars, t_exec_data *data);
+int			ft_echo(t_vars *vars, t_exec_data *data);
+int			ft_exit(t_vars *vars, t_exec_data *data);
+int			ft_env(t_vars *vars, t_exec_data *data);
+int			ft_unset(t_vars *vars, t_exec_data *data);
 
 int			setup_signal(t_vars *vars);
 
