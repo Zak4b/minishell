@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:32:57 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 16:39:17 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 22:28:12 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*get_var_value(t_vars *vars, char **p)
 {
 	char	*var_name;
 	char	*value;
-	
+
 	var_name = grab_var_name(p);
 	if (ft_strlen(var_name) == 0)
 		value = ft_strdup("$");
@@ -62,7 +62,7 @@ char	*replace_vars(t_vars *vars, char *str)
 		if (*str == '$' && ++str)
 			ft_lstadd_back(&lst, ft_lstnew(get_var_value(vars, &str)));
 	}
-	array = (char **)list_to_array(lst);
+	array = (char **)ft_lst_to_array(lst);
 	result = ft_strnjoin(array, count_line(array), "");
 	return (ft_lstclear(&lst, NULL), free_split(array), result);
 }

@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 18:20:03 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 22:44:11 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,8 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
+	struct s_token	*next;
 }	t_token;
-
-typedef struct s_tokenlist
-{
-	t_token				token;
-	struct s_tokenlist	*next;
-}	t_tokenlist;
 
 typedef struct s_exec_data
 {
@@ -69,13 +64,13 @@ typedef struct s_exec_data
 	int					fd_out;
 	struct s_exec_data	*prev;
 	struct s_exec_data	*pipe;
-}	t_exec_data;
+}	t_exec;
 
 typedef struct s_vars
 {
 	t_list				*env;
-	t_tokenlist			*token_list;
-	t_exec_data			*exec_data;
+	t_token				*token_list;
+	t_exec				*exec_data;
 	int					exit_code;
 	int					nbheredoc;
 	struct sigaction	sa;
@@ -85,13 +80,13 @@ char		*readline_prompt(t_vars *vars, char **dest);
 
 void		clean_exit(t_vars *vars, int exit_code);
 int			count_line(char **str);
-void		**list_to_array(t_list *lst);
 int			skip_spaces(char **str);
 char		*str_append(char **dest, char *next);
+int			get_exit_code(int status);
 
-t_tokenlist	*tokenize(char *input);
-void		token_append(t_tokenlist **lst, t_token_type type, char *value);
-void		clear_token_list(t_tokenlist **t);
+t_token		*tokenize(char *input);
+void		token_append(t_token **lst, t_token_type type, char *value);
+void		clear_token_list(t_token **t);
 
 char		*eval_string(t_vars *vars, char *str);
 
@@ -104,20 +99,21 @@ char		**build_env(t_vars *vars);
 void		set_env(t_vars *vars, char *key, char *value);
 void		unset_env(t_vars *vars, char *key);
 
-t_exec_data	*build_exec(t_vars *vars, t_tokenlist *lst, t_exec_data **dest, t_exec_data *prev);
-void		free_exec(t_exec_data *data);
+t_exec		*build_exec(t_vars *vars, t_token *lst,
+				t_exec **dest, t_exec *prev);
+void		free_exec(t_exec *data);
 
 int			is_builtin(char *cmd);
-int			exec_builtin(t_vars *vars, t_exec_data *data);
+int			exec_builtin(t_vars *vars, t_exec *data);
 int			execute(t_vars *vars);
 
-int			ft_cd(t_vars *vars, t_exec_data *data);
-int			ft_export(t_vars *vars, t_exec_data *data);
-int			ft_pwd(t_vars *vars, t_exec_data *data);
-int			ft_echo(t_vars *vars, t_exec_data *data);
-int			ft_exit(t_vars *vars, t_exec_data *data);
-int			ft_env(t_vars *vars, t_exec_data *data);
-int			ft_unset(t_vars *vars, t_exec_data *data);
+int			ft_cd(t_vars *vars, t_exec *data);
+int			ft_export(t_vars *vars, t_exec *data);
+int			ft_pwd(t_vars *vars, t_exec *data);
+int			ft_echo(t_vars *vars, t_exec *data);
+int			ft_exit(t_vars *vars, t_exec *data);
+int			ft_env(t_vars *vars, t_exec *data);
+int			ft_unset(t_vars *vars, t_exec *data);
 
 int			setup_signal(t_vars *vars);
 
@@ -125,7 +121,7 @@ int			start_signal(t_vars *vars);
 int			stop_signal(t_vars *vars);
 int			heredoc(char *delimiter, t_vars *vars);
 void		heredoc_killer(int nbheredoc);
-int			check(t_tokenlist *tok_list);
+int			check(t_token *tok_list);
 bool		is_redirection(t_token t);
 bool		is_limit_token(t_token t);
 

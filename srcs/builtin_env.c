@@ -6,13 +6,13 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:34:32 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 17:59:50 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 22:36:23 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_export(t_vars *vars, t_exec_data *data)
+int	ft_export(t_vars *vars, t_exec *data)
 {
 	int		i;
 	char	**key_value;
@@ -39,7 +39,7 @@ int	ft_export(t_vars *vars, t_exec_data *data)
 	return (exit_code);
 }
 
-int	ft_env(t_vars *vars, t_exec_data *data)
+int	ft_env(t_vars *vars, t_exec *data)
 {
 	t_list	*env;
 	char	**value;
@@ -57,7 +57,7 @@ int	ft_env(t_vars *vars, t_exec_data *data)
 	return (0);
 }
 
-int	ft_unset(t_vars *vars, t_exec_data *data)
+int	ft_unset(t_vars *vars, t_exec *data)
 {
 	int		i;
 

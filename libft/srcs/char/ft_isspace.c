@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/30 13:00:50 by asene             #+#    #+#             */
-/*   Updated: 2024/12/30 13:02:02 by asene            ###   ########.fr       */
+/*   Created: 2025/01/18 17:35:21 by asene             #+#    #+#             */
+/*   Updated: 2025/01/18 17:38:30 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-int	ft_isspace(char c)
+int	ft_isspace(int c)
 {
 	return (c == ' ' || (c >= 9 && c <= 13));
 }

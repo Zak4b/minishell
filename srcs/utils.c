@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:49:58 by asene             #+#    #+#             */
-/*   Updated: 2025/01/16 14:09:12 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/21 22:29:29 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,6 @@ int	count_line(char **str)
 	return (i);
 }
 
-void	**list_to_array(t_list *lst)
-{
-	int		i;
-	int		size;
-	void	**array;
-
-	size = ft_lstsize(lst);
-	array = ft_calloc(size + 1, sizeof(void *));
-	i = 0;
-	while (lst)
-	{
-		array[i++] = lst->content;
-		lst = lst->next;
-	}
-	return (array);
-}
-
 int	skip_spaces(char **str)
 {
 	if (!ft_isspace(**str))
@@ -68,4 +51,14 @@ char	*str_append(char **dest, char *next)
 	free(*dest);
 	*dest = new_str;
 	return (new_str);
+}
+
+// return exit code from waitpid status
+int	get_exit_code(int status)
+{
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
 }

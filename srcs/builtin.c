@@ -6,13 +6,13 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/21 22:05:32 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 22:36:23 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	dest_for_cd(t_vars *vars, t_exec_data *data, char **dest)
+int	dest_for_cd(t_vars *vars, t_exec *data, char **dest)
 {
 	if (data->argc == 1 || ft_strcmp(data->args[1], "~") == 0)
 	{
@@ -31,7 +31,7 @@ int	dest_for_cd(t_vars *vars, t_exec_data *data, char **dest)
 	return (0);
 }
 
-int	ft_cd(t_vars *vars, t_exec_data *data)
+int	ft_cd(t_vars *vars, t_exec *data)
 {
 	char		*dest;
 	char		*tmp;
@@ -58,7 +58,7 @@ int	ft_cd(t_vars *vars, t_exec_data *data)
 	return (SUCCESS);
 }
 
-int	ft_echo(t_vars *vars, t_exec_data *data)
+int	ft_echo(t_vars *vars, t_exec *data)
 {
 	int		i;
 	int		new_line;
@@ -84,7 +84,7 @@ int	ft_echo(t_vars *vars, t_exec_data *data)
 	return (SUCCESS);
 }
 
-int	ft_exit(t_vars *vars, t_exec_data *data)
+int	ft_exit(t_vars *vars, t_exec *data)
 {
 	int	exit_code;
 
@@ -92,8 +92,6 @@ int	ft_exit(t_vars *vars, t_exec_data *data)
 	if (data->argc == 2)
 	{
 		exit_code = ft_atoi(data->args[1]); //TODO atol
-		if (exit_code > MAX_EXIT_CODE)
-			exit_code = MAX_EXIT_CODE;
 	}
 	else if (data->argc > 2)
 	{
@@ -102,10 +100,10 @@ int	ft_exit(t_vars *vars, t_exec_data *data)
 	}
 	free_split(data->args);
 	clean_exit(vars, exit_code);
-	return (exit_code);
+	return (exit_code % 256);
 }
 
-int	ft_pwd(t_vars *vars, t_exec_data *data)
+int	ft_pwd(t_vars *vars, t_exec *data)
 {
 	char	*pwd;
 

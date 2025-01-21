@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
+/*   ft_lst_to_array.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 15:11:59 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 19:33:04 by asene            ###   ########.fr       */
+/*   Created: 2025/01/18 17:39:23 by asene             #+#    #+#             */
+/*   Updated: 2025/01/18 17:47:25 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+void	**ft_lst_to_array(t_list *lst)
 {
-	t_list	*new_list;
-	t_list	*new_item;
+	void	**array;
+	size_t	i;
 
-	if (!lst || !f || !del)
+	array = ft_calloc(ft_lstsize(lst) + 1, sizeof(void *));
+	if (!array)
 		return (NULL);
-	new_list = NULL;
+	i = 0;
 	while (lst)
 	{
-		new_item = ft_lstnew(f(lst->content));
-		if (new_item == NULL)
-		{
-			ft_lstclear(&new_list, del);
-			return (NULL);
-		}
-		ft_lstadd_back(&new_list, new_item);
+		array[i++] = lst->content;
 		lst = lst->next;
 	}
-	return (new_list);
+	return (array);
 }

@@ -6,21 +6,21 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2025/01/07 21:22:55 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 22:51:02 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	token_append(t_tokenlist **lst, t_token_type type, char *value)
+void	token_append(t_token **lst, t_token_type type, char *value)
 {
-	t_tokenlist	*e;
-	t_tokenlist	*last;
+	t_token	*e;
+	t_token	*last;
 
-	e = ft_calloc(1, sizeof(t_tokenlist));
+	e = ft_calloc(1, sizeof(t_token));
 	e->next = NULL;
-	e->token.type = type;
-	e->token.value = value;
+	e->type = type;
+	e->value = value;
 	if (*lst == NULL)
 		return (*lst = e, (void)0);
 	last = *lst;
@@ -50,7 +50,7 @@ char	*grab_word(char **p)
 	return (res = ft_substr(*p, 0, i), *p += i, res);
 }
 
-void	get_next_token(t_tokenlist **list, char **input)
+void	get_next_token(t_token **list, char **input)
 {
 	t_token_type	type;
 
@@ -70,9 +70,9 @@ void	get_next_token(t_tokenlist **list, char **input)
 	token_append(list, type, grab_word(input));
 }
 
-t_tokenlist	*tokenize(char *input)
+t_token	*tokenize(char *input)
 {
-	t_tokenlist	*list;
+	t_token	*list;
 
 	list = NULL;
 	while (*input)
@@ -85,17 +85,17 @@ t_tokenlist	*tokenize(char *input)
 	return (token_append(&list, TOKEN_END, NULL), list);
 }
 
-void	clear_token_list(t_tokenlist **t)
+void	clear_token_list(t_token **t)
 {
-	t_tokenlist	*next;
+	t_token	*next;
 
 	while (t && *t)
 	{
 		next = (*t)->next;
-		if ((*t)->token.value)
+		if ((*t)->value)
 		{
-			free((*t)->token.value);
-			(*t)->token.value = NULL;
+			free((*t)->value);
+			(*t)->value = NULL;
 		}
 		free(*t);
 		*t = next;

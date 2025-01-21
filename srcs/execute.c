@@ -6,23 +6,14 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 18:28:56 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 22:36:23 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	get_exit_code(int status)
-{
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	else if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
-}
-
 // execve || exit
-void	exec_cmd(t_vars *vars, t_exec_data *data)
+void	exec_cmd(t_vars *vars, t_exec *data)
 {
 	char	**env;
 
@@ -39,7 +30,7 @@ void	exec_cmd(t_vars *vars, t_exec_data *data)
 }
 
 // Return exit code
-int	run_cmd(t_vars *vars, t_exec_data *data, bool need_fork)
+int	run_cmd(t_vars *vars, t_exec *data, bool need_fork)
 {
 	int		status;
 	pid_t	pid;
@@ -57,11 +48,11 @@ int	run_cmd(t_vars *vars, t_exec_data *data, bool need_fork)
 		if (pid == 0)
 			exec_cmd(vars, data);
 		waitpid(pid, &status, 0);
-		return (get_exit_code(status));	
+		return (get_exit_code(status));
 	}
 }
 
-void	child_process(t_vars *vars, t_exec_data *data, int *fds)
+void	child_process(t_vars *vars, t_exec *data, int *fds)
 {
 	int	exit_code;
 
@@ -71,7 +62,7 @@ void	child_process(t_vars *vars, t_exec_data *data, int *fds)
 	clean_exit(vars, exit_code);
 }
 
-int	execute_pipeline(t_vars *vars, t_exec_data *data, int input_fd)
+int	execute_pipeline(t_vars *vars, t_exec *data, int input_fd)
 {
 	pid_t	pid;
 	int		fds[2];

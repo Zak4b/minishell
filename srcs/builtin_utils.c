@@ -6,13 +6,13 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:36:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 18:23:26 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 22:36:23 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	(*get_builtin(char *cmd))(t_vars *vars, t_exec_data *data)
+int	(*get_builtin(char *cmd))(t_vars *vars, t_exec *data)
 {
 	if (ft_strcmp(cmd, "cd") == 0)
 		return (ft_cd);
@@ -36,9 +36,9 @@ int	is_builtin(char *cmd)
 	return (!!(get_builtin(cmd)));
 }
 
-int	exec_builtin(t_vars *vars, t_exec_data *data)
+int	exec_builtin(t_vars *vars, t_exec *data)
 {
-	int		(*builtin)(t_vars *, t_exec_data *);
+	int		(*builtin)(t_vars *, t_exec *);
 	int		exit_code;
 
 	builtin = get_builtin(data->args[0]);

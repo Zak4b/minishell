@@ -1,5 +1,5 @@
 NAME = libft.a
-FLAGS = -Wall -Wextra -Werror -I. -g
+FLAGS = -Wall -Wextra -Werror -I.
 OBJDIR = obj
 SUB_DIRS = $(addprefix $(OBJDIR)/, char conversions ft_printf list mem strings)
 
@@ -9,9 +9,9 @@ SOURCES = \
 		char/ft_isalnum.c \
 		char/ft_isascii.c \
 		char/ft_isprint.c \
+		char/ft_isspace.c \
 		char/ft_toupper.c \
 		char/ft_tolower.c \
-		char/ft_isspace.c \
 		strings/ft_strcmp.c \
 		strings/ft_strncmp.c \
 		strings/ft_strlen.c \
@@ -52,6 +52,7 @@ SOURCES = \
 		list/ft_lstclear.c \
 		list/ft_lstiter.c \
 		list/ft_lstmap.c \
+		list/ft_lst_to_array.c \
 		ft_printf/ft_printf.c \
 		ft_printf/utils.c \
 		ft_printf/conversions.c \

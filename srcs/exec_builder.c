@@ -6,13 +6,13 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 18:21:08 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 22:45:51 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	free_exec(t_exec_data *data)
+void	free_exec(t_exec *data)
 {
 	if (data->path)
 		free(data->path);
@@ -23,7 +23,7 @@ void	free_exec(t_exec_data *data)
 	free(data);
 }
 
-char	*build_word(t_vars *vars, t_tokenlist **lst)
+char	*build_word(t_vars *vars, t_token **lst)
 {
 	char	*value;
 	char	*tmp;
@@ -31,10 +31,10 @@ char	*build_word(t_vars *vars, t_tokenlist **lst)
 	value = ft_calloc(1, sizeof(char));
 	while (1)
 	{
-		tmp = eval_string(vars, (*lst)->token.value);
+		tmp = eval_string(vars, (*lst)->value);
 		str_append(&value, tmp);
 		free(tmp);
-		if ((*lst)->next->token.type != TOKEN_WORD)
+		if ((*lst)->next->type != TOKEN_WORD)
 			break ;
 		(*lst) = (*lst)->next;
 	}
@@ -46,10 +46,11 @@ void	file_error(t_token token)
 	if (access(token.value, F_OK) == 0)
 		ft_fprintf(2, "minishell: %s: Permission denied\n", token.value);
 	else
-		ft_fprintf(2, "minishell: %s: No such file or directory\n", token.value);
+		ft_fprintf(2, "minishell: %s: No such file or directory\n",
+			token.value);
 }
 
-void	handle_redirect(t_vars *vars, t_exec_data *data, t_token token)
+void	handle_redirect(t_vars *vars, t_exec *data, t_token token)
 {
 	int	fd;
 
@@ -77,31 +78,28 @@ void	handle_redirect(t_vars *vars, t_exec_data *data, t_token token)
 	}
 }
 
-t_exec_data	*build_exec(t_vars *vars, t_tokenlist *tok_lst, t_exec_data **data, t_exec_data *prev)
+t_exec	*build_exec(t_vars *vars, t_token *tok_lst, t_exec **data, t_exec *prev)
 {
-	t_list		*lst;
-	t_exec_data	**next;
+	t_list	*lst;
 
 	lst = NULL;
-	*data = ft_calloc(1, sizeof(t_exec_data));
-	**data = (t_exec_data){NULL, NULL, 0, 0, 1, NULL, NULL};
+	*data = ft_calloc(1, sizeof(t_exec));
+	**data = (t_exec){NULL, NULL, 0, 0, 1, NULL, NULL};
 	if (prev)
 		(*data)->prev = prev;
-	while (tok_lst && ! is_limit_token(tok_lst->token))
+	while (tok_lst && ! is_limit_token(*tok_lst))
 	{
-		if (tok_lst->token.type == TOKEN_WORD)
+		if (tok_lst->type == TOKEN_WORD)
 			ft_lstadd_back(&lst, ft_lstnew(build_word(vars, &tok_lst)));
-		else if (is_redirection(tok_lst->token))
-			handle_redirect(vars, *data, tok_lst->token);
+		else if (is_redirection(*tok_lst))
+			handle_redirect(vars, *data, *tok_lst);
 		tok_lst = tok_lst->next;
 	}
-	(*data)->args = (char **)list_to_array(lst);
+	(*data)->args = (char **)ft_lst_to_array(lst);
+	ft_lstclear(&lst, NULL);
 	if ((*data)->args[0])
 		(*data)->path = search_path(vars, (*data)->args[0]);
-	if (tok_lst->token.type == TOKEN_PIPE)
-	{
-		next = &(*data)->pipe;
-		build_exec(vars, tok_lst->next, next, *data);
-	}
-	return (ft_lstclear(&lst, NULL), (*data)->argc = count_line((*data)->args), *data);
+	if (tok_lst->type == TOKEN_PIPE)
+		build_exec(vars, tok_lst->next, &(*data)->pipe, *data);
+	return ((*data)->argc = count_line((*data)->args), *data);
 }

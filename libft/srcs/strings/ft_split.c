@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:36:20 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 20:53:08 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/18 18:18:53 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	free_split(char **split)
 {
 	int	i;
 
+	if (split == NULL)
+		return ;
 	i = 0;
 	while (split[i])
 		free(split[i++]);
@@ -26,6 +28,8 @@ static int	count_word(char const *str, char c)
 {
 	int	wc;
 
+	if (!str)
+		return (0);
 	wc = 0;
 	while (*str)
 	{
@@ -45,7 +49,7 @@ char	**ft_split(char const *str, char c)
 	int		k;
 	char	**array;
 
-	array = malloc(sizeof(char *) * (count_word(str, c) + 1));
+	array = ft_calloc(count_word(str, c) + 1, sizeof(char *));
 	if (array == NULL)
 		return (NULL);
 	k = 0;
@@ -63,6 +67,5 @@ char	**ft_split(char const *str, char c)
 				return (free_split(array), NULL);
 		}
 	}
-	array[k] = NULL;
-	return (array);
+	return (array[k] = NULL, array);
 }

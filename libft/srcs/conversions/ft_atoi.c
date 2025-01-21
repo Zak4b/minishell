@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:43:34 by asene             #+#    #+#             */
-/*   Updated: 2024/12/25 19:38:00 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/18 18:10:58 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ int	ft_atoi(const char *nptr)
 	long	result;
 	int		sign;
 
+	if (!nptr)
+		return (0);
 	result = 0;
 	sign = 1;
-	while (*nptr == ' ' || (*nptr >= 9 && *nptr <= 13))
+	while (ft_isspace(*nptr))
 		nptr++;
 	if (*nptr == '-' || *nptr == '+')
 		if (*(nptr++) == '-')

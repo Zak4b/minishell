@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 11:26:31 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/21 17:06:51 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 22:48:47 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,39 +47,36 @@ char	*token_str(t_token t)
 	return (NULL);
 }
 
-t_token	next_token(t_tokenlist *tok_list)
+t_token	*next_token(t_token *tok_list)
 {
-	t_token	token;
-
 	tok_list = tok_list->next;
 	while (tok_list)
 	{
-		token = tok_list->token;
-		if (token.type != TOKEN_SPACE)
-			return (token);
+		if (tok_list->type != TOKEN_SPACE)
+			return (tok_list);
 		tok_list = tok_list->next;
 	}
-	return (token);
+	return (tok_list);
 }
 
-int	check(t_tokenlist *tok_list)
+int	check(t_token *tok_list)
 {
-	if (tok_list->token.type == TOKEN_PIPE)
+	if (tok_list->type == TOKEN_PIPE)
 		return (ft_fprintf(2,
 				"minishell: syntax error near unexpected token `|'\n"), 0);
 	while (tok_list)
 	{
-		if ((is_redirection(tok_list->token)
-				&& tok_list->token.type != TOKEN_SPACE
-				&& ft_strlen(tok_list->token.value) == 0)
-			|| (tok_list->token.type == TOKEN_PIPE
-				&& (next_token(tok_list).type == TOKEN_END
-					|| next_token(tok_list).type == TOKEN_PIPE)))
+		if ((is_redirection(*tok_list)
+				&& tok_list->type != TOKEN_SPACE
+				&& ft_strlen(tok_list->value) == 0)
+			|| (tok_list->type == TOKEN_PIPE
+				&& (next_token(tok_list)->type == TOKEN_END
+					|| next_token(tok_list)->type == TOKEN_PIPE)))
 		{
-			if (tok_list->next->token.type != TOKEN_END)
+			if (tok_list->next->type != TOKEN_END)
 				return (ft_fprintf(2,
 						"minishell: syntax error near unexpected token `%s'\n",
-						token_str(tok_list->token)), 0);
+						token_str(*tok_list)), 0);
 			return (ft_fprintf(2,
 					"minishell: syntax error near unexpected token `newline'\n")
 				, 0);
