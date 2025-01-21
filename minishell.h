@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 22:44:11 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 23:35:17 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void		free_exec(t_exec *data);
 int			is_builtin(char *cmd);
 int			exec_builtin(t_vars *vars, t_exec *data);
 int			execute(t_vars *vars);
+bool		parse_exit_code(char *str, int *dest);
 
 int			ft_cd(t_vars *vars, t_exec *data);
 int			ft_export(t_vars *vars, t_exec *data);

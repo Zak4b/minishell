@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/21 22:36:23 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 23:43:58 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,16 @@ int	ft_exit(t_vars *vars, t_exec *data)
 	exit_code = vars->exit_code;
 	if (data->argc == 2)
 	{
-		exit_code = ft_atoi(data->args[1]); //TODO atol
+		if (!parse_exit_code(data->args[1], &exit_code))
+			ft_fprintf(2, "exit: %s: numeric argument required\n",
+				data->args[1]);
 	}
 	else if (data->argc > 2)
 	{
 		ft_fprintf(2, "exit: too many arguments\n");
 		exit_code = FAILURE;
 	}
-	free_split(data->args);
+	free_exec(vars->exec_data);
 	clean_exit(vars, exit_code);
 	return (exit_code % 256);
 }

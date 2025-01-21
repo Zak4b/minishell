@@ -6,11 +6,12 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:36:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 22:36:23 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 23:39:20 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <limits.h>
 
 int	(*get_builtin(char *cmd))(t_vars *vars, t_exec *data)
 {
@@ -55,4 +56,30 @@ int	exec_builtin(t_vars *vars, t_exec *data)
 		clean_exit(vars, exit_code);
 	}
 	return (exit_code);
+}
+
+bool	parse_exit_code(char *str, int *dest)
+{
+	long	nb;
+	int		sign;
+
+	nb = 0;
+	sign = 1;
+	while (ft_isspace(*str))
+		str++;
+	if (*str == '-' || *str == '+')
+		if (*str++ == '-')
+			sign = -1;
+	if (!*str)
+		return (*dest = 2, false);
+	while (*str)
+	{
+		if (! ft_isdigit(*str) || nb > (LONG_MAX - (*str - '0')) / 10)
+			return (*dest = 2, false);
+		nb = nb * 10 + *str++ - '0';
+	}
+	*dest = nb * sign;
+	while (*dest < 0)
+		*dest += 256;
+	return (true);
 }
