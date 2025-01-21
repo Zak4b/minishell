@@ -25,7 +25,8 @@ SOURCES = \
 		secure.c \
 		execute.c \
 		heredoc.c \
-		env.c
+		env.c \
+		expand.c
 
 OBJDIR = obj
 OBJS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))

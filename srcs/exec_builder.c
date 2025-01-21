@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 13:07:56 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 14:18:36 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,59 +23,6 @@ void	free_exec(t_exec_data *data)
 	if (data->pipe)
 		free_exec(data->pipe);
 	free(data);
-}
-
-char	*replace_vars(t_vars *vars, char *str)
-{
-	int		i;
-	t_list	*lst;
-	char	*var;
-	char	**array;
-
-	lst = NULL;
-	while (*str)
-	{
-		i = 0;
-		while (str[i] && str[i] != '$')
-			i++;
-		ft_lstadd_back(&lst, ft_lstnew(ft_substr(str, 0, i)));
-		str = str + i;
-		if (*str == '$' && ++str)
-		{
-			var = grab_word(&str);
-			ft_lstadd_back(&lst, ft_lstnew(getenv_value(vars, var)));
-			free(var);
-		}
-	}
-	array = (char **)list_to_array(lst);
-	var = ft_strnjoin(array, count_line(array), "");
-	return (ft_lstclear(&lst, NULL), free_split(array), var);
-}
-
-char	*eval_string(t_vars *vars, char *str)
-{
-	char	*p;
-	char	*res;
-	char	quote;
-
-	p = NULL;
-	quote = 0;
-	if (ft_strchr("'\"", *str))
-	{
-		quote = *str;
-		if (str[ft_strlen(str) - 1] != str[0])
-			return (NULL);
-		p = ft_strdup(str + 1);
-		str = p;
-		str[ft_strlen(str) - 1] = '\0';
-	}
-	if (quote == '\'')
-		res = ft_strdup(str);
-	else
-		res = replace_vars(vars, str);
-	if (p)
-		free (p);
-	return (res);
 }
 
 char	*build_word(t_vars *vars, t_tokenlist **lst)

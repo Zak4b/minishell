@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 13:08:36 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 14:21:17 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,10 @@ int			skip_spaces(char **str);
 char		*str_append(char **dest, char *next);
 
 t_tokenlist	*tokenize(char *input);
-char		*grab_word(char **p);
 void		token_append(t_tokenlist **lst, t_token_type type, char *value);
 void		clear_token_list(t_tokenlist **t);
+
+char		*eval_string(t_vars *vars, char *str);
 
 char		*search_path(t_vars *vars, char *cmd);
 int			correct_path(t_vars *vars, char *cmd);
