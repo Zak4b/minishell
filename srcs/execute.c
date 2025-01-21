@@ -6,25 +6,22 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 11:50:30 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 13:19:57 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	free_exec(t_exec_data *data)
+int	get_exit_code(int status)
 {
-	if (data->path)
-		free(data->path);
-	if (data->args)
-		free_split(data->args);
-	if (access(".heredoc", F_OK) == 0)
-		unlink(".heredoc");
-	if (data->pipe)
-		free_exec(data->pipe);
-	free(data);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
 }
 
+// execve || exit
 void	exec_cmd(t_vars *vars, t_exec_data *data)
 {
 	char	**env;
@@ -40,22 +37,34 @@ void	exec_cmd(t_vars *vars, t_exec_data *data)
 	clean_exit(vars, CMD_NOT_FOUND);
 }
 
+// Return exit code
+int	run_cmd(t_vars *vars, t_exec_data *data)
+{
+	int		status;
+	pid_t	pid;
+
+	if (data->fd_in == -1 || data->fd_out == -1)
+		return (1);
+	if (is_builtin(data->args[0]))
+		return (exec_builtin(vars, *data));
+	else
+	{
+		pid = fork();
+		if (pid == 0)
+			exec_cmd(vars, data);
+		waitpid(pid, &status, 0);
+		return (get_exit_code(status));	
+	}
+}
+
 void	child_process(t_vars *vars, t_exec_data *data, int *fds)
 {
 	int	exit_code;
 
 	if (fds[0])
 		close(fds[0]);
-	if (data->fd_in == -1 || data->fd_out == -1)
-		clean_exit(vars, 1);
-	if (is_builtin(data->args[0]))
-	{
-		exit_code = exec_builtin(vars, *data);
-		free_exec(data);
-		clean_exit(vars, exit_code);
-	}
-	else if (data->path)
-		exec_cmd(vars, data);
+	exit_code = run_cmd(vars, data);
+	clean_exit(vars, exit_code);
 }
 
 int	execute_pipeline(t_vars *vars, t_exec_data *data, int input_fd)
@@ -86,22 +95,9 @@ int	execute_pipeline(t_vars *vars, t_exec_data *data, int input_fd)
 	return (status);
 }
 
-int	run_cmd(t_vars *vars, t_exec_data *data)
-{
-	int		status;
-	pid_t	pid;
-
-	if (data->fd_in == -1 || data->fd_out == -1)
-		return (1);
-	pid = fork();
-	if (pid == 0)
-		exec_cmd(vars, data);
-	return (waitpid(pid, &status, 0), status);
-}
-
 int	execute(t_vars *vars)
 {
-	int			status;
+	int			exit_code;
 	t_exec_data	*data;
 
 	data = NULL;
@@ -111,17 +107,11 @@ int	execute(t_vars *vars)
 		return (free_exec(data), vars->exit_code);
 	stop_signal(vars);
 	if (data->pipe)
-		status = execute_pipeline(vars, data, STDIN_FILENO);
-	else if (is_builtin(data->args[0]))
-		status = exec_builtin(vars, *data);
+		exit_code = get_exit_code(execute_pipeline(vars, data, STDIN_FILENO));
 	else
-		status = run_cmd(vars, data);
+		exit_code = run_cmd(vars, data);
 	free_exec(data);
 	start_signal(vars);
 	heredoc_killer(vars->nbheredoc);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	else if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
+	return (exit_code);
 }

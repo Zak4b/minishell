@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/20 12:42:48 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/21 13:07:56 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+void	free_exec(t_exec_data *data)
+{
+	if (data->path)
+		free(data->path);
+	if (data->args)
+		free_split(data->args);
+	if (access(".heredoc", F_OK) == 0)
+		unlink(".heredoc");
+	if (data->pipe)
+		free_exec(data->pipe);
+	free(data);
+}
 
 char	*replace_vars(t_vars *vars, char *str)
 {
