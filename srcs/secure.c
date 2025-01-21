@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 11:26:31 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/21 15:43:22 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:56:45 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,17 @@ int	check(t_tokenlist *tok_list)
 	while (tok_list)
 	{
 		if ((is_redirection(tok_list->token)
-				&& tok_list->token.type != TOKEN_SPACE
-				&& ft_strlen(tok_list->token.value) == 0)
+				&& (next_token(tok_list).type == TOKEN_END
+					|| next_token(tok_list).type == TOKEN_PIPE
+					|| is_redirection(next_token(tok_list))))
 			|| (tok_list->token.type == TOKEN_PIPE
 				&& (next_token(tok_list).type == TOKEN_END
 					|| next_token(tok_list).type == TOKEN_PIPE)))
 		{
-			if (tok_list->next->token.type != TOKEN_END)
+			if (next_token(tok_list).type != TOKEN_END)
 				return (ft_fprintf(2,
 						"minishell: syntax error near unexpected token `%s'\n",
-						token_str(tok_list->token)), 0);
+						token_str(next_token(tok_list))), 0);
 			return (ft_fprintf(2,
 					"minishell: syntax error near unexpected token `newline'\n")
 				, 0);
