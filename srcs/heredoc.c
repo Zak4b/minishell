@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:34:03 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/16 15:42:51 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:26:40 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,11 @@ int	heredoc(char *delimiter, t_vars *vars)
 	int		fd;
 	pid_t	pid;
 	char	*name;
+	char	*number;
 
-	name = ft_strjoin(".heredoc", ft_itoa(vars->nbheredoc));
+	number = ft_itoa(vars->nbheredoc);
+	name = ft_strjoin(".heredoc", number);
+	free(number);
 	pid = fork();
 	if (pid == 0 && signal_heredoc(vars))
 		heredoc_child(delimiter, name);
