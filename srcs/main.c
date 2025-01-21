@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 11:03:38 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 11:24:20 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,29 @@
 
 volatile sig_atomic_t	g_nal = 0;
 
-void	init_shell(t_vars *vars, char **env)
+void	update_shell_lvl(t_vars *vars)
 {
 	char	*shell_lvl;
 	int		shell_lvl_value;
-	vars->token_list = NULL;
-	vars->exit_code = 0;
-	setup_signal(vars);
-	parse_env(env, vars);
+
 	shell_lvl = getenv_value(vars, "SHLVL");
-	shell_lvl_value = ft_atoi(shell_lvl) + 1;
+	if (shell_lvl)
+		shell_lvl_value = ft_atoi(shell_lvl) + 1;
+	else
+		shell_lvl_value = 1;
 	free(shell_lvl);
 	shell_lvl = ft_itoa(shell_lvl_value);
 	set_env(vars, "SHLVL", shell_lvl);
 	free(shell_lvl);
+}
+
+void	init_shell(t_vars *vars, char **env)
+{
+	vars->token_list = NULL;
+	vars->exit_code = 0;
+	setup_signal(vars);
+	parse_env(env, vars);
+	update_shell_lvl(vars);
 }
 
 int	main(int argc, char **argv, char **env)
