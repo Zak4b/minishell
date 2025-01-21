@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   secure.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 11:26:31 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/16 15:52:15 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/21 14:09:14 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,21 @@ char	*token_str(t_token t)
 	return (NULL);
 }
 
+t_token	next_token(t_tokenlist *tok_list)
+{
+	t_token	token;
+
+	tok_list = tok_list->next;
+	while (tok_list)
+	{
+		token = tok_list->token;
+		if (token.type != TOKEN_SPACE)
+			return (token);
+		tok_list = tok_list->next;
+	}
+	return (token);
+}
+
 bool	check_syntax(t_tokenlist *tok_lst)
 {
 	while (tok_lst)
@@ -60,9 +75,9 @@ int	check(t_tokenlist *tok_list)
 				"minishell: syntax error near unexpected token `|'\n"), 0);
 	while (tok_list)
 	{
-		if (tok_list->token.type >= TOKEN_REDIRECT_IN
-			&& tok_list->token.type <= TOKEN_HEREDOC
-			&& ft_strlen(tok_list->token.value) == 0)
+		if ((is_redirection(tok_list->token) && tok_list->token.type != TOKEN_SPACE
+		&& ft_strlen(tok_list->token.value) == 0) || (tok_list->token.type == TOKEN_PIPE
+		&& (next_token(tok_list).type == TOKEN_END || next_token(tok_list).type == TOKEN_PIPE)))
 		{
 			if (tok_list->next->token.type != TOKEN_END)
 				return (ft_fprintf(2,
