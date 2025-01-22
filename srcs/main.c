@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:51:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 18:20:21 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 13:51:14 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ void	init_shell(t_vars *vars, char **env)
 	vars->token_list = NULL;
 	vars->exec_data = NULL;
 	vars->exit_code = 0;
-	setup_signal(vars);
+	vars->sa.sa_flags = SA_RESTART;
+	sigemptyset(&vars->sa.sa_mask);
+	start_signal(vars);
 	parse_env(env, vars);
 	update_shell_lvl(vars);
 }

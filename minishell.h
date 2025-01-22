@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 23:35:17 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 13:34:05 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,6 @@ int			ft_echo(t_vars *vars, t_exec *data);
 int			ft_exit(t_vars *vars, t_exec *data);
 int			ft_env(t_vars *vars, t_exec *data);
 int			ft_unset(t_vars *vars, t_exec *data);
-
-int			setup_signal(t_vars *vars);
 
 int			start_signal(t_vars *vars);
 int			stop_signal(t_vars *vars);
