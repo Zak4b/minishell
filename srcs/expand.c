@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:32:57 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 14:17:37 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 22:28:31 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ char	*grab_var_name(char **p)
 	int		i;
 	char	*res;
 
-	if(**p == '?')
-		return ((*p)++,ft_strdup("?"));
+	if (**p == '?')
+		return ((*p)++, ft_strdup("?"));
 	i = 0;
 	while ((*p)[i])
 	{

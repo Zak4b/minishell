@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 21:46:48 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 22:30:19 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ char	*build_word(t_vars *vars, t_token **lst)
 		tmp = eval_string(vars, (*lst)->value);
 		str_append(&value, tmp);
 		free(tmp);
-		if ((*lst)->next == NULL || ((*lst)->next && (*lst)->next->type != TOKEN_WORD))
+		if (((*lst)->next && (*lst)->next->type != TOKEN_WORD)
+			|| (*lst)->next == NULL )
 			break ;
 		(*lst) = (*lst)->next;
 	}
@@ -44,7 +45,7 @@ char	*build_word(t_vars *vars, t_token **lst)
 int	get_open_flags(t_token token)
 {
 	int	flags;
-	
+
 	if (token.type == TOKEN_REDIRECT_OUT)
 		flags = O_WRONLY | O_CREAT | O_TRUNC;
 	else if (token.type == TOKEN_APPEND)

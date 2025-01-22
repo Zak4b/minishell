@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 21:45:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 21:48:15 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 22:29:42 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	file_error(char *file)
 {
-	char *msg;
+	char	*msg;
 
 	if (access(file, F_OK) == 0)
 		msg = "Permission denied";

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 09:30:16 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/22 13:58:03 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/22 22:20:21 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ int	start_signal(t_vars *vars)
 		perror("sigaction");
 		return (1);
 	}
-	vars->sa.sa_handler = SIG_IGN;
 	if (sigaction(SIGPIPE, &vars->sa, NULL) == -1)
 	{
 		perror("sigaction");
 		return (1);
 	}
+	vars->sa.sa_handler = SIG_IGN;
 	if (sigaction(SIGQUIT, &vars->sa, NULL) == -1)
 	{
 		perror("sigaction");
@@ -60,12 +60,6 @@ int	stop_signal(t_vars *vars)
 		return (1);
 	}
 	if (sigaction(SIGQUIT, &vars->sa, NULL) == -1)
-	{
-		perror("sigaction");
-		return (1);
-	}
-	vars->sa.sa_handler = SIG_IGN;
-	if (sigaction(SIGPIPE, &vars->sa, NULL) == -1)
 	{
 		perror("sigaction");
 		return (1);

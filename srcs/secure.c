@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 11:26:31 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/22 22:06:50 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 22:30:49 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int	check(t_token *tok_list)
 	{
 		next = next_token(tok_list);
 		if ((is_redirection(*tok_list) && (!next || next->type != TOKEN_WORD))
-			|| (tok_list->type == TOKEN_PIPE && (!next || next->type == TOKEN_PIPE)))
+			|| (tok_list->type == TOKEN_PIPE
+				&& (!next || next->type == TOKEN_PIPE)))
 			return (syntaxe_error(next), 0);
 		tok_list = next;
 	}
