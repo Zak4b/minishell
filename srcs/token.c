@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 21:19:33 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 23:07:41 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ char	*grab_word(char **p)
 	{
 		if (quote && (*p)[i] == quote && ++i)
 			break ;
-		if (!quote && (ft_isspace((*p)[i]) || ft_strchr("|<>\"'", (*p)[i])))
+		if (!quote && (ft_strchr(" \t\n\v\f\r;|<>\"'", (*p)[i])
+			|| !ft_strncmp(&(*p)[i], "&&", 2)))
 			break ;
 		i++;
 	}
@@ -55,13 +56,19 @@ void	get_next_token(t_token **list, char **input)
 	t_token_type	type;
 
 	type = TOKEN_WORD;
-	if (**input == '|' && ++(*input))
-		return (token_append(list, TOKEN_PIPE, NULL));
-	if (**input == '>' && *(*input +1) == '>' && ++(*input) && ++(*input))
+	if (**input == ';' && ++(*input))
+		type = TOKEN_END;
+	else if (!ft_strncmp(*input, "&&", 2) && ++(*input) && ++(*input))
+		type = TOKEN_AND;
+	else if (!ft_strncmp(*input, "||", 2) && ++(*input) && ++(*input))
+		type = TOKEN_OR;
+	else if (**input == '|' && ++(*input))
+		type = TOKEN_PIPE;
+	else if (!ft_strncmp(*input, ">>", 2) && ++(*input) && ++(*input))
 		type = TOKEN_APPEND;
 	else if (**input == '>' && ++(*input))
 		type = TOKEN_REDIRECT_OUT;
-	else if (**input == '<' && *(*input +1) == '<' && ++(*input) && ++(*input))
+	else if (!ft_strncmp(*input, "<<", 2) && ++(*input) && ++(*input))
 		type = TOKEN_HEREDOC;
 	else if (**input == '<' && ++(*input))
 		type = TOKEN_REDIRECT_IN;

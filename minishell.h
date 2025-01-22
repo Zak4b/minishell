@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 21:56:22 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 23:51:57 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ typedef enum e_token_type
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
 	TOKEN_SPACE,
-	TOKEN_VAR,
+	TOKEN_OR,
+	TOKEN_AND,
 	TOKEN_END
 }	t_token_type;
 
@@ -99,13 +100,13 @@ char		**build_env(t_vars *vars);
 void		set_env(t_vars *vars, char *key, char *value);
 void		unset_env(t_vars *vars, char *key);
 
-t_exec		*build_exec(t_vars *vars, t_token *lst,
+t_exec		*build_exec(t_vars *vars, t_token **lst,
 				t_exec **dest, t_exec *prev);
 void		free_exec(t_exec *data);
 
 int			is_builtin(char *cmd);
 int			exec_builtin(t_vars *vars, t_exec *data);
-int			execute(t_vars *vars);
+int			execute(t_vars *vars, t_token *token_list);
 bool		parse_exit_code(char *str, int *dest);
 
 int			ft_cd(t_vars *vars, t_exec *data);

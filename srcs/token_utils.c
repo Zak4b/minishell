@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 21:50:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 22:31:06 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 23:01:56 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ bool	is_redirection(t_token t)
 bool	is_limit_token(t_token t)
 {
 	if (t.type == TOKEN_PIPE
+		|| t.type == TOKEN_OR
+		|| t.type == TOKEN_AND
 		|| t.type == TOKEN_END)
 		return (true);
 	return (false);
