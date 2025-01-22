@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:34:32 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 01:01:37 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 15:15:27 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	ft_env(t_vars *vars, t_exec *data)
 	while (env)
 	{
 		value = env->content;
-		ft_printf("%s=%s\n", value[0], value[1]);
+		ft_fprintf(data->fd_out, "%s=%s\n", value[0], value[1]);
 		env = env->next;
 	}
 	return (0);

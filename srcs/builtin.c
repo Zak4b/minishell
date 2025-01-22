@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/21 23:43:58 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/22 15:16:16 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ int	ft_echo(t_vars *vars, t_exec *data)
 	}
 	while (i < data->argc)
 	{
-		ft_putstr_fd(data->args[i++], 1);
+		ft_putstr_fd(data->args[i++], data->fd_out);
 		if (i < data->argc)
-			ft_putchar_fd(' ', 1);
+			ft_putchar_fd(' ', data->fd_out);
 	}
 	if (new_line)
-		ft_putchar_fd('\n', 1);
+		ft_putchar_fd('\n', data->fd_out);
 	return (SUCCESS);
 }
 
@@ -112,7 +112,7 @@ int	ft_pwd(t_vars *vars, t_exec *data)
 	(void)vars;
 	(void)data;
 	pwd = getcwd(NULL, 0);
-	printf("%s\n", pwd);
+	ft_fprintf(data->fd_out, "%s\n", pwd);
 	free(pwd);
 	return (SUCCESS);
 }
