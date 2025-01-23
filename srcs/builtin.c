@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/23 12:52:47 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:38:13 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ int	ft_exit(t_vars *vars, t_exec *data)
 	int	exit_code;
 
 	exit_code = vars->exit_code;
+	if (data->fd_out != 1)
+		close(data->fd_out);
 	if (data->argc == 2)
 	{
 		if (!parse_exit_code(data->args[1], &exit_code))
