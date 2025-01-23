@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/23 12:28:01 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:39:53 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,8 @@ char		**build_env(t_vars *vars);
 void		set_env(t_vars *vars, char *key, char *value);
 void		unset_env(t_vars *vars, char *key);
 
-t_exec		*build_exec(t_vars *vars, t_token *tok_lst, t_exec **data, t_exec *prev);
+t_exec		*build_exec(t_vars *vars, t_token *tok_lst,
+				t_exec **data, t_exec *prev);
 void		free_exec(t_exec *data);
 
 int			is_builtin(char *cmd);
