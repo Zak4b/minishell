@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/23 12:28:24 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:52:47 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int	ft_exit(t_vars *vars, t_exec *data)
 		exit_code = FAILURE;
 	}
 	free_exec(vars->exec_data);
+	ft_printf("exit\n");
 	clean_exit(vars, exit_code);
 	return (exit_code % 256);
 }
