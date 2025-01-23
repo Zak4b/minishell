@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/23 16:30:18 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/23 16:39:41 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,8 @@ int	open_redirection(t_vars *vars, t_token_type type, t_token **tok_lst)
 	int	flags;
 	char *name;
 
-	name = build_word(vars, tok_lst);
 	if (type == TOKEN_HEREDOC)
-		fd = heredoc(name, vars);
+		fd = heredoc((*tok_lst)->value, vars);
 	else
 	{
 		flags = 0;
@@ -60,9 +59,10 @@ int	open_redirection(t_vars *vars, t_token_type type, t_token **tok_lst)
 			flags = O_WRONLY | O_CREAT | O_APPEND;
 		else if (type == TOKEN_REDIRECT_IN)
 			flags = O_RDONLY;
+		name = build_word(vars, tok_lst);
 		fd = open(name, flags, 0644);
+		free(name);
 	}
-	free(name);
 	return (fd);
 }
 
