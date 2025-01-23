@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:36:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/23 13:38:47 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/23 16:31:43 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ int	exec_builtin(t_vars *vars, t_exec *data)
 	if (data->fd_in != 0)
 		close(data->fd_in);
 	exit_code = builtin(vars, data);
+	if (data->fd_out != 1)
+		close(data->fd_out);
 	if (data->pipe || data->prev)
 	{
-		if (data->fd_out != 1)
-			close(data->fd_out);
 		free_exec(vars->exec_data);
 		clean_exit(vars, exit_code);
 	}

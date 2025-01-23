@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/23 10:34:03 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/23 16:30:18 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,28 @@ char	*build_word(t_vars *vars, t_token **lst)
 	return (value);
 }
 
-int	get_open_flags(t_token token)
+int	open_redirection(t_vars *vars, t_token_type type, t_token **tok_lst)
 {
+	int	fd;
 	int	flags;
+	char *name;
 
-	if (token.type == TOKEN_REDIRECT_OUT)
-		flags = O_WRONLY | O_CREAT | O_TRUNC;
-	else if (token.type == TOKEN_APPEND)
-		flags = O_WRONLY | O_CREAT | O_APPEND;
-	else if (token.type == TOKEN_REDIRECT_IN)
-		flags = O_RDONLY;
+	name = build_word(vars, tok_lst);
+	if (type == TOKEN_HEREDOC)
+		fd = heredoc(name, vars);
 	else
+	{
 		flags = 0;
-	return (flags);
+		if (type == TOKEN_REDIRECT_OUT)
+			flags = O_WRONLY | O_CREAT | O_TRUNC;
+		else if (type == TOKEN_APPEND)
+			flags = O_WRONLY | O_CREAT | O_APPEND;
+		else if (type == TOKEN_REDIRECT_IN)
+			flags = O_RDONLY;
+		fd = open(name, flags, 0644);
+	}
+	free(name);
+	return (fd);
 }
 
 void	handle_redirect(t_vars *vars, t_exec *data, t_token **tok_lst)
@@ -64,10 +73,7 @@ void	handle_redirect(t_vars *vars, t_exec *data, t_token **tok_lst)
 
 	current = **tok_lst;
 	(*tok_lst) = (*tok_lst)->next;
-	if (is_redirection(current) && current.type != TOKEN_HEREDOC)
-		fd = open(build_word(vars, tok_lst), get_open_flags(current), 0644);
-	else
-		fd = heredoc((*tok_lst)->value, vars);
+	fd = open_redirection(vars, current.type, tok_lst);
 	if (fd == -1)
 		file_error((*tok_lst)->value);
 	if (current.type == TOKEN_REDIRECT_OUT || current.type == TOKEN_APPEND)
