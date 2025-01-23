@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 21:50:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 23:01:56 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/23 16:58:31 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,11 @@ char	*token_str(t_token *t)
 		return (">");
 	else if (t->type == TOKEN_APPEND)
 		return (">>");
+	else if (t->type == TOKEN_AND)
+		return ("&&");
+	else if (t->type == TOKEN_OR)
+		return ("||");
+	else if (t->type == TOKEN_END)
+		return (";");
 	return (NULL);
 }

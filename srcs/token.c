@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 23:07:41 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/23 17:00:51 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*grab_word(char **p)
 	{
 		if (quote && (*p)[i] == quote && ++i)
 			break ;
-		if (!quote && (ft_strchr(" \t\n\v\f\r;|<>\"'", (*p)[i])
+		if (!quote && (ft_strchr(" \t\n\v\f\r|<>\"'", (*p)[i])
 			|| !ft_strncmp(&(*p)[i], "&&", 2)))
 			break ;
 		i++;
@@ -56,9 +56,7 @@ void	get_next_token(t_token **list, char **input)
 	t_token_type	type;
 
 	type = TOKEN_WORD;
-	if (**input == ';' && ++(*input))
-		type = TOKEN_END;
-	else if (!ft_strncmp(*input, "&&", 2) && ++(*input) && ++(*input))
+	if (!ft_strncmp(*input, "&&", 2) && ++(*input) && ++(*input))
 		type = TOKEN_AND;
 	else if (!ft_strncmp(*input, "||", 2) && ++(*input) && ++(*input))
 		type = TOKEN_OR;
