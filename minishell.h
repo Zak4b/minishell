@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/23 11:00:55 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:28:01 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,5 +129,6 @@ int			exec_error(char *input);
 
 void		file_error(char *file);
 void		syntaxe_error(t_token *token);
+int			is_echo_option(char *option);
 
 #endif

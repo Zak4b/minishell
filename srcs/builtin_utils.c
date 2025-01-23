@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:36:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 15:14:16 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/23 12:32:38 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,29 @@ int	(*get_builtin(char *cmd))(t_vars *vars, t_exec *data)
 int	is_builtin(char *cmd)
 {
 	return (!!(get_builtin(cmd)));
+}
+
+int	is_echo_option(char *option)
+{
+	int	len;
+	int	i;
+
+	if (ft_strncmp(option, "-n", 2) == 0)
+	{
+		len = ft_strlen(option);
+		if (len != 2)
+		{
+			i = 2;
+			while (i < len)
+			{
+				if (option[i] != 'n')
+					return (1);
+				i++;
+			}
+		}
+		return (0);
+	}
+	return (1);
 }
 
 int	exec_builtin(t_vars *vars, t_exec *data)

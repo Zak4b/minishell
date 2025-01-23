@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/23 10:42:52 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:28:24 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	ft_echo(t_vars *vars, t_exec *data)
 	new_line = 1;
 	while (i < data->argc)
 	{
-		if (ft_strcmp(data->args[i], "-n"))
+		if (is_echo_option(data->args[i]))
 			break ;
 		new_line = 0;
 		i++;
