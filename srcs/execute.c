@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 22:36:23 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/23 11:04:52 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 void	exec_cmd(t_vars *vars, t_exec *data)
 {
 	char	**env;
+	int		exit;
 
 	if (dup2(data->fd_in, 0) != 0)
 		close(data->fd_in);
@@ -24,9 +25,9 @@ void	exec_cmd(t_vars *vars, t_exec *data)
 	env = build_env(vars);
 	execve(data->path, data->args, env);
 	free_split(env);
-	ft_fprintf(2, "%s: command not found\n", data->args[0]);
+	exit = exec_error(data->args[0]);
 	free_exec(vars->exec_data);
-	clean_exit(vars, CMD_NOT_FOUND);
+	clean_exit(vars, exit);
 }
 
 // Return exit code

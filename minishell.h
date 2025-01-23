@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 23:51:57 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/23 11:00:55 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ typedef enum e_exit_code
 	SUCCESS = 0,
 	FAILURE = 1,
 	BAD_USAGE = 2,
-	CMD_NOT_FOUND = 127,
+	FILE_ERROR = 126,
+	NOT_FOUND = 127,
 	MAX_EXIT_CODE = 255
 }	t_exit_code;
 
@@ -100,13 +101,12 @@ char		**build_env(t_vars *vars);
 void		set_env(t_vars *vars, char *key, char *value);
 void		unset_env(t_vars *vars, char *key);
 
-t_exec		*build_exec(t_vars *vars, t_token **lst,
-				t_exec **dest, t_exec *prev);
+t_exec		*build_exec(t_vars *vars, t_token *tok_lst, t_exec **data, t_exec *prev);
 void		free_exec(t_exec *data);
 
 int			is_builtin(char *cmd);
 int			exec_builtin(t_vars *vars, t_exec *data);
-int			execute(t_vars *vars, t_token *token_list);
+int			execute(t_vars *vars);
 bool		parse_exit_code(char *str, int *dest);
 
 int			ft_cd(t_vars *vars, t_exec *data);
@@ -125,6 +125,7 @@ int			check(t_token *tok_list);
 bool		is_redirection(t_token t);
 bool		is_limit_token(t_token t);
 char		*token_str(t_token *t);
+int			exec_error(char *input);
 
 void		file_error(char *file);
 void		syntaxe_error(t_token *token);
