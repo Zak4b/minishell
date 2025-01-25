@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:34:03 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/24 13:56:06 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/25 11:26:14 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	heredoc_child(char *delimiter, char *name, t_vars *vars)
 	char	*new_delimiter;
 	int		has_quote;
 
+	free_exec(vars->exec_data);
 	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	free(name);
 	has_quote = heredoc_delimiter(vars, delimiter, &new_delimiter);
@@ -64,7 +65,8 @@ void	heredoc_child(char *delimiter, char *name, t_vars *vars)
 			ft_fprintf(fd, "%s\n", line);
 		free(line);
 	}
-	free(new_delimiter);
+	if (has_quote)
+		free(new_delimiter);
 	close(fd);
 	clean_exit(vars, 0);
 }
@@ -102,17 +104,17 @@ int	heredoc(char *delimiter, t_vars *vars)
 	pid = fork();
 	if (pid == 0 && signal_heredoc(vars))
 		heredoc_child(delimiter, name, vars);
+	waitpid(pid, 0, 0);
+	if (g_nal != SIGINT)
+	{
+		fd = open(name, O_RDONLY, 0644);
+		vars->nbheredoc++;
+	}
 	else
 	{
-		waitpid(pid, 0, 0);
-		if (g_nal == SIGINT)
-		{
-			fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			close(fd);
-		}
+		fd = -1;
+		unlink(name);
 	}
-	fd = open(name, O_RDONLY, 0644);
 	free(name);
-	vars->nbheredoc = vars->nbheredoc + 1;
 	return (fd);
 }

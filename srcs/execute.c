@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/23 11:04:52 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/25 12:02:17 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	run_cmd(t_vars *vars, t_exec *data, bool need_fork)
 	pid_t	pid;
 
 	if (data->fd_in == -1 || data->fd_out == -1)
-		return (1);
+		return (free_exec(vars->exec_data), 1);
 	if (is_builtin(data->args[0]))
 		return (exec_builtin(vars, data));
 	else
