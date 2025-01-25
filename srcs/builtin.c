@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/23 13:38:13 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 16:37:13 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	ft_cd(t_vars *vars, t_exec *data)
 		return (ft_fprintf(2, "cd: too many arguments\n"), 1);
 	if (dest_for_cd(vars, data, &dest) == 1)
 		return (FAILURE);
+	if (ft_strlen(dest) == 0)
+		return (free(dest), SUCCESS);
 	if (stat(dest, &st) != 0)
 		return (ft_fprintf(2, "cd: %s: No such file or directory\n", dest),
 			free(dest), FAILURE);
