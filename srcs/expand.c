@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:32:57 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 22:28:31 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/24 12:27:43 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,13 @@ char	*eval_string(t_vars *vars, char *str)
 	if (p)
 		free (p);
 	return (res);
+}
+
+void	ftf_print_var(int fd, char *content, t_vars *vars)
+{
+	char	*replaced;
+
+	replaced = replace_vars(vars, content);
+	ft_fprintf(fd, "%s\n", content);
+	free(replaced);
 }

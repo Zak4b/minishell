@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/23 13:39:53 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/24 12:27:50 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,5 +131,6 @@ int			exec_error(char *input);
 void		file_error(char *file);
 void		syntaxe_error(t_token *token);
 int			is_echo_option(char *option);
+void		ftf_print_var(int fd, char *content, t_vars *vars);
 
 #endif
