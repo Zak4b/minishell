@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 18:12:20 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 22:01:44 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	exec_cmd(t_vars *vars, t_exec *data)
 		env = build_env(vars);
 		execve(data->path, data->args, env);
 		free_split(env);
-	
 	}
 	exit = exec_error(vars, data);
 	free_exec(vars->exec_data);

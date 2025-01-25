@@ -6,14 +6,14 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 21:45:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 18:17:15 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 22:01:11 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void	get_file_error(char *file, char **msg, int *exit_code)
-{	
+{
 	struct stat	st;
 
 	if (stat(file, &st) != 0)

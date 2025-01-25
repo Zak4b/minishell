@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 15:43:46 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 22:01:28 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	open_redirection(t_vars *vars, t_token_type type, t_token **tok_lst)
 {
 	int		fd;
 	int		flags;
-	char 	*name;
+	char	*name;
 	bool	has_quote;
 
 	name = build_word(vars, tok_lst, &has_quote);
