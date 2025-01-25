@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/25 16:37:13 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 18:58:19 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,11 @@ int	ft_exit(t_vars *vars, t_exec *data)
 	exit_code = vars->exit_code;
 	if (data->fd_out != 1)
 		close(data->fd_out);
-	if (data->argc == 2)
+	if (data->argc > 1 && !parse_exit_code(data->args[1], &exit_code))
 	{
-		if (!parse_exit_code(data->args[1], &exit_code))
-			ft_fprintf(2, "exit: %s: numeric argument required\n",
-				data->args[1]);
+		ft_fprintf(2, "exit: %s: numeric argument required\n",
+			data->args[1]);
+		exit_code = FAILURE;
 	}
 	else if (data->argc > 2)
 	{
