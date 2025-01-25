@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:34:03 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/25 11:26:14 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 14:24:26 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,44 +29,29 @@ int	signal_heredoc(t_vars *vars)
 	return (1);
 }
 
-int		heredoc_delimiter(t_vars *vars, char *delimiter, char **new_delimiter)
+void	heredoc_child(t_vars *vars, char *name, char *delimiter, bool eval_vars)
 {
-	if (ft_strchr(delimiter, '\'') || ft_strchr(delimiter, '\"'))
-	{
-		*new_delimiter = eval_string(vars, delimiter);
-		return (1);
-	}
-	*new_delimiter = delimiter;
-	return (0);
-}
-
-void	heredoc_child(char *delimiter, char *name, t_vars *vars)
-{
-	char	*line;
 	int		fd;
-	char	*new_delimiter;
-	int		has_quote;
+	char	*line;
 
 	free_exec(vars->exec_data);
 	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	free(name);
-	has_quote = heredoc_delimiter(vars, delimiter, &new_delimiter);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strcmp(line, new_delimiter) == 0 || g_nal == SIGINT)
+		if (!line || ft_strcmp(line, delimiter) == 0 || g_nal == SIGINT)
 		{
 			free(line);
 			break ;
 		}
-		if (has_quote)
+		if (eval_vars)
 			ftf_print_var(fd, line, vars);
 		else
 			ft_fprintf(fd, "%s\n", line);
 		free(line);
 	}
-	if (has_quote)
-		free(new_delimiter);
+	free(delimiter);
 	close(fd);
 	clean_exit(vars, 0);
 }
@@ -91,7 +76,7 @@ void	heredoc_killer(int nbheredoc)
 	}
 }
 
-int	heredoc(char *delimiter, t_vars *vars)
+int	heredoc(t_vars *vars, char *delimiter, bool eval_vars)
 {
 	int		fd;
 	pid_t	pid;
@@ -103,7 +88,7 @@ int	heredoc(char *delimiter, t_vars *vars)
 	free(number);
 	pid = fork();
 	if (pid == 0 && signal_heredoc(vars))
-		heredoc_child(delimiter, name, vars);
+		heredoc_child(vars, name, delimiter, eval_vars);
 	waitpid(pid, 0, 0);
 	if (g_nal != SIGINT)
 	{

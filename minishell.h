@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/24 12:27:50 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/25 14:23:56 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ t_token		*tokenize(char *input);
 void		token_append(t_token **lst, t_token_type type, char *value);
 void		clear_token_list(t_token **t);
 
-char		*eval_string(t_vars *vars, char *str);
+char		*eval_string(t_vars *vars, char *str, bool *has_quote);
 
 char		*search_path(t_vars *vars, char *cmd);
 int			correct_path(t_vars *vars, char *cmd);
@@ -120,7 +120,7 @@ int			ft_unset(t_vars *vars, t_exec *data);
 
 int			start_signal(t_vars *vars);
 int			stop_signal(t_vars *vars);
-int			heredoc(char *delimiter, t_vars *vars);
+int			heredoc(t_vars *vars, char *delimiter, bool eval_vars);
 void		heredoc_killer(int nbheredoc);
 int			check(t_token *tok_list);
 bool		is_redirection(t_token t);

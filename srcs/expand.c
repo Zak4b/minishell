@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:32:57 by asene             #+#    #+#             */
-/*   Updated: 2025/01/24 12:27:43 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/25 14:37:09 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*replace_vars(t_vars *vars, char *str)
 	return (ft_lstclear(&lst, NULL), free_split(array), result);
 }
 
-char	*eval_string(t_vars *vars, char *str)
+char	*eval_string(t_vars *vars, char *str, bool *has_quote)
 {
 	char	*p;
 	char	*res;
@@ -90,6 +90,8 @@ char	*eval_string(t_vars *vars, char *str)
 		res = ft_strdup(str);
 	else
 		res = replace_vars(vars, str);
+	if (has_quote)
+		*has_quote = (quote != 0);
 	if (p)
 		free (p);
 	return (res);
@@ -100,6 +102,6 @@ void	ftf_print_var(int fd, char *content, t_vars *vars)
 	char	*replaced;
 
 	replaced = replace_vars(vars, content);
-	ft_fprintf(fd, "%s\n", content);
+	ft_fprintf(fd, "%s\n", replaced);
 	free(replaced);
 }
