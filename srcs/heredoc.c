@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:34:03 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/25 14:24:26 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 15:47:10 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,18 +88,18 @@ int	heredoc(t_vars *vars, char *delimiter, bool eval_vars)
 	free(number);
 	pid = fork();
 	if (pid == 0 && signal_heredoc(vars))
+	{
+		ft_lstclear(vars->tmp, free);
 		heredoc_child(vars, name, delimiter, eval_vars);
+	}
 	waitpid(pid, 0, 0);
+	fd = -1;
 	if (g_nal != SIGINT)
 	{
 		fd = open(name, O_RDONLY, 0644);
 		vars->nbheredoc++;
 	}
 	else
-	{
-		fd = -1;
 		unlink(name);
-	}
-	free(name);
-	return (fd);
+	return (free(name), fd);
 }

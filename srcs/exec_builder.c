@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 14:42:22 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 15:43:46 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,10 @@ t_exec	*build_exec(t_vars *vars, t_token *tok_lst, t_exec **data, t_exec *prev)
 	t_list	*lst;
 
 	lst = NULL;
+	vars->tmp = &lst;
 	*data = ft_calloc(1, sizeof(t_exec));
 	**data = (t_exec){NULL, NULL, 0, 0, 1, NULL, NULL};
-	if (prev)
-		(*data)->prev = prev;
+	(*data)->prev = prev;
 	while (tok_lst && ! is_limit_token(*tok_lst))
 	{
 		if (tok_lst->type == TOKEN_WORD)
@@ -119,8 +119,7 @@ t_exec	*build_exec(t_vars *vars, t_token *tok_lst, t_exec **data, t_exec *prev)
 	}
 	(*data)->args = (char **)ft_lst_to_array(lst);
 	ft_lstclear(&lst, NULL);
-	if ((*data)->args[0])
-		(*data)->path = search_path(vars, (*data)->args[0]);
+	(*data)->path = search_path(vars, (*data)->args[0]);
 	if (tok_lst && tok_lst->type == TOKEN_PIPE)
 		build_exec(vars, tok_lst->next, &(*data)->pipe, *data);
 	return ((*data)->argc = count_line((*data)->args), *data);
