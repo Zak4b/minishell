@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 15:44:22 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 17:05:34 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int			check(t_token *tok_list);
 bool		is_redirection(t_token t);
 bool		is_limit_token(t_token t);
 char		*token_str(t_token *t);
-int			exec_error(char *input);
+int			exec_error(t_vars *vars, t_exec *data);
 
 void		file_error(char *file);
 void		syntaxe_error(t_token *token);

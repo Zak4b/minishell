@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/16 15:56:33 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 18:22:09 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*search_path(t_vars *vars, char *cmd)
 
 	if (cmd == NULL)
 		return (NULL);
-	if (access(cmd, F_OK | X_OK) == 0 && ft_strchr(cmd, '/'))
+	if (access(cmd, F_OK) == 0 && ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
 	env_path = getenv_value(vars, "PATH");
 	if (!env_path)

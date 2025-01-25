@@ -6,47 +6,61 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 21:45:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/23 13:40:11 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 18:17:15 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exec_error(char *input)
-{
-	char		*msg;
+void	get_file_error(char *file, char **msg, int *exit_code)
+{	
 	struct stat	st;
-	int			error;
 
-	error = NOT_FOUND;
-	if (ft_strchr(input, '/'))
+	if (stat(file, &st) != 0)
 	{
-		if (stat(input, &st) != 0)
-			msg = "No such file or directory";
-		else
-		{
-			error = FILE_ERROR;
-			if (S_ISDIR(st.st_mode))
-				msg = "Is a directory";
-			else
-				msg = "Permission denied";
-		}
-		ft_fprintf(2, "minishell: %s: %s\n", input, msg);
+		if (exit_code)
+			*exit_code = NOT_FOUND;
+		if (msg)
+			*msg = "No such file or directory";
 	}
 	else
-		ft_fprintf(2, "%s: command not found\n", input);
-	return (error);
+	{
+		if (exit_code)
+			*exit_code = FILE_ERROR;
+		if (msg)
+		{
+			if (S_ISDIR(st.st_mode))
+				*msg = "Is a directory";
+			else
+				*msg = "Permission denied";
+		}
+	}
 }
 
 void	file_error(char *file)
 {
 	char	*msg;
 
-	if (access(file, F_OK) == 0)
-		msg = "Permission denied";
-	else
-		msg = "No such file or directory";
+	get_file_error(file, &msg, NULL);
 	ft_fprintf(2, "minishell: %s: %s\n", file, msg);
+	free(msg);
+}
+
+int	exec_error(t_vars *vars, t_exec *data)
+{
+	char		*msg;
+	char		*path;
+	int			error;
+
+	error = NOT_FOUND;
+	path = getenv_value(vars, "PATH");
+	if (path && !data->path)
+		msg = "command not found";
+	else
+		get_file_error(data->args[0], &msg, &error);
+	free(path);
+	ft_fprintf(2, "minishell: %s: %s\n", data->args[0], msg);
+	return (error);
 }
 
 void	syntaxe_error(t_token *token)

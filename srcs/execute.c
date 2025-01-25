@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 15:00:20 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 18:12:20 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,14 @@ void	exec_cmd(t_vars *vars, t_exec *data)
 		close(data->fd_in);
 	if (dup2(data->fd_out, 1) != 1)
 		close(data->fd_out);
-	env = build_env(vars);
-	execve(data->path, data->args, env);
-	free_split(env);
-	exit = exec_error(data->args[0]);
+	if (data->path)
+	{
+		env = build_env(vars);
+		execve(data->path, data->args, env);
+		free_split(env);
+	
+	}
+	exit = exec_error(vars, data);
 	free_exec(vars->exec_data);
 	clean_exit(vars, exit);
 }
