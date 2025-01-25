@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:34:32 by asene             #+#    #+#             */
-/*   Updated: 2025/01/22 15:15:27 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/25 15:51:00 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	ft_export(t_vars *vars, t_exec *data)
 				data->args[i]);
 			exit_code = 1;
 		}
-		else
+		else if (strchr(data->args[i], '='))
 			set_env(vars, key_value[0], key_value[1]);
 		free_split(key_value);
 		i++;
