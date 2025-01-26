@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 11:26:31 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/26 19:11:50 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 19:35:04 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,19 @@ t_token	*next_token(t_token *tok_list)
 	return (tok_list);
 }
 
+bool	check_open_quote(t_token *token)
+{
+	size_t	len;
+
+	len = ft_strlen(token->value);
+	if (ft_strchr("'\"", token->value[0]))
+	{
+		if (token->value[len - 1] != token->value[0])
+			return (false);
+	}
+	return (true);
+}
+
 bool	check(t_token *tok_list)
 {
 	t_token	*next;
@@ -39,7 +52,11 @@ bool	check(t_token *tok_list)
 			|| (is_limit_token(*tok_list)
 				&& (!next || is_limit_token(*next))))
 			return (syntaxe_error(next), false);
+		if (next == NULL)
+			break ;
 		tok_list = next;
 	}
+	if (tok_list->type == TOKEN_WORD && !check_open_quote(tok_list))
+			return (syntaxe_error(tok_list), false);
 	return (true);
 }
