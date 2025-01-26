@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 17:05:34 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 18:31:17 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_exec		*build_exec(t_vars *vars, t_token *tok_lst,
 				t_exec **data, t_exec *prev);
 void		free_exec(t_exec *data);
 
-int			is_builtin(char *cmd);
+bool		is_builtin(char *cmd);
 int			exec_builtin(t_vars *vars, t_exec *data);
 int			execute(t_vars *vars);
 bool		parse_exit_code(char *str, int *dest);
@@ -123,7 +123,7 @@ int			start_signal(t_vars *vars);
 int			stop_signal(t_vars *vars);
 int			heredoc(t_vars *vars, char *delimiter, bool eval_vars);
 void		heredoc_killer(int nbheredoc);
-int			check(t_token *tok_list);
+bool		check(t_token *tok_list);
 bool		is_redirection(t_token t);
 bool		is_limit_token(t_token t);
 char		*token_str(t_token *t);
@@ -131,7 +131,7 @@ int			exec_error(t_vars *vars, t_exec *data);
 
 void		file_error(char *file);
 void		syntaxe_error(t_token *token);
-int			is_echo_option(char *option);
+bool		is_echo_option(char *option);
 void		ftf_print_var(int fd, char *content, t_vars *vars);
 
 #endif

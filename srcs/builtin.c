@@ -6,29 +6,29 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 23:34:33 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/25 18:58:19 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 18:36:25 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	dest_for_cd(t_vars *vars, t_exec *data, char **dest)
+bool	dest_for_cd(t_vars *vars, t_exec *data, char **dest)
 {
 	if (data->argc == 1 || ft_strcmp(data->args[1], "~") == 0)
 	{
 		*dest = getenv_value(vars, "HOME");
 		if (*dest == NULL)
-			return (ft_fprintf(2, "cd: HOME not set\n"), 1);
+			return (ft_fprintf(2, "cd: HOME not set\n"), true);
 	}
 	else if (ft_strcmp(data->args[1], "-") == 0)
 	{
 		*dest = getenv_value(vars, "OLDPWD");
 		if (*dest == NULL)
-			return (ft_fprintf(2, "cd: OLDPWD not set\n"), 1);
+			return (ft_fprintf(2, "cd: OLDPWD not set\n"), true);
 	}
 	else
 		*dest = ft_strdup(data->args[1]);
-	return (0);
+	return (false);
 }
 
 int	ft_cd(t_vars *vars, t_exec *data)

@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/26 18:16:35 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 18:29:46 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	open_redirection(t_vars *vars, t_token_type type, t_token **tok_lst)
 	return (fd);
 }
 
-void	handle_redirect(t_vars *vars, t_exec *data, t_token **tok_lst)
+bool	handle_redirect(t_vars *vars, t_exec *data, t_token **tok_lst)
 {
 	int		fd;
 	t_token	current;
@@ -98,6 +98,7 @@ void	handle_redirect(t_vars *vars, t_exec *data, t_token **tok_lst)
 			close(data->fd_in);
 		data->fd_in = fd;
 	}
+	return (fd != -1);
 }
 
 t_exec	*build_exec(t_vars *vars, t_token *tok_lst, t_exec **data, t_exec *prev)

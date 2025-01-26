@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:36:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/23 16:31:43 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 18:30:59 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ int	(*get_builtin(char *cmd))(t_vars *vars, t_exec *data)
 	return (NULL);
 }
 
-int	is_builtin(char *cmd)
+bool	is_builtin(char *cmd)
 {
 	return (!!(get_builtin(cmd)));
 }
 
-int	is_echo_option(char *option)
+bool	is_echo_option(char *option)
 {
 	int	len;
 	int	i;
@@ -55,9 +55,9 @@ int	is_echo_option(char *option)
 				i++;
 			}
 		}
-		return (0);
+		return (false);
 	}
-	return (1);
+	return (true);
 }
 
 int	exec_builtin(t_vars *vars, t_exec *data)
