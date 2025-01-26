@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 22:01:28 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 18:16:35 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ int	open_redirection(t_vars *vars, t_token_type type, t_token **tok_lst)
 			flags = O_RDONLY;
 		fd = open(name, flags, 0644);
 	}
+	if (fd == -1)
+		file_error(name);
 	free(name);
 	return (fd);
 }
@@ -84,8 +86,6 @@ void	handle_redirect(t_vars *vars, t_exec *data, t_token **tok_lst)
 	current = **tok_lst;
 	(*tok_lst) = (*tok_lst)->next;
 	fd = open_redirection(vars, current.type, tok_lst);
-	if (fd == -1)
-		file_error((*tok_lst)->value);
 	if (current.type == TOKEN_REDIRECT_OUT || current.type == TOKEN_APPEND)
 	{
 		if (data->fd_out != 1)

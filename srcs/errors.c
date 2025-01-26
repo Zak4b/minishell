@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 21:45:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 22:01:11 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 18:22:14 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	file_error(char *file)
 
 	get_file_error(file, &msg, NULL);
 	ft_fprintf(2, "minishell: %s: %s\n", file, msg);
-	free(msg);
 }
 
 int	exec_error(t_vars *vars, t_exec *data)
