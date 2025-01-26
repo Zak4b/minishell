@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 09:54:06 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/25 18:22:09 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 19:10:29 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,4 @@ char	*search_path(t_vars *vars, char *cmd)
 		free(path);
 	}
 	return (free_split(split), NULL);
-}
-
-int	correct_path(t_vars *vars, char *cmd)
-{
-	int		valid;
-	char	*res;
-
-	res = search_path(vars, cmd);
-	valid = !!res;
-	free(res);
-	return (valid);
 }

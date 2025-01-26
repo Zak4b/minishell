@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/26 18:31:17 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 19:12:25 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,9 @@ void		token_append(t_token **lst, t_token_type type, char *value);
 void		clear_token_list(t_token **t);
 
 char		*eval_string(t_vars *vars, char *str, bool *has_quote);
+char		*replace_vars(t_vars *vars, char *str);
 
 char		*search_path(t_vars *vars, char *cmd);
-int			correct_path(t_vars *vars, char *cmd);
 
 void		parse_env(char **env, t_vars *vars);
 char		*getenv_value(t_vars *vars, char *key);
@@ -132,6 +132,5 @@ int			exec_error(t_vars *vars, t_exec *data);
 void		file_error(char *file);
 void		syntaxe_error(t_token *token);
 bool		is_echo_option(char *option);
-void		ftf_print_var(int fd, char *content, t_vars *vars);
 
 #endif

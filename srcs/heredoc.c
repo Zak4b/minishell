@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:34:03 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/25 15:47:10 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 18:54:02 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	heredoc_child(t_vars *vars, char *name, char *delimiter, bool eval_vars)
 {
 	int		fd;
 	char	*line;
+	char	*tmp;
 
 	free_exec(vars->exec_data);
 	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -46,14 +47,15 @@ void	heredoc_child(t_vars *vars, char *name, char *delimiter, bool eval_vars)
 			break ;
 		}
 		if (eval_vars)
-			ftf_print_var(fd, line, vars);
-		else
-			ft_fprintf(fd, "%s\n", line);
+		{
+			tmp = replace_vars(vars, line);
+			free(line);
+			line = tmp;
+		}
+		ft_fprintf(fd, "%s\n", line);
 		free(line);
 	}
-	free(delimiter);
-	close(fd);
-	clean_exit(vars, 0);
+	return (free(delimiter), close(fd), clean_exit(vars, 0));
 }
 
 void	heredoc_killer(int nbheredoc)

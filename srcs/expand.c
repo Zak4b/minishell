@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:32:57 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 14:37:09 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/26 19:08:18 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,4 @@ char	*eval_string(t_vars *vars, char *str, bool *has_quote)
 	if (p)
 		free (p);
 	return (res);
-}
-
-void	ftf_print_var(int fd, char *content, t_vars *vars)
-{
-	char	*replaced;
-
-	replaced = replace_vars(vars, content);
-	ft_fprintf(fd, "%s\n", replaced);
-	free(replaced);
 }
