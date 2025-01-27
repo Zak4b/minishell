@@ -6,15 +6,27 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:34:03 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/27 13:47:17 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/27 15:41:28 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	empty_event(void)
+{
+	return (0);
+}
+
+void	handle_herdoc(int sig)
+{
+	g_nal = sig;
+	if (sig == SIGINT)
+		rl_done = 1;
+}
+
 int	signal_heredoc(t_vars *vars)
 {
-	vars->sa.sa_handler = SIG_DFL;
+	vars->sa.sa_handler = handle_herdoc;
 	if (sigaction(SIGINT, &vars->sa, NULL) == -1)
 	{
 		perror("sigaction");
@@ -35,9 +47,7 @@ void	heredoc_child(t_vars *vars, char *name, char *delimiter, bool eval_vars)
 	char	*line;
 	char	*tmp;
 
-	free_exec(vars->exec_data);
 	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	free(name);
 	while (1)
 	{
 		line = readline("> ");
@@ -55,7 +65,7 @@ void	heredoc_child(t_vars *vars, char *name, char *delimiter, bool eval_vars)
 		ft_fprintf(fd, "%s\n", line);
 		free(line);
 	}
-	return (free(delimiter), close(fd), clean_exit(vars, 0));
+	close(fd);
 }
 
 void	heredoc_killer(int nbheredoc)
@@ -81,20 +91,15 @@ void	heredoc_killer(int nbheredoc)
 int	heredoc(t_vars *vars, char *delimiter, bool eval_vars)
 {
 	int		fd;
-	pid_t	pid;
 	char	*name;
 	char	*number;
 
 	number = ft_itoa(vars->nbheredoc);
 	name = ft_strjoin(".heredoc", number);
 	free(number);
-	pid = fork();
-	if (pid == 0 && signal_heredoc(vars))
-	{
-		ft_lstclear(vars->tmp, free);
-		heredoc_child(vars, name, delimiter, eval_vars);
-	}
-	waitpid(pid, 0, 0);
+	rl_event_hook = empty_event;
+	signal_heredoc(vars);
+	heredoc_child(vars, name, delimiter, eval_vars);
 	fd = -1;
 	if (g_nal != SIGINT)
 	{
@@ -103,5 +108,6 @@ int	heredoc(t_vars *vars, char *delimiter, bool eval_vars)
 	}
 	else
 		unlink(name);
+	rl_event_hook = NULL;
 	return (free(name), fd);
 }
