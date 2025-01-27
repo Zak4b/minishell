@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/27 13:50:15 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/27 15:38:15 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,6 @@ int	run_cmd(t_vars *vars, t_exec *data, bool need_fork)
 	int		status;
 	pid_t	pid;
 
-	if (data->fd_in == -1 || data->fd_out == -1)
-	{
-		if (!need_fork)
-			free_exec(vars->exec_data);
-		return (1);
-	}
 	if (is_builtin(data->args[0]))
 		return (exec_builtin(vars, data));
 	else
@@ -105,11 +99,16 @@ int	execute(t_vars *vars)
 	vars->exec_data = NULL;
 	vars->nbheredoc = 0;
 	stop_signal(vars);
-	build_exec(vars, vars->token_list, &vars->exec_data, NULL);
-	if (!vars->exec_data->args[0] || g_nal == SIGINT)
-		return (start_signal(vars), free_exec(vars->exec_data)
-			, vars->exit_code);
-	if (vars->exec_data->pipe)
+	if (!build_exec(vars, vars->token_list, &vars->exec_data, NULL))
+	{
+		if (g_nal == SIGINT)
+			exit_code = 128 + SIGINT;
+		else
+			exit_code = FAILURE;
+	}
+	else if (!vars->exec_data->args[0])
+		exit_code = vars->exit_code;
+	else if (vars->exec_data->pipe)
 		exit_code = get_exit_code(execute_pipeline(vars, vars->exec_data, 0));
 	else
 		exit_code = run_cmd(vars, vars->exec_data, true);

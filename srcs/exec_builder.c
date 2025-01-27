@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/27 13:46:21 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/27 15:37:21 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	free_exec(t_exec *data)
 {
+	if (!data)
+		return ;
 	if (data->path)
 		free(data->path);
 	if (data->args)
@@ -115,13 +117,15 @@ t_exec	*build_exec(t_vars *vars, t_token *tok_lst, t_exec **data, t_exec *prev)
 		if (tok_lst->type == TOKEN_WORD)
 			ft_lstadd_back(&lst, ft_lstnew(build_word(vars, &tok_lst, NULL)));
 		else if (is_redirection(*tok_lst))
-			handle_redirect(vars, *data, &tok_lst);
+			if (!handle_redirect(vars, *data, &tok_lst))
+				return (ft_lstclear(&lst, free), free(*data), *data = NULL);
 		tok_lst = tok_lst->next;
 	}
 	(*data)->args = (char **)ft_lst_to_array(lst);
 	ft_lstclear(&lst, NULL);
 	(*data)->path = search_path(vars, (*data)->args[0]);
 	if (tok_lst && tok_lst->type == TOKEN_PIPE)
-		build_exec(vars, tok_lst->next, &(*data)->pipe, *data);
+		if (!build_exec(vars, tok_lst->next, &(*data)->pipe, *data))
+			return (free_exec(*data), NULL);
 	return ((*data)->argc = count_line((*data)->args), *data);
 }
