@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 22:01:44 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/27 13:50:15 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,11 @@ int	execute(t_vars *vars)
 
 	vars->exec_data = NULL;
 	vars->nbheredoc = 0;
-	build_exec(vars, vars->token_list, &vars->exec_data, NULL);
-	if (!vars->exec_data->args[0])
-		return (free_exec(vars->exec_data), vars->exit_code);
 	stop_signal(vars);
+	build_exec(vars, vars->token_list, &vars->exec_data, NULL);
+	if (!vars->exec_data->args[0] || g_nal == SIGINT)
+		return (start_signal(vars), free_exec(vars->exec_data)
+			, vars->exit_code);
 	if (vars->exec_data->pipe)
 		exit_code = get_exit_code(execute_pipeline(vars, vars->exec_data, 0));
 	else

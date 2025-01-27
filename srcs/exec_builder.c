@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/26 18:29:46 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/27 13:46:21 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	open_redirection(t_vars *vars, t_token_type type, t_token **tok_lst)
 			flags = O_RDONLY;
 		fd = open(name, flags, 0644);
 	}
-	if (fd == -1)
+	if (fd == -1 && type != TOKEN_HEREDOC)
 		file_error(name);
 	free(name);
 	return (fd);

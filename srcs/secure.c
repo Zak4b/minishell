@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   secure.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 11:26:31 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/26 19:35:04 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/27 13:50:44 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ bool	check(t_token *tok_list)
 		tok_list = next;
 	}
 	if (tok_list->type == TOKEN_WORD && !check_open_quote(tok_list))
-			return (syntaxe_error(tok_list), false);
+		return (syntaxe_error(tok_list), false);
 	return (true);
 }
