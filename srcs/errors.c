@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 21:45:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/26 18:22:14 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/27 14:02:01 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	exec_error(t_vars *vars, t_exec *data)
 
 	error = NOT_FOUND;
 	path = getenv_value(vars, "PATH");
-	if (path && !data->path)
+	if (!ft_strchr(data->args[0], '/') && path && !data->path)
 		msg = "command not found";
 	else
 		get_file_error(data->args[0], &msg, &error);
