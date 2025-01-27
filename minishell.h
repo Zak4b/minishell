@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/27 13:11:22 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/27 15:50:23 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,5 +133,6 @@ void		file_error(char *file);
 void		syntaxe_error(t_token *token);
 bool		is_echo_option(char *option);
 void		catch_sign(int sign);
+void		handle_heredoc(int sig);
 
 #endif

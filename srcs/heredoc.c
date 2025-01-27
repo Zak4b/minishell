@@ -6,7 +6,7 @@
 /*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:34:03 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/27 15:41:28 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/01/27 15:50:05 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,9 @@ int	empty_event(void)
 	return (0);
 }
 
-void	handle_herdoc(int sig)
-{
-	g_nal = sig;
-	if (sig == SIGINT)
-		rl_done = 1;
-}
-
 int	signal_heredoc(t_vars *vars)
 {
-	vars->sa.sa_handler = handle_herdoc;
+	vars->sa.sa_handler = handle_heredoc;
 	if (sigaction(SIGINT, &vars->sa, NULL) == -1)
 	{
 		perror("sigaction");

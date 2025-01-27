@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/27 15:47:37 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/27 15:52:31 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ int	execute(t_vars *vars)
 	if (!build_exec(vars, vars->token_list, &vars->exec_data, NULL))
 	{
 		if (g_nal == SIGINT)
+		{
 			exit_code = 128 + SIGINT;
+			g_nal = 0;
+		}
 		else
 			exit_code = FAILURE;
 	}

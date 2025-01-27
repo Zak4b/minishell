@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
+/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 09:30:16 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/22 22:20:21 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/27 15:50:12 by rsebasti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ void	handle_signal(int sign)
 void	catch_sign(int sign)
 {
 	g_nal = sign;
+}
+
+void	handle_heredoc(int sig)
+{
+	g_nal = sig;
+	if (sig == SIGINT)
+		rl_done = 1;
 }
 
 int	start_signal(t_vars *vars)
