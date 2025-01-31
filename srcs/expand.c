@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:32:57 by asene             #+#    #+#             */
-/*   Updated: 2025/01/26 19:08:18 by asene            ###   ########.fr       */
+/*   Updated: 2025/01/31 16:22:51 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,8 @@ char	*grab_var_name(char **p)
 	if (**p == '?')
 		return ((*p)++, ft_strdup("?"));
 	i = 0;
-	while ((*p)[i])
-	{
-		if (ft_isspace((*p)[i]) || ft_strchr("$|<>/\"'", (*p)[i]))
-			break ;
+	while ((*p)[i] && (isalnum((*p)[i]) || (*p)[i] == '_'))
 		i++;
-	}
 	return (res = ft_substr(*p, 0, i), *p += i, res);
 }
 
