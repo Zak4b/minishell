@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   secure.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 11:26:31 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/27 13:50:44 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/02/01 00:19:10 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ bool	check_open_quote(t_token *token)
 	len = ft_strlen(token->value);
 	if (ft_strchr("'\"", token->value[0]))
 	{
-		if (token->value[len - 1] != token->value[0])
+		if (token->value[len - 1] != token->value[0]
+			|| ft_strlen(token->value) == 1)
 			return (false);
 	}
 	return (true);

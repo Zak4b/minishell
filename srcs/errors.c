@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 21:45:51 by asene             #+#    #+#             */
-/*   Updated: 2025/01/27 14:02:01 by asene            ###   ########.fr       */
+/*   Updated: 2025/02/01 00:20:01 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,6 @@ int	exec_error(t_vars *vars, t_exec *data)
 
 void	syntaxe_error(t_token *token)
 {
-	ft_fprintf(2, "minishell: syntax error near unexpected token `%s'\n",
+	ft_fprintf(2, "minishell: syntax error near unexpected token '%s'\n",
 		token_str(token));
 }
