@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_conversion.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 16:09:56 by rsebasti          #+#    #+#             */
-/*   Updated: 2025/01/16 15:54:37 by asene            ###   ########.fr       */
+/*   Updated: 2025/02/18 14:12:36 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,6 @@ void	parse_env(char **env, t_vars *vars)
 	vars->env = env_lst;
 }
 
-char	*getenv_value(t_vars *vars, char *key)
-{
-	t_list	*env;
-
-	if (key == NULL)
-		return (NULL);
-	else if (ft_strcmp(key, "?") == 0)
-		return (ft_itoa(vars->exit_code));
-	env = vars->env;
-	while (env)
-	{
-		if (strcmp(((char **)env->content)[0], key) == 0)
-			return (ft_strdup(((char **)(env->content))[1]));
-		env = env->next;
-	}
-	return (NULL);
-}
-
 char	**build_env(t_vars *vars)
 {
 	int		i;
@@ -66,56 +48,4 @@ char	**build_env(t_vars *vars)
 		env = env->next;
 	}
 	return (res);
-}
-
-void	set_env(t_vars *vars, char *key, char *value)
-{
-	t_list	*env;
-	char	**content;
-
-	if (value == NULL)
-		value = "";
-	env = vars->env;
-	while (env)
-	{
-		content = (char **)env->content;
-		if (ft_strcmp(content[0], key) == 0)
-		{
-			if (content[1] != NULL)
-				free(content[1]);
-			content[1] = ft_strdup(value);
-			return ;
-		}
-		env = env->next;
-	}
-	content = ft_calloc(3, sizeof(char *));
-	content[0] = ft_strdup(key);
-	content[1] = ft_strdup(value);
-	ft_lstadd_back(&vars->env, ft_lstnew(content));
-}
-
-void	unset_env(t_vars *vars, char *key)
-{
-	t_list	*env;
-	t_list	*prev;
-	char	**content;
-
-	env = vars->env;
-	prev = NULL;
-	while (env)
-	{
-		content = env->content;
-		if (ft_strcmp(content[0], key) == 0)
-		{
-			if (prev)
-				prev->next = env->next;
-			else
-				vars->env = env->next;
-			free_split(content);
-			free(env);
-			break ;
-		}
-		prev = env;
-		env = env->next;
-	}
 }

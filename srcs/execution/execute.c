@@ -3,17 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 15:56:53 by asene             #+#    #+#             */
-/*   Updated: 2025/01/27 15:52:31 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:38:30 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
+// return exit code from waitpid status
+static int	get_exit_code(int status)
+{
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
+}
+
 // execve || exit
-void	exec_cmd(t_vars *vars, t_exec *data)
+static void	exec_cmd(t_vars *vars, t_exec *data)
 {
 	char	**env;
 	int		exit;
@@ -52,44 +62,6 @@ int	run_cmd(t_vars *vars, t_exec *data, bool need_fork)
 		waitpid(pid, &status, 0);
 		return (get_exit_code(status));
 	}
-}
-
-void	child_process(t_vars *vars, t_exec *data, int *fds)
-{
-	int	exit_code;
-
-	if (fds[0])
-		close(fds[0]);
-	exit_code = run_cmd(vars, data, false);
-	clean_exit(vars, exit_code);
-}
-
-int	execute_pipeline(t_vars *vars, t_exec *data, int input_fd)
-{
-	pid_t	pid;
-	int		fds[2];
-	int		status;
-
-	fds[0] = 0;
-	if (data->pipe)
-	{
-		pipe(fds);
-		if (isatty(data->fd_out))
-			data->fd_out = fds[1];
-		if (isatty(data->pipe->fd_in))
-			data->pipe->fd_in = fds[0];
-	}
-	pid = fork();
-	if (pid == 0)
-		child_process(vars, data, fds);
-	if (!isatty(input_fd))
-		close(input_fd);
-	if (data->pipe == NULL)
-		return (waitpid(pid, &status, 0), status);
-	close(fds[1]);
-	status = execute_pipeline(vars, data->pipe, fds[0]);
-	waitpid(pid, NULL, 0);
-	return (status);
 }
 
 int	execute(t_vars *vars)

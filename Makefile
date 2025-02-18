@@ -11,25 +11,9 @@ LIB = -L/opt/homebrew/opt/readline/lib -lreadline -L./libft/ -lft
 
 FLAGS = -Wall -Wextra -Werror -g
 
-SOURCES = \
-        main.c \
-		prompt.c \
-		token.c \
-		token_utils.c \
-		utils.c \
-		pathfinder.c \
-		signal.c \
-		builtin.c \
-		builtin_env.c \
-		builtin_utils.c \
-		exec_builder.c \
-		secure.c \
-		execute.c \
-		heredoc.c \
-		env.c \
-		expand.c \
-		errors.c
+SOURCES = ./builtins/builtin_utils.c ./builtins/cd.c ./builtins/echo.c ./builtins/env.c ./builtins/exit.c ./builtins/export.c ./builtins/pwd.c ./builtins/unset.c ./env/env_conversion.c ./env/getenv_value.c ./env/path.c ./env/set_env.c ./env/unset_env.c ./errors.c ./execution/exec_builder.c ./execution/execute.c ./execution/execute_pipeline.c ./execution/free_exec.c ./expand.c ./heredoc.c ./main.c ./prompt.c ./signal.c ./syntaxe.c ./tokens/clear_token_list.c ./tokens/tokenize.c ./tokens/token_utils.c ./utils.c 
 
+SRCDIR = srcs
 OBJDIR = obj
 OBJS = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
 
@@ -44,10 +28,8 @@ $(LIBFT):
 
 all: $(NAME)
 
-$(OBJDIR):
-	@mkdir -p $(OBJDIR)
-
-$(OBJDIR)/%.o: srcs/%.c | $(OBJDIR)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(dir $@)
 	@cc $(FLAGS) $(INC) -c $< -o $@
 
 norm:

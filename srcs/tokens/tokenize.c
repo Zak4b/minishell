@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
+/*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:46:54 by asene             #+#    #+#             */
-/*   Updated: 2025/01/23 17:00:51 by asene            ###   ########.fr       */
+/*   Updated: 2025/02/18 14:24:38 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	token_append(t_token **lst, t_token_type type, char *value)
+static int	skip_spaces(char **str)
 {
-	t_token	*e;
-	t_token	*last;
-
-	e = ft_calloc(1, sizeof(t_token));
-	e->next = NULL;
-	e->type = type;
-	e->value = value;
-	if (*lst == NULL)
-		return (*lst = e, (void)0);
-	last = *lst;
-	while (last->next)
-		last = last->next;
-	last->next = e;
+	if (!ft_isspace(**str))
+		return (0);
+	while (**str && ft_isspace(**str))
+		(*str)++;
+	return (1);
 }
 
-char	*grab_word(char **p)
+static char	*grab_word(char **p)
 {
 	int		i;
 	char	quote;
@@ -51,7 +43,24 @@ char	*grab_word(char **p)
 	return (res = ft_substr(*p, 0, i), *p += i, res);
 }
 
-void	get_next_token(t_token **list, char **input)
+void	token_append(t_token **lst, t_token_type type, char *value)
+{
+	t_token	*e;
+	t_token	*last;
+
+	e = ft_calloc(1, sizeof(t_token));
+	e->next = NULL;
+	e->type = type;
+	e->value = value;
+	if (*lst == NULL)
+		return (*lst = e, (void)0);
+	last = *lst;
+	while (last->next)
+		last = last->next;
+	last->next = e;
+}
+
+static void	add_next_token(t_token **list, char **input)
 {
 	t_token_type	type;
 
@@ -88,24 +97,7 @@ t_token	*tokenize(char *input)
 		if (skip_spaces(&input))
 			token_append(&list, TOKEN_SPACE, NULL);
 		if (*input)
-			get_next_token(&list, (char **)&input);
+			add_next_token(&list, (char **)&input);
 	}
 	return (list);
-}
-
-void	clear_token_list(t_token **t)
-{
-	t_token	*next;
-
-	while (t && *t)
-	{
-		next = (*t)->next;
-		if ((*t)->value)
-		{
-			free((*t)->value);
-			(*t)->value = NULL;
-		}
-		free(*t);
-		*t = next;
-	}
 }

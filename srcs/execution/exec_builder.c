@@ -6,28 +6,11 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:45:46 by asene             #+#    #+#             */
-/*   Updated: 2025/01/27 15:37:21 by asene            ###   ########.fr       */
+/*   Updated: 2025/02/18 14:30:20 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-void	free_exec(t_exec *data)
-{
-	if (!data)
-		return ;
-	if (data->path)
-		free(data->path);
-	if (data->args)
-		free_split(data->args);
-	if (data->fd_out != 1 && data->fd_out != -1)
-		close(data->fd_out);
-	if (data->fd_in != 0 && data->fd_in != -1)
-		close(data->fd_in);
-	if (data->pipe)
-		free_exec(data->pipe);
-	free(data);
-}
 
 char	*build_word(t_vars *vars, t_token **lst, bool *has_quote)
 {

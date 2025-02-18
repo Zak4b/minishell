@@ -6,7 +6,7 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 16:49:58 by asene             #+#    #+#             */
-/*   Updated: 2025/01/21 22:29:29 by asene            ###   ########.fr       */
+/*   Updated: 2025/02/18 14:31:56 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,6 @@ int	count_line(char **str)
 	return (i);
 }
 
-int	skip_spaces(char **str)
-{
-	if (!ft_isspace(**str))
-		return (0);
-	while (**str && ft_isspace(**str))
-		(*str)++;
-	return (1);
-}
-
 char	*str_append(char **dest, char *next)
 {
 	unsigned int	new_len;
@@ -51,14 +42,4 @@ char	*str_append(char **dest, char *next)
 	free(*dest);
 	*dest = new_str;
 	return (new_str);
-}
-
-// return exit code from waitpid status
-int	get_exit_code(int status)
-{
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	else if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
 }

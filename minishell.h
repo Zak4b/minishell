@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsebasti <rsebasti@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 20:52:55 by asene             #+#    #+#             */
-/*   Updated: 2025/01/27 15:50:23 by rsebasti         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:48:18 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,7 @@ char		*readline_prompt(t_vars *vars, char **dest);
 
 void		clean_exit(t_vars *vars, int exit_code);
 int			count_line(char **str);
-int			skip_spaces(char **str);
 char		*str_append(char **dest, char *next);
-int			get_exit_code(int status);
 
 t_token		*tokenize(char *input);
 void		token_append(t_token **lst, t_token_type type, char *value);
@@ -98,6 +96,7 @@ char		*search_path(t_vars *vars, char *cmd);
 
 void		parse_env(char **env, t_vars *vars);
 char		*getenv_value(t_vars *vars, char *key);
+char		*get_var_string(t_vars *vars, char *var_name);
 char		**build_env(t_vars *vars);
 void		set_env(t_vars *vars, char *key, char *value);
 void		unset_env(t_vars *vars, char *key);
@@ -109,7 +108,8 @@ void		free_exec(t_exec *data);
 bool		is_builtin(char *cmd);
 int			exec_builtin(t_vars *vars, t_exec *data);
 int			execute(t_vars *vars);
-bool		parse_exit_code(char *str, int *dest);
+int			run_cmd(t_vars *vars, t_exec *data, bool need_fork);
+int			execute_pipeline(t_vars *vars, t_exec *data, int input_fd);
 
 int			ft_cd(t_vars *vars, t_exec *data);
 int			ft_export(t_vars *vars, t_exec *data);
@@ -131,7 +131,6 @@ int			exec_error(t_vars *vars, t_exec *data);
 
 void		file_error(char *file);
 void		syntaxe_error(t_token *token);
-bool		is_echo_option(char *option);
 void		catch_sign(int sign);
 void		handle_heredoc(int sig);
 

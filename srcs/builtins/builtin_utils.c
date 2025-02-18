@@ -6,12 +6,11 @@
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 21:36:48 by asene             #+#    #+#             */
-/*   Updated: 2025/01/26 18:30:59 by asene            ###   ########.fr       */
+/*   Updated: 2025/02/18 14:05:48 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <limits.h>
 
 int	(*get_builtin(char *cmd))(t_vars *vars, t_exec *data)
 {
@@ -37,29 +36,6 @@ bool	is_builtin(char *cmd)
 	return (!!(get_builtin(cmd)));
 }
 
-bool	is_echo_option(char *option)
-{
-	int	len;
-	int	i;
-
-	if (ft_strncmp(option, "-n", 2) == 0)
-	{
-		len = ft_strlen(option);
-		if (len != 2)
-		{
-			i = 2;
-			while (i < len)
-			{
-				if (option[i] != 'n')
-					return (1);
-				i++;
-			}
-		}
-		return (false);
-	}
-	return (true);
-}
-
 int	exec_builtin(t_vars *vars, t_exec *data)
 {
 	int		(*builtin)(t_vars *, t_exec *);
@@ -79,30 +55,4 @@ int	exec_builtin(t_vars *vars, t_exec *data)
 		clean_exit(vars, exit_code);
 	}
 	return (exit_code);
-}
-
-bool	parse_exit_code(char *str, int *dest)
-{
-	long	nb;
-	int		sign;
-
-	nb = 0;
-	sign = 1;
-	while (ft_isspace(*str))
-		str++;
-	if (*str == '-' || *str == '+')
-		if (*str++ == '-')
-			sign = -1;
-	if (!*str)
-		return (*dest = 2, false);
-	while (*str)
-	{
-		if (! ft_isdigit(*str) || nb > (LONG_MAX - (*str - '0')) / 10)
-			return (*dest = 2, false);
-		nb = nb * 10 + *str++ - '0';
-	}
-	*dest = nb * sign;
-	while (*dest < 0)
-		*dest += 256;
-	return (true);
 }

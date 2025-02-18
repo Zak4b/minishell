@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_env.c                                      :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asene <asene@student.42perpignan.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/07 21:34:32 by asene             #+#    #+#             */
-/*   Updated: 2025/01/25 15:51:00 by asene            ###   ########.fr       */
+/*   Created: 2025/02/18 13:58:18 by asene             #+#    #+#             */
+/*   Updated: 2025/02/18 14:22:42 by asene            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_valid_export(char **key_value)
+static bool	is_valid_export(char **key_value)
 {
 	int	i;
 
@@ -25,7 +25,7 @@ bool	is_valid_export(char **key_value)
 	return (true);
 }
 
-char	**parse_export_arg(char *arg)
+static char	**parse_export_arg(char *arg)
 {
 	char	*equal;
 	char	**key_value;
@@ -70,32 +70,4 @@ int	ft_export(t_vars *vars, t_exec *data)
 		i++;
 	}
 	return (exit_code);
-}
-
-int	ft_env(t_vars *vars, t_exec *data)
-{
-	t_list	*env;
-	char	**value;
-
-	(void)data;
-	if (data->argc > 1)
-		return (ft_fprintf(2, "env: too many arguments\n"), BAD_USAGE);
-	env = vars->env;
-	while (env)
-	{
-		value = env->content;
-		ft_fprintf(data->fd_out, "%s=%s\n", value[0], value[1]);
-		env = env->next;
-	}
-	return (0);
-}
-
-int	ft_unset(t_vars *vars, t_exec *data)
-{
-	int		i;
-
-	i = 1;
-	while (i < data->argc)
-		unset_env(vars, data->args[i++]);
-	return (0);
 }
